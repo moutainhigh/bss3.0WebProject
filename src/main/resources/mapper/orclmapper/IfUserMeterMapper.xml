@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.IfUserMeterMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.IfUserMeter">
+    <result column="SERV_ID" jdbcType="DECIMAL" property="servId" />
+    <result column="REGION_CODE" jdbcType="DECIMAL" property="regionCode" />
+    <result column="FORBID_STATUS" jdbcType="DECIMAL" property="forbidStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SERV_ID, REGION_CODE, FORBID_STATUS
+  </sql>
+  <delete id="deleteIfUserMeter" parameterType="java.util.HashMap">
+    delete from IF_USER_METER
+    where SERV_ID = #{servId}
+  </delete>
+  <insert id="insertIfUserMeter" parameterType="com.asia.vo.IfUserMeter">
+    insert into IF_USER_METER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="servId != null">
+        SERV_ID,
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE,
+      </if>
+      <if test="forbidStatus != null">
+        FORBID_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="servId != null">
+        #{servId,jdbcType=DECIMAL},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=DECIMAL},
+      </if>
+      <if test="forbidStatus != null">
+        #{forbidStatus,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectcountUserMeter" parameterType="java.util.HashMap" resultType="java.lang.Long">
+    select count(1) from IF_USER_METER
+    where SERV_ID = #{servId}
+    and forbid_status = 1
+  </select>
+</mapper>

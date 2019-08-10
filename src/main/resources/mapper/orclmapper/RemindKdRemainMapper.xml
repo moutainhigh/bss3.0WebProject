@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.RemindKdRemainMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.RemindKdRemain">
+    <result column="SERV_ID" jdbcType="DECIMAL" property="servId" />
+    <result column="ACCT_ID" jdbcType="DECIMAL" property="acctId" />
+    <result column="ACC_NBR" jdbcType="VARCHAR" property="accNbr" />
+    <result column="OFFER_ID" jdbcType="DECIMAL" property="offerId" />
+    <result column="OFFER_NAME" jdbcType="VARCHAR" property="offerName" />
+    <result column="OFFER_INST_ID" jdbcType="DECIMAL" property="offerInstId" />
+    <result column="DAY_RENT" jdbcType="DECIMAL" property="dayRent" />
+    <result column="CUR_MON_RENT" jdbcType="DECIMAL" property="curMonRent" />
+    <result column="CUR_BALANCE" jdbcType="DECIMAL" property="curBalance" />
+    <result column="EXP_DATE" jdbcType="DATE" property="expDate" />
+    <result column="LAST_DAYS" jdbcType="DECIMAL" property="lastDays" />
+    <result column="STATE_DATE" jdbcType="DATE" property="stateDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SERV_ID, ACCT_ID, ACC_NBR, OFFER_ID, OFFER_NAME, OFFER_INST_ID, DAY_RENT, CUR_MON_RENT, 
+    CUR_BALANCE, EXP_DATE, LAST_DAYS, STATE_DATE, REMARK
+  </sql>
+  <select id="selectRemindKdRemain" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from REMIND_KD_REMAIN
+    where
+    ACC_NBR = #{accNbr}
+    and STATE_DATE between to_date(#{beginDate},'yyyymmdd') and to_date(#{endDate},'yyyymmdd')
+  </select>
+</mapper>

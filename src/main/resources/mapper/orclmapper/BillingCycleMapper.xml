@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.InfoOverAccuFeeMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.BillingCycle">
+    <result column="BILLING_CYCLE_ID" jdbcType="DECIMAL" property="billingCycleId" />
+    <result column="BILLING_CYCLE_TYPE_ID" jdbcType="DECIMAL" property="billingCycleTypeId" />
+    <result column="CYCLE_BEGIN_DATE" jdbcType="DATE" property="cycleBeginDate" />
+    <result column="CYCLE_END_DATE" jdbcType="DATE" property="cycleEndDate" />
+    <result column="DUE_DATE" jdbcType="DATE" property="dueDate" />
+    <result column="BLOCK_DATE" jdbcType="DATE" property="blockDate" />
+    <result column="LAST_BILLING_CYCLE_ID" jdbcType="DECIMAL" property="lastBillingCycleId" />
+    <result column="STATE" jdbcType="VARCHAR" property="state" />
+    <result column="STATE_DATE" jdbcType="DATE" property="stateDate" />
+  </resultMap>
+  <resultMap id="BaseResultPronInstMap" type="generator.ProdInst">
+    <result column="PROD_INST_ID" jdbcType="DECIMAL" property="prodInstId" />
+    <result column="PROD_ID" jdbcType="DECIMAL" property="prodId" />
+    <result column="ACC_PROD_INST_ID" jdbcType="DECIMAL" property="accProdInstId" />
+    <result column="PROD_USE_TYPE" jdbcType="VARCHAR" property="prodUseType" />
+    <result column="ACC_NUM" jdbcType="VARCHAR" property="accNum" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="PAYMENT_MODE_CD" jdbcType="VARCHAR" property="paymentModeCd" />
+    <result column="ADDRESS_DESC" jdbcType="VARCHAR" property="addressDesc" />
+    <result column="OWNER_CUST_ID" jdbcType="DECIMAL" property="ownerCustId" />
+    <result column="PROD_INST_PWD" jdbcType="VARCHAR" property="prodInstPwd" />
+    <result column="EXCH_ID" jdbcType="DECIMAL" property="exchId" />
+    <result column="ADDRESS_ID" jdbcType="VARCHAR" property="addressId" />
+    <result column="REGION_ID" jdbcType="DECIMAL" property="regionId" />
+    <result column="LAN_ID" jdbcType="DECIMAL" property="lanId" />
+    <result column="ACT_DATE" jdbcType="DATE" property="actDate" />
+    <result column="BEGIN_RENT_DATE" jdbcType="DATE" property="beginRentDate" />
+    <result column="STOP_RENT_DATE" jdbcType="DATE" property="stopRentDate" />
+    <result column="STATUS_CD" jdbcType="VARCHAR" property="statusCd" />
+    <result column="CREATE_ORG_ID" jdbcType="DECIMAL" property="createOrgId" />
+    <result column="CREATE_STAFF" jdbcType="DECIMAL" property="createStaff" />
+    <result column="UPDATE_STAFF" jdbcType="DECIMAL" property="updateStaff" />
+    <result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+    <result column="STATUS_DATE" jdbcType="DATE" property="statusDate" />
+    <result column="UPDATE_DATE" jdbcType="DATE" property="updateDate" />
+    <result column="FIRST_FINISH_DATE" jdbcType="DATE" property="firstFinishDate" />
+    <result column="BUSI_MOD_DATE" jdbcType="DATE" property="busiModDate" />
+    <result column="USE_CUST_ID" jdbcType="DECIMAL" property="useCustId" />
+    <result column="LAST_ORDER_ITEM_ID" jdbcType="DECIMAL" property="lastOrderItemId" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="POINT_OWNER_ID" jdbcType="DECIMAL" property="pointOwnerId" />
+    <result column="EXT_PROD_INST_ID" jdbcType="VARCHAR" property="extProdInstId" />
+    <result column="GRP_PROD_NBR" jdbcType="VARCHAR" property="grpProdNbr" />
+    <result column="ROUTE_ID" jdbcType="DECIMAL" property="routeId" />
+  </resultMap>
+  <resultMap id="BaseResultProdInstRegionMap" type="generator.ProdInstRegion">
+    <result column="PROD_INST_REGION_ID" jdbcType="DECIMAL" property="prodInstRegionId" />
+    <result column="PROD_INST_ID" jdbcType="DECIMAL" property="prodInstId" />
+    <result column="REGION_ID" jdbcType="DECIMAL" property="regionId" />
+    <result column="EFF_DATE" jdbcType="DATE" property="effDate" />
+    <result column="EXP_DATE" jdbcType="DATE" property="expDate" />
+    <result column="STATUS_CD" jdbcType="VARCHAR" property="statusCd" />
+    <result column="CREATE_STAFF" jdbcType="DECIMAL" property="createStaff" />
+    <result column="UPDATE_STAFF" jdbcType="DECIMAL" property="updateStaff" />
+    <result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+    <result column="STATUS_DATE" jdbcType="DATE" property="statusDate" />
+    <result column="UPDATE_DATE" jdbcType="DATE" property="updateDate" />
+    <result column="LAST_ORDER_ITEM_ID" jdbcType="DECIMAL" property="lastOrderItemId" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="ROUTE_ID" jdbcType="DECIMAL" property="routeId" />
+  </resultMap>
+  <resultMap id="BaseResultMobileMap" type="generator.MobileDataEvent043111801">
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="NAI" jdbcType="VARCHAR" property="nai" />
+    <result column="NAS_IP" jdbcType="VARCHAR" property="nasIp" />
+    <result column="SESSION_ID" jdbcType="VARCHAR" property="sessionId" />
+    <result column="PPP_ID" jdbcType="VARCHAR" property="pppId" />
+    <result column="PDSN_ADDRESS" jdbcType="VARCHAR" property="pdsnAddress" />
+    <result column="PCF_ADDRESS" jdbcType="VARCHAR" property="pcfAddress" />
+    <result column="BSID" jdbcType="VARCHAR" property="bsid" />
+    <result column="START_DATE" jdbcType="DATE" property="startDate" />
+    <result column="DURATION" jdbcType="DECIMAL" property="duration" />
+    <result column="SEND_AMOUNT" jdbcType="DECIMAL" property="sendAmount" />
+    <result column="RECV_AMOUNT" jdbcType="DECIMAL" property="recvAmount" />
+    <result column="SUM_AMOUNT" jdbcType="DECIMAL" property="sumAmount" />
+    <result column="EVENT_ID" jdbcType="DECIMAL" property="eventId" />
+    <result column="SWITCH_ID" jdbcType="DECIMAL" property="switchId" />
+    <result column="FILE_ID" jdbcType="DECIMAL" property="fileId" />
+    <result column="CREATED_DATE" jdbcType="DATE" property="createdDate" />
+    <result column="EVENT_SOURCE_TYPE" jdbcType="DECIMAL" property="eventSourceType" />
+    <result column="MSC" jdbcType="VARCHAR" property="msc" />
+    <result column="LAC" jdbcType="VARCHAR" property="lac" />
+    <result column="CELL_ID" jdbcType="VARCHAR" property="cellId" />
+    <result column="BILLING_CYCLE_ID" jdbcType="DECIMAL" property="billingCycleId" />
+    <result column="EVENT_TYPE_ID" jdbcType="DECIMAL" property="eventTypeId" />
+    <result column="BILL_FLOW_ID" jdbcType="DECIMAL" property="billFlowId" />
+    <result column="SERV_ID" jdbcType="DECIMAL" property="servId" />
+    <result column="CUST_ID" jdbcType="DECIMAL" property="custId" />
+    <result column="PRODUCT_ID" jdbcType="DECIMAL" property="productId" />
+    <result column="BILLING_VISIT_AREA_CODE" jdbcType="VARCHAR" property="billingVisitAreaCode" />
+    <result column="ROAM_TYPE_ID" jdbcType="DECIMAL" property="roamTypeId" />
+    <result column="OFFER_ID1" jdbcType="DECIMAL" property="offerId1" />
+    <result column="OFFER_ID2" jdbcType="DECIMAL" property="offerId2" />
+    <result column="BILLING_AREA_CODE" jdbcType="VARCHAR" property="billingAreaCode" />
+    <result column="BILLING_NBR" jdbcType="VARCHAR" property="billingNbr" />
+    <result column="BILLING_ORG_ID" jdbcType="DECIMAL" property="billingOrgId" />
+    <result column="OFFER_ID4" jdbcType="DECIMAL" property="offerId4" />
+    <result column="CHARGE1" jdbcType="DECIMAL" property="charge1" />
+    <result column="ACCT_ITEM_TYPE_ID1" jdbcType="DECIMAL" property="acctItemTypeId1" />
+    <result column="BILL_MEASURE1" jdbcType="DECIMAL" property="billMeasure1" />
+    <result column="MEASURE_TYPE1" jdbcType="DECIMAL" property="measureType1" />
+    <result column="ACCT_ID1" jdbcType="DECIMAL" property="acctId1" />
+    <result column="OFFER_INSTANCE_ID1" jdbcType="DECIMAL" property="offerInstanceId1" />
+    <result column="ITEM_SOURCE_ID1" jdbcType="DECIMAL" property="itemSourceId1" />
+    <result column="CHARGE2" jdbcType="DECIMAL" property="charge2" />
+    <result column="ACCT_ITEM_TYPE_ID2" jdbcType="DECIMAL" property="acctItemTypeId2" />
+    <result column="BILL_MEASURE2" jdbcType="DECIMAL" property="billMeasure2" />
+    <result column="MEASURE_TYPE2" jdbcType="DECIMAL" property="measureType2" />
+    <result column="ACCT_ID2" jdbcType="DECIMAL" property="acctId2" />
+    <result column="OFFER_INSTANCE_ID2" jdbcType="DECIMAL" property="offerInstanceId2" />
+    <result column="ITEM_SOURCE_ID2" jdbcType="DECIMAL" property="itemSourceId2" />
+    <result column="CHARGE3" jdbcType="DECIMAL" property="charge3" />
+    <result column="ACCT_ITEM_TYPE_ID3" jdbcType="DECIMAL" property="acctItemTypeId3" />
+    <result column="BILL_MEASURE3" jdbcType="DECIMAL" property="billMeasure3" />
+    <result column="MEASURE_TYPE3" jdbcType="DECIMAL" property="measureType3" />
+    <result column="ACCT_ID3" jdbcType="DECIMAL" property="acctId3" />
+    <result column="OFFER_INSTANCE_ID3" jdbcType="DECIMAL" property="offerInstanceId3" />
+    <result column="ITEM_SOURCE_ID3" jdbcType="DECIMAL" property="itemSourceId3" />
+    <result column="CHARGE4" jdbcType="DECIMAL" property="charge4" />
+    <result column="ACCT_ITEM_TYPE_ID4" jdbcType="DECIMAL" property="acctItemTypeId4" />
+    <result column="BILL_MEASURE4" jdbcType="DECIMAL" property="billMeasure4" />
+    <result column="MEASURE_TYPE4" jdbcType="DECIMAL" property="measureType4" />
+    <result column="ACCT_ID4" jdbcType="DECIMAL" property="acctId4" />
+    <result column="OFFER_INSTANCE_ID4" jdbcType="DECIMAL" property="offerInstanceId4" />
+    <result column="ITEM_SOURCE_ID4" jdbcType="DECIMAL" property="itemSourceId4" />
+    <result column="BILLING_RECORD" jdbcType="VARCHAR" property="billingRecord" />
+    <result column="ROAM_FLAG" jdbcType="DECIMAL" property="roamFlag" />
+    <result column="RP_SESSION_ID" jdbcType="VARCHAR" property="rpSessionId" />
+    <result column="SOURCE_EVENT_TYPE" jdbcType="DECIMAL" property="sourceEventType" />
+    <result column="RESERVED_FIELD1" jdbcType="VARCHAR" property="reservedField1" />
+    <result column="RESERVED_FIELD2" jdbcType="VARCHAR" property="reservedField2" />
+    <result column="RESERVED_FIELD3" jdbcType="VARCHAR" property="reservedField3" />
+    <result column="RESERVED_FIELD4" jdbcType="VARCHAR" property="reservedField4" />
+    <result column="RESERVED_FIELD5" jdbcType="VARCHAR" property="reservedField5" />
+    <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo" />
+    <result column="EXTEND_VALUE1" jdbcType="VARCHAR" property="extendValue1" />
+    <result column="BUSINESS_KEY" jdbcType="DECIMAL" property="businessKey" />
+    <result column="USER_TYPE" jdbcType="DECIMAL" property="userType" />
+    <result column="EXTEND_EVENT_VALUE01" jdbcType="VARCHAR" property="extendEventValue01" />
+    <result column="EXTEND_EVENT_VALUE02" jdbcType="VARCHAR" property="extendEventValue02" />
+    <result column="EXTEND_EVENT_VALUE03" jdbcType="VARCHAR" property="extendEventValue03" />
+    <result column="EXTEND_EVENT_VALUE04" jdbcType="VARCHAR" property="extendEventValue04" />
+    <result column="EXTEND_EVENT_VALUE05" jdbcType="VARCHAR" property="extendEventValue05" />
+    <result column="EXTEND_EVENT_VALUE06" jdbcType="VARCHAR" property="extendEventValue06" />
+    <result column="EXTEND_EVENT_VALUE07" jdbcType="VARCHAR" property="extendEventValue07" />
+    <result column="EXTEND_EVENT_VALUE08" jdbcType="VARCHAR" property="extendEventValue08" />
+    <result column="EXTEND_EVENT_VALUE09" jdbcType="VARCHAR" property="extendEventValue09" />
+    <result column="EXTEND_EVENT_VALUE10" jdbcType="VARCHAR" property="extendEventValue10" />
+    <result column="END_DATE" jdbcType="DATE" property="endDate" />
+    <result column="NO_BILL_FLAG" jdbcType="DECIMAL" property="noBillFlag" />
+    <result column="EXTEND_VALUE2" jdbcType="VARCHAR" property="extendValue2" />
+    <result column="EXTEND_VALUE3" jdbcType="VARCHAR" property="extendValue3" />
+    <result column="EXTEND_VALUE4" jdbcType="VARCHAR" property="extendValue4" />
+    <result column="EXTEND_VALUE5" jdbcType="VARCHAR" property="extendValue5" />
+    <result column="EXTEND_VALUE6" jdbcType="VARCHAR" property="extendValue6" />
+    <result column="EXTEND_VALUE7" jdbcType="VARCHAR" property="extendValue7" />
+    <result column="EXTEND_VALUE8" jdbcType="VARCHAR" property="extendValue8" />
+    <result column="EXTEND_VALUE9" jdbcType="VARCHAR" property="extendValue9" />
+    <result column="EXTEND_VALUE10" jdbcType="VARCHAR" property="extendValue10" />
+    <result column="EVENT_SEQ" jdbcType="DECIMAL" property="eventSeq" />
+    <result column="ORG_SEQUENCE" jdbcType="VARCHAR" property="orgSequence" />
+    <result column="DOMAIN_NAME" jdbcType="VARCHAR" property="domainName" />
+    <result column="ACCOUNT_AREA_CODE" jdbcType="VARCHAR" property="accountAreaCode" />
+    <result column="FIRST_PRICING_MEASURE" jdbcType="DECIMAL" property="firstPricingMeasure" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="EXTEND_EVENT_ID01" jdbcType="VARCHAR" property="extendEventId01" />
+    <result column="EXTEND_EVENT_ID10" jdbcType="VARCHAR" property="extendEventId10" />
+    <result column="BIND_ATTR" jdbcType="VARCHAR" property="bindAttr" />
+    <result column="LONG_TYPE_ID" jdbcType="DECIMAL" property="longTypeId" />
+    <result column="ERROR_ID" jdbcType="DECIMAL" property="errorId" />
+    <result column="USAGE_AMOUNT" jdbcType="DECIMAL" property="usageAmount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    BILLING_CYCLE_ID, BILLING_CYCLE_TYPE_ID, CYCLE_BEGIN_DATE, CYCLE_END_DATE, DUE_DATE, 
+    BLOCK_DATE, LAST_BILLING_CYCLE_ID, `STATE`, STATE_DATE
+  </sql>
+  <sql id="Base_Column_List_Mobile">
+    IMSI, NAI, NAS_IP, SESSION_ID, PPP_ID, PDSN_ADDRESS, PCF_ADDRESS, BSID, START_DATE,
+    DURATION, SEND_AMOUNT, RECV_AMOUNT, SUM_AMOUNT, EVENT_ID, SWITCH_ID, FILE_ID, CREATED_DATE,
+    EVENT_SOURCE_TYPE, MSC, LAC, CELL_ID, BILLING_CYCLE_ID, EVENT_TYPE_ID, BILL_FLOW_ID,
+    SERV_ID, CUST_ID, PRODUCT_ID, BILLING_VISIT_AREA_CODE, ROAM_TYPE_ID, OFFER_ID1, OFFER_ID2,
+    BILLING_AREA_CODE, BILLING_NBR, BILLING_ORG_ID, OFFER_ID4, CHARGE1, ACCT_ITEM_TYPE_ID1,
+    BILL_MEASURE1, MEASURE_TYPE1, ACCT_ID1, OFFER_INSTANCE_ID1, ITEM_SOURCE_ID1, CHARGE2,
+    ACCT_ITEM_TYPE_ID2, BILL_MEASURE2, MEASURE_TYPE2, ACCT_ID2, OFFER_INSTANCE_ID2, ITEM_SOURCE_ID2,
+    CHARGE3, ACCT_ITEM_TYPE_ID3, BILL_MEASURE3, MEASURE_TYPE3, ACCT_ID3, OFFER_INSTANCE_ID3,
+    ITEM_SOURCE_ID3, CHARGE4, ACCT_ITEM_TYPE_ID4, BILL_MEASURE4, MEASURE_TYPE4, ACCT_ID4,
+    OFFER_INSTANCE_ID4, ITEM_SOURCE_ID4, BILLING_RECORD, ROAM_FLAG, RP_SESSION_ID, SOURCE_EVENT_TYPE,
+    RESERVED_FIELD1, RESERVED_FIELD2, RESERVED_FIELD3, RESERVED_FIELD4, RESERVED_FIELD5,
+    CARD_NO, EXTEND_VALUE1, BUSINESS_KEY, USER_TYPE, EXTEND_EVENT_VALUE01, EXTEND_EVENT_VALUE02,
+    EXTEND_EVENT_VALUE03, EXTEND_EVENT_VALUE04, EXTEND_EVENT_VALUE05, EXTEND_EVENT_VALUE06,
+    EXTEND_EVENT_VALUE07, EXTEND_EVENT_VALUE08, EXTEND_EVENT_VALUE09, EXTEND_EVENT_VALUE10,
+    END_DATE, NO_BILL_FLAG, EXTEND_VALUE2, EXTEND_VALUE3, EXTEND_VALUE4, EXTEND_VALUE5,
+    EXTEND_VALUE6, EXTEND_VALUE7, EXTEND_VALUE8, EXTEND_VALUE9, EXTEND_VALUE10, EVENT_SEQ,
+    ORG_SEQUENCE, DOMAIN_NAME, ACCOUNT_AREA_CODE, FIRST_PRICING_MEASURE, IMEI, EXTEND_EVENT_ID01,
+    EXTEND_EVENT_ID10, BIND_ATTR, LONG_TYPE_ID, ERROR_ID, USAGE_AMOUNT
+  </sql>
+  <sql id="Base_Column_List_ProdInst">
+    PROD_INST_ID, PROD_ID, ACC_PROD_INST_ID, PROD_USE_TYPE, ACC_NUM, ACCOUNT, PAYMENT_MODE_CD,
+    ADDRESS_DESC, OWNER_CUST_ID, PROD_INST_PWD, EXCH_ID, ADDRESS_ID, REGION_ID, LAN_ID,
+    ACT_DATE, BEGIN_RENT_DATE, STOP_RENT_DATE, STATUS_CD, CREATE_ORG_ID, CREATE_STAFF,
+    UPDATE_STAFF, CREATE_DATE, STATUS_DATE, UPDATE_DATE, FIRST_FINISH_DATE, BUSI_MOD_DATE,
+    USE_CUST_ID, LAST_ORDER_ITEM_ID, REMARK, POINT_OWNER_ID, EXT_PROD_INST_ID, GRP_PROD_NBR,
+    ROUTE_ID
+  </sql>
+  <sql id="Base_Column_List_ProdInstRegion">
+    PROD_INST_REGION_ID, PROD_INST_ID, REGION_ID, EFF_DATE, EXP_DATE, STATUS_CD, CREATE_STAFF,
+    UPDATE_STAFF, CREATE_DATE, STATUS_DATE, UPDATE_DATE, LAST_ORDER_ITEM_ID, REMARK,
+    ROUTE_ID
+  </sql>
+  <select id="selectBillingCyle" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from BILLING_CYCLE
+    where to_char(CYCLE_BEGIN_DATE,'yyyymmdd') =#{queryMonth}
+  </select>
+  <select id="selectMobileDataEvent" statementType="STATEMENT" resultType="java.util.HashMap">
+    select
+    nvl(sum(offer_id4)/100,0) overCharge,nvl(round(sum(bill_measure1)/ 1024 / 1024,2),0) OverData
+    from ${tableName}
+    where SERV_ID in ${servId}
+    and offer_id4 > 0
+  </select>
+  <select id="selectProdInst" parameterType="java.util.HashMap" resultMap="BaseResultPronInstMap">
+    select
+    <include refid="Base_Column_List_ProdInst" />
+    from PROD_INST
+    where ACC_NUM = #{accNum}
+    and status_cd not in (110000, 120000)
+  </select>
+  <select id="selectProdInstRegion" parameterType="java.util.HashMap" resultMap="BaseResultProdInstRegionMap">
+    select
+    <include refid="Base_Column_List_ProdInstRegion" />
+    from ACCT.PROD_INST_REGION
+    where PROD_INST_ID = #{prodInstId}
+  </select>
+</mapper>

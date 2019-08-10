@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.billmapper.IntfServCustChangeContrastMapper">
+
+  <sql id="Base_Column_List">
+    ARCH_GRP_ID, SERV_ID, OLD_CUST_ID, NEW_CUST_ID, CHANGE_DATE
+  </sql>
+  <select id="selectIntfServCustChangeContrast" parameterType="java.util.HashMap" resultType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+    from intf_serv_cust_change_contrast
+    where SERV_ID = #{servId,jdbcType=BIGINT}
+  </select>
+</mapper>
