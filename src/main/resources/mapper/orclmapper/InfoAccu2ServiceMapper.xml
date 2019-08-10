@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.InfoAccu2ServiceMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.InfoAccu2Service">
+    <result column="SERV_ID" jdbcType="DECIMAL" property="servId" />
+    <result column="ACC_NBR" jdbcType="VARCHAR" property="accNbr" />
+    <result column="TOTAL_STREAM" jdbcType="DECIMAL" property="totalStream" />
+    <result column="CUR_STREAM" jdbcType="DECIMAL" property="curStream" />
+    <result column="ALARM_DATE" jdbcType="DATE" property="alarmDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    SERV_ID, ACC_NBR, TOTAL_STREAM, CUR_STREAM, ALARM_DATE
+  </sql>
+  <select id="selectInfoAccu2Service" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from INFO_ACCU_2_SERVICE
+    where
+    ACC_NBR = #{accNbr}
+    and to_char(ALARM_DATE,'yyyymm') = #{alarmDate}
+  </select>
+
+</mapper>

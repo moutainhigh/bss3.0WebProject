@@ -1,56 +1,42 @@
 package com.asia.web.openApi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
-import com.asia.domain.openApi.QryBalanceRecordDetailReq;
-import com.asia.domain.openApi.QryBalanceRecordDetailRes;
+import com.asia.domain.openApi.*;
 import com.asia.domain.openApi.QryBalanceRecordDetailRes.BalanceChangeList;
-import com.asia.domain.openApi.QryBillReq;
-import com.asia.domain.openApi.QryBillRes;
 import com.asia.domain.openApi.QryBillRes.FeeBillingCycle;
 import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup;
 import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup.AcctItemType;
-import com.asia.domain.openApi.QryCustBillReq;
-import com.asia.domain.openApi.QryCustBillRes;
-import com.asia.domain.openApi.QryInstantFeeListReq;
-import com.asia.domain.openApi.QryInstantFeeListRes;
 import com.asia.domain.openApi.QryInstantFeeListRes.ItemInformation;
-import com.asia.domain.openApi.QryInstantFeeReq;
-import com.asia.domain.openApi.QryInstantFeeRes;
-import com.asia.domain.openApi.QryPaymentReq;
-import com.asia.domain.openApi.QryPaymentRes;
 import com.asia.domain.openApi.QryPaymentRes.PaymentInfo;
 import com.asia.domain.openApi.QryPaymentRes.PaymentInfo.AccNbrDetail;
-import com.asia.domain.openApi.QueryBalanceReq;
-import com.asia.domain.openApi.QueryBalanceRes;
 import com.asia.domain.openApi.QueryBalanceRes.BalanceQuery;
-import com.asia.domain.openApi.RechargeBalanceReq;
-import com.asia.domain.openApi.RechargeBalanceRes;
-import com.asia.domain.openApi.RtBillItemReq;
-import com.asia.domain.openApi.RtBillItemRes;
 import com.asia.domain.openApi.RtBillItemRes.DataBillItem;
 import com.asia.domain.openApi.RtBillItemRes.IncrBillItem;
 import com.asia.domain.openApi.RtBillItemRes.SmsBillItem;
 import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
-import com.asia.service.openApi.OpenAPIServiceImpl;
+import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
+import com.asia.mapper.ordmapper.ProdInstRouteMapper;
+import com.asia.service.impl.Bon3ServiceImpl;
+import com.asia.service.impl.openApi.OpenAPIServiceImpl;
+import com.asiainfo.account.model.domain.StdCcaQueryServ;
+import com.asiainfo.account.model.domain.StdCcrQueryServ;
+import com.asiainfo.account.model.request.StdCcrQueryServRequest;
+import com.asiainfo.account.model.response.StdCcaQueryServResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * openApi服务暴漏
@@ -63,6 +49,15 @@ import com.asia.service.openApi.OpenAPIServiceImpl;
 public class OpenApiConroller{
 	@Autowired
 	private OpenAPIServiceImpl openAPIServiceImpl;
+	@Autowired
+	private Bon3ServiceImpl bon3Service;
+	private static final String X_CTG_REQUEST_ID = "X-CTG-Request-ID";
+	@Autowired
+	private HttpServletRequest request;
+	@Autowired
+	private IntfServCustChangeContrastMapper intfServCustChangeContrastDao;
+	@Autowired
+	private ProdInstRouteMapper prodInstRouteMapperDao;
 	/**
 	 * qryInstantFee:(实时话费查询). <br/>
 	 * @author yinyanzhen
@@ -322,11 +317,37 @@ public class OpenApiConroller{
 	 */
 	@PostMapping("/RtBillItem")
 	public String rtBillItem(@RequestBody RtBillItemReq body,
-			@RequestHeader Map<String,String> headers,HttpServletResponse response){
+			@RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
 		//记录业务日志
 		LogUtil.opeLog("/openApi/rtBillItem","body>>"+body.toString()
 			+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
+		// TODO: 2019/7/30 过户增加判断
+		String acctNumb = body.getSvcObjectStruct().getObjValue();
+		Map map = new HashMap();
+		//调用用户信息查询接口 begin
+		StdCcaQueryServResponse info=new StdCcaQueryServResponse();
+		StdCcrQueryServRequest stdCcrQueryServRequest = new StdCcrQueryServRequest();
+		StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+		StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
+		stdCcrQueryServ.setAreaCode("0431");
+		stdCcrQueryServ.setQueryType("1");
+		stdCcrQueryServ.setValue("17390026401");
+		stdCcrQueryServ.setValueType("1");
+		stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
+
+		info = bon3Service.searchServInfo(stdCcrQueryServRequest,headers);
+		stdCcaQueryServ = info.getStdCcaQueryServ();
+		String servId = "310000012365";//stdCcaQueryServ.getServId();
+		map.put("servId", servId);
+		List<Map<String, Object>> owenCustList = intfServCustChangeContrastDao.selectIntfServCustChangeContrast(map);
+		if (owenCustList.size() > 1) {
+			Map owenCustMap = owenCustList.get(0);
+
+		}
+		long prodInstId = 123;
+		List<Map<String, Object>> prodInstRouteList = new ArrayList<Map<String, Object>>();
+		prodInstRouteList = prodInstRouteMapperDao.selectProdInstRouteId(prodInstId);
 		try {
 			returnInfo.setSmsBillItems(new ArrayList<>());
 			returnInfo.getSmsBillItems().add(new SmsBillItem());
@@ -340,6 +361,47 @@ public class OpenApiConroller{
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
+		}
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+	}
+	/**
+	 * @Author WangBaoQiang
+	 * @Description //充值回退服务
+	 * @Date 17:04 2019/7/29
+	 * @Param [body, headers, response]
+	 * @return java.lang.String
+	*/
+	@PostMapping("/RollRechargeBalance")
+	public String rollRechargeBalnce(@RequestBody RollRechargeBalanceReq body,
+									 @RequestHeader Map<String,String> headers,HttpServletResponse response){
+		//记录业务日志
+		LogUtil.opeLog("/openApi/rollRechargeBalnce","body>>"+body.toString()
+				+" header>>"+JSON.toJSONString(headers), this.getClass());
+		RollRechargeBalanceRes returnInfo=new RollRechargeBalanceRes();
+		try {
+		    returnInfo.setReqServiceId("100001111101");
+            returnInfo.setResultCode("0");
+            returnInfo.setResultMsg("");
+//			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
+			headers.forEach((key,val)->{response.setHeader(key, val);});
+		} catch (Exception e) {
+			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", e, this.getClass());
+		}
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+	}
+	@PostMapping("/test")
+	public String qryInstantFeeTest(@RequestBody QryInstantFeeReq qryInstantFeeReq,
+								@RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
+		//记录业务日志
+		LogUtil.opeLog("/openApi/QryInstantFee", "body>>"+qryInstantFeeReq.toString()
+				+" header>>"+JSON.toJSONString(headers), this.getClass());
+		QryInstantFeeRes returnInfo = new QryInstantFeeRes();
+		try {
+			returnInfo.setResultCode(Constant.ResultCode.OPENAPI_OK);
+			returnInfo=openAPIServiceImpl.qryInstantFee(qryInstantFeeReq, headers);
+			headers.forEach((key,val)->{response.setHeader(key, val);});
+		} catch (Exception e) {
+			LogUtil.error("/openApi/QryInstantFee服务调用失败", e, this.getClass());
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}

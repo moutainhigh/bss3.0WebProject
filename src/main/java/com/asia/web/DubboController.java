@@ -1,17 +1,11 @@
 package com.asia.web;
 
-import java.util.Map;
+import com.asia.service.impl.DubboServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.asia.service.DubboServiceImpl;
+import java.util.Map;
 
 /**
  * 账务Dubbo服务暴漏
@@ -25,11 +19,26 @@ import com.asia.service.DubboServiceImpl;
 public class DubboController{
 	@Autowired
 	private DubboServiceImpl acctService;
-	
+	/*@Autowired
+	SystemSwitchService systemSwitchService;*/
 	@PostMapping("/test")
 	public String searchServInfo(@RequestBody String str,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		acctService.test();
 		return null;
 	}
+	/*@RequestMapping("/test1")
+	public String getSystemSwitch (){
+
+		SystemSwitchQuery systemSwitchQuery = new SystemSwitchQuery();
+		systemSwitchQuery.setStaffID(1L);
+		systemSwitchQuery.setSwitchID(123L);
+
+		SystemSwitchQueryRequest systemSwitchQueryRequest = new SystemSwitchQueryRequest();
+		systemSwitchQueryRequest.setSystemSwitchQuery(systemSwitchQuery);
+
+		SystemSwitchQueryResponse systemSwitchQueryResponse = systemSwitchService.getSystemSwitch(systemSwitchQueryRequest);
+
+		return JSON.toJSONString(systemSwitchQueryResponse);
+	}*/
 }

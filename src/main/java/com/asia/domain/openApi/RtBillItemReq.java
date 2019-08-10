@@ -28,6 +28,10 @@ public class RtBillItemReq extends BaseDomain{
 	private Integer firstQryCond ;
 	//查询条件2
 	private Integer secondQryCond ;
+	//查询开始时间
+	private Integer startDate;
+	//查询结束时间
+	private Integer endDate;
 
 	public OperAttrStruct getOperAttrStruct() {
 		return operAttrStruct;
@@ -99,5 +103,21 @@ public class RtBillItemReq extends BaseDomain{
 
 	public void setSecondQryCond(Integer secondQryCond) {
 		this.secondQryCond = secondQryCond;
+	}
+
+	public Integer getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Integer startDate) {
+		this.startDate = startDate;
+	}
+
+	public Integer getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Integer endDate) {
+		this.endDate = endDate;
 	}
 }

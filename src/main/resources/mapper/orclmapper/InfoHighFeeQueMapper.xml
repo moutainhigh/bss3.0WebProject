@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.InfoHighFeeQueMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.InfoHighFeeQue">
+    <result column="SERV_ID" jdbcType="DECIMAL" property="servId" />
+    <result column="ACC_NBR" jdbcType="VARCHAR" property="accNbr" />
+    <result column="ITEM_GROUP_ID" jdbcType="DECIMAL" property="itemGroupId" />
+    <result column="CHARGE" jdbcType="DECIMAL" property="charge" />
+    <result column="ALARM_DATE" jdbcType="DATE" property="alarmDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SERV_ID, ACC_NBR, ITEM_GROUP_ID, CHARGE, ALARM_DATE
+  </sql>
+  <select id="selectInfoHighFee" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from INFO_HIGH_FEE_QUE
+    where
+    ACC_NBR = #{accNbr}
+    and to_char(ALARM_DATE,'yyyymm') = #{alarmDate}
+  </select>
+
+</mapper>

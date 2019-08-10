@@ -20,7 +20,7 @@ import com.asia.common.utils.LogUtil;
 import com.asia.domain.openApi.InvoiceRes;
 import com.asia.domain.openApi.IssueInvoiceRes;
 import com.asia.domain.openApi.MonthlyBillRes;
-import com.asia.service.openApi.InvoiceServiceImpl;
+import com.asia.service.impl.openApi.InvoiceServiceImpl;
 
 /**
  * 发票一致性接口

@@ -18,8 +18,9 @@ public class Constant{
 		public static final String ERROR="0500";
 	}
 	
-	public static final String BASE_URL_BON3="http://127.0.0.1:8092/";
-	public static final String BASE_URL_OPENAPI="http://XX.XX.XX.XX:xx/";
+	public static final String BASE_URL_BON3="http://136.160.153.42:8026/";
+	//"http://XX.XX.XX.XX:xx/";
+	public static final String BASE_URL_OPENAPI="http://136.160.153.42:8026//billsrv/openApi/";
 	public static final String BASE_URL_OPENAPI_INVOICE="http://137.0.31.177:8001/serviceAgent/rest";
 	
 	/**
@@ -103,7 +104,7 @@ public class Constant{
 		 * 用户信息查询
 		 */
 //		public static final String searchServInfo=Constant.BASE_URL_BON3+"/billing/acct/std/searchServInfo";
-		public static final String searchServInfo=Constant.BASE_URL_BON3+"/srv/bon3/searchServInfo";
+		public static final String searchServInfo=Constant.BASE_URL_BON3+"/billsrv/bon3/searchServInfo";
 		/**
 		 * 流量卡充值记录查询
 		 */
