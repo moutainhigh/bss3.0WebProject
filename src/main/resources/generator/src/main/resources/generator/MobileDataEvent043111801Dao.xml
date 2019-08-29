@@ -1,0 +1,1408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.MobileDataEvent043111801Dao">
+  <resultMap id="BaseResultMap" type="generator.MobileDataEvent043111801">
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="NAI" jdbcType="VARCHAR" property="nai" />
+    <result column="NAS_IP" jdbcType="VARCHAR" property="nasIp" />
+    <result column="SESSION_ID" jdbcType="VARCHAR" property="sessionId" />
+    <result column="PPP_ID" jdbcType="VARCHAR" property="pppId" />
+    <result column="PDSN_ADDRESS" jdbcType="VARCHAR" property="pdsnAddress" />
+    <result column="PCF_ADDRESS" jdbcType="VARCHAR" property="pcfAddress" />
+    <result column="BSID" jdbcType="VARCHAR" property="bsid" />
+    <result column="START_DATE" jdbcType="DATE" property="startDate" />
+    <result column="DURATION" jdbcType="DECIMAL" property="duration" />
+    <result column="SEND_AMOUNT" jdbcType="DECIMAL" property="sendAmount" />
+    <result column="RECV_AMOUNT" jdbcType="DECIMAL" property="recvAmount" />
+    <result column="SUM_AMOUNT" jdbcType="DECIMAL" property="sumAmount" />
+    <result column="EVENT_ID" jdbcType="DECIMAL" property="eventId" />
+    <result column="SWITCH_ID" jdbcType="DECIMAL" property="switchId" />
+    <result column="FILE_ID" jdbcType="DECIMAL" property="fileId" />
+    <result column="CREATED_DATE" jdbcType="DATE" property="createdDate" />
+    <result column="EVENT_SOURCE_TYPE" jdbcType="DECIMAL" property="eventSourceType" />
+    <result column="MSC" jdbcType="VARCHAR" property="msc" />
+    <result column="LAC" jdbcType="VARCHAR" property="lac" />
+    <result column="CELL_ID" jdbcType="VARCHAR" property="cellId" />
+    <result column="BILLING_CYCLE_ID" jdbcType="DECIMAL" property="billingCycleId" />
+    <result column="EVENT_TYPE_ID" jdbcType="DECIMAL" property="eventTypeId" />
+    <result column="BILL_FLOW_ID" jdbcType="DECIMAL" property="billFlowId" />
+    <result column="SERV_ID" jdbcType="DECIMAL" property="servId" />
+    <result column="CUST_ID" jdbcType="DECIMAL" property="custId" />
+    <result column="PRODUCT_ID" jdbcType="DECIMAL" property="productId" />
+    <result column="BILLING_VISIT_AREA_CODE" jdbcType="VARCHAR" property="billingVisitAreaCode" />
+    <result column="ROAM_TYPE_ID" jdbcType="DECIMAL" property="roamTypeId" />
+    <result column="OFFER_ID1" jdbcType="DECIMAL" property="offerId1" />
+    <result column="OFFER_ID2" jdbcType="DECIMAL" property="offerId2" />
+    <result column="BILLING_AREA_CODE" jdbcType="VARCHAR" property="billingAreaCode" />
+    <result column="BILLING_NBR" jdbcType="VARCHAR" property="billingNbr" />
+    <result column="BILLING_ORG_ID" jdbcType="DECIMAL" property="billingOrgId" />
+    <result column="OFFER_ID4" jdbcType="DECIMAL" property="offerId4" />
+    <result column="CHARGE1" jdbcType="DECIMAL" property="charge1" />
+    <result column="ACCT_ITEM_TYPE_ID1" jdbcType="DECIMAL" property="acctItemTypeId1" />
+    <result column="BILL_MEASURE1" jdbcType="DECIMAL" property="billMeasure1" />
+    <result column="MEASURE_TYPE1" jdbcType="DECIMAL" property="measureType1" />
+    <result column="ACCT_ID1" jdbcType="DECIMAL" property="acctId1" />
+    <result column="OFFER_INSTANCE_ID1" jdbcType="DECIMAL" property="offerInstanceId1" />
+    <result column="ITEM_SOURCE_ID1" jdbcType="DECIMAL" property="itemSourceId1" />
+    <result column="CHARGE2" jdbcType="DECIMAL" property="charge2" />
+    <result column="ACCT_ITEM_TYPE_ID2" jdbcType="DECIMAL" property="acctItemTypeId2" />
+    <result column="BILL_MEASURE2" jdbcType="DECIMAL" property="billMeasure2" />
+    <result column="MEASURE_TYPE2" jdbcType="DECIMAL" property="measureType2" />
+    <result column="ACCT_ID2" jdbcType="DECIMAL" property="acctId2" />
+    <result column="OFFER_INSTANCE_ID2" jdbcType="DECIMAL" property="offerInstanceId2" />
+    <result column="ITEM_SOURCE_ID2" jdbcType="DECIMAL" property="itemSourceId2" />
+    <result column="CHARGE3" jdbcType="DECIMAL" property="charge3" />
+    <result column="ACCT_ITEM_TYPE_ID3" jdbcType="DECIMAL" property="acctItemTypeId3" />
+    <result column="BILL_MEASURE3" jdbcType="DECIMAL" property="billMeasure3" />
+    <result column="MEASURE_TYPE3" jdbcType="DECIMAL" property="measureType3" />
+    <result column="ACCT_ID3" jdbcType="DECIMAL" property="acctId3" />
+    <result column="OFFER_INSTANCE_ID3" jdbcType="DECIMAL" property="offerInstanceId3" />
+    <result column="ITEM_SOURCE_ID3" jdbcType="DECIMAL" property="itemSourceId3" />
+    <result column="CHARGE4" jdbcType="DECIMAL" property="charge4" />
+    <result column="ACCT_ITEM_TYPE_ID4" jdbcType="DECIMAL" property="acctItemTypeId4" />
+    <result column="BILL_MEASURE4" jdbcType="DECIMAL" property="billMeasure4" />
+    <result column="MEASURE_TYPE4" jdbcType="DECIMAL" property="measureType4" />
+    <result column="ACCT_ID4" jdbcType="DECIMAL" property="acctId4" />
+    <result column="OFFER_INSTANCE_ID4" jdbcType="DECIMAL" property="offerInstanceId4" />
+    <result column="ITEM_SOURCE_ID4" jdbcType="DECIMAL" property="itemSourceId4" />
+    <result column="BILLING_RECORD" jdbcType="VARCHAR" property="billingRecord" />
+    <result column="ROAM_FLAG" jdbcType="DECIMAL" property="roamFlag" />
+    <result column="RP_SESSION_ID" jdbcType="VARCHAR" property="rpSessionId" />
+    <result column="SOURCE_EVENT_TYPE" jdbcType="DECIMAL" property="sourceEventType" />
+    <result column="RESERVED_FIELD1" jdbcType="VARCHAR" property="reservedField1" />
+    <result column="RESERVED_FIELD2" jdbcType="VARCHAR" property="reservedField2" />
+    <result column="RESERVED_FIELD3" jdbcType="VARCHAR" property="reservedField3" />
+    <result column="RESERVED_FIELD4" jdbcType="VARCHAR" property="reservedField4" />
+    <result column="RESERVED_FIELD5" jdbcType="VARCHAR" property="reservedField5" />
+    <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo" />
+    <result column="EXTEND_VALUE1" jdbcType="VARCHAR" property="extendValue1" />
+    <result column="BUSINESS_KEY" jdbcType="DECIMAL" property="businessKey" />
+    <result column="USER_TYPE" jdbcType="DECIMAL" property="userType" />
+    <result column="EXTEND_EVENT_VALUE01" jdbcType="VARCHAR" property="extendEventValue01" />
+    <result column="EXTEND_EVENT_VALUE02" jdbcType="VARCHAR" property="extendEventValue02" />
+    <result column="EXTEND_EVENT_VALUE03" jdbcType="VARCHAR" property="extendEventValue03" />
+    <result column="EXTEND_EVENT_VALUE04" jdbcType="VARCHAR" property="extendEventValue04" />
+    <result column="EXTEND_EVENT_VALUE05" jdbcType="VARCHAR" property="extendEventValue05" />
+    <result column="EXTEND_EVENT_VALUE06" jdbcType="VARCHAR" property="extendEventValue06" />
+    <result column="EXTEND_EVENT_VALUE07" jdbcType="VARCHAR" property="extendEventValue07" />
+    <result column="EXTEND_EVENT_VALUE08" jdbcType="VARCHAR" property="extendEventValue08" />
+    <result column="EXTEND_EVENT_VALUE09" jdbcType="VARCHAR" property="extendEventValue09" />
+    <result column="EXTEND_EVENT_VALUE10" jdbcType="VARCHAR" property="extendEventValue10" />
+    <result column="END_DATE" jdbcType="DATE" property="endDate" />
+    <result column="NO_BILL_FLAG" jdbcType="DECIMAL" property="noBillFlag" />
+    <result column="EXTEND_VALUE2" jdbcType="VARCHAR" property="extendValue2" />
+    <result column="EXTEND_VALUE3" jdbcType="VARCHAR" property="extendValue3" />
+    <result column="EXTEND_VALUE4" jdbcType="VARCHAR" property="extendValue4" />
+    <result column="EXTEND_VALUE5" jdbcType="VARCHAR" property="extendValue5" />
+    <result column="EXTEND_VALUE6" jdbcType="VARCHAR" property="extendValue6" />
+    <result column="EXTEND_VALUE7" jdbcType="VARCHAR" property="extendValue7" />
+    <result column="EXTEND_VALUE8" jdbcType="VARCHAR" property="extendValue8" />
+    <result column="EXTEND_VALUE9" jdbcType="VARCHAR" property="extendValue9" />
+    <result column="EXTEND_VALUE10" jdbcType="VARCHAR" property="extendValue10" />
+    <result column="EVENT_SEQ" jdbcType="DECIMAL" property="eventSeq" />
+    <result column="ORG_SEQUENCE" jdbcType="VARCHAR" property="orgSequence" />
+    <result column="DOMAIN_NAME" jdbcType="VARCHAR" property="domainName" />
+    <result column="ACCOUNT_AREA_CODE" jdbcType="VARCHAR" property="accountAreaCode" />
+    <result column="FIRST_PRICING_MEASURE" jdbcType="DECIMAL" property="firstPricingMeasure" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="EXTEND_EVENT_ID01" jdbcType="VARCHAR" property="extendEventId01" />
+    <result column="EXTEND_EVENT_ID10" jdbcType="VARCHAR" property="extendEventId10" />
+    <result column="BIND_ATTR" jdbcType="VARCHAR" property="bindAttr" />
+    <result column="LONG_TYPE_ID" jdbcType="DECIMAL" property="longTypeId" />
+    <result column="ERROR_ID" jdbcType="DECIMAL" property="errorId" />
+    <result column="USAGE_AMOUNT" jdbcType="DECIMAL" property="usageAmount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    IMSI, NAI, NAS_IP, SESSION_ID, PPP_ID, PDSN_ADDRESS, PCF_ADDRESS, BSID, START_DATE, 
+    DURATION, SEND_AMOUNT, RECV_AMOUNT, SUM_AMOUNT, EVENT_ID, SWITCH_ID, FILE_ID, CREATED_DATE, 
+    EVENT_SOURCE_TYPE, MSC, LAC, CELL_ID, BILLING_CYCLE_ID, EVENT_TYPE_ID, BILL_FLOW_ID, 
+    SERV_ID, CUST_ID, PRODUCT_ID, BILLING_VISIT_AREA_CODE, ROAM_TYPE_ID, OFFER_ID1, OFFER_ID2, 
+    BILLING_AREA_CODE, BILLING_NBR, BILLING_ORG_ID, OFFER_ID4, CHARGE1, ACCT_ITEM_TYPE_ID1, 
+    BILL_MEASURE1, MEASURE_TYPE1, ACCT_ID1, OFFER_INSTANCE_ID1, ITEM_SOURCE_ID1, CHARGE2, 
+    ACCT_ITEM_TYPE_ID2, BILL_MEASURE2, MEASURE_TYPE2, ACCT_ID2, OFFER_INSTANCE_ID2, ITEM_SOURCE_ID2, 
+    CHARGE3, ACCT_ITEM_TYPE_ID3, BILL_MEASURE3, MEASURE_TYPE3, ACCT_ID3, OFFER_INSTANCE_ID3, 
+    ITEM_SOURCE_ID3, CHARGE4, ACCT_ITEM_TYPE_ID4, BILL_MEASURE4, MEASURE_TYPE4, ACCT_ID4, 
+    OFFER_INSTANCE_ID4, ITEM_SOURCE_ID4, BILLING_RECORD, ROAM_FLAG, RP_SESSION_ID, SOURCE_EVENT_TYPE, 
+    RESERVED_FIELD1, RESERVED_FIELD2, RESERVED_FIELD3, RESERVED_FIELD4, RESERVED_FIELD5, 
+    CARD_NO, EXTEND_VALUE1, BUSINESS_KEY, USER_TYPE, EXTEND_EVENT_VALUE01, EXTEND_EVENT_VALUE02, 
+    EXTEND_EVENT_VALUE03, EXTEND_EVENT_VALUE04, EXTEND_EVENT_VALUE05, EXTEND_EVENT_VALUE06, 
+    EXTEND_EVENT_VALUE07, EXTEND_EVENT_VALUE08, EXTEND_EVENT_VALUE09, EXTEND_EVENT_VALUE10, 
+    END_DATE, NO_BILL_FLAG, EXTEND_VALUE2, EXTEND_VALUE3, EXTEND_VALUE4, EXTEND_VALUE5, 
+    EXTEND_VALUE6, EXTEND_VALUE7, EXTEND_VALUE8, EXTEND_VALUE9, EXTEND_VALUE10, EVENT_SEQ, 
+    ORG_SEQUENCE, DOMAIN_NAME, ACCOUNT_AREA_CODE, FIRST_PRICING_MEASURE, IMEI, EXTEND_EVENT_ID01, 
+    EXTEND_EVENT_ID10, BIND_ATTR, LONG_TYPE_ID, ERROR_ID, USAGE_AMOUNT
+  </sql>
+  <select id="selectByExample" parameterType="generator.MobileDataEvent043111801Example" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ACCT.MOBILE_DATA_EVENT_0431_11801
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="generator.MobileDataEvent043111801Example">
+    delete from ACCT.MOBILE_DATA_EVENT_0431_11801
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="generator.MobileDataEvent043111801">
+    insert into ACCT.MOBILE_DATA_EVENT_0431_11801 (IMSI, NAI, NAS_IP, 
+      SESSION_ID, PPP_ID, PDSN_ADDRESS, 
+      PCF_ADDRESS, BSID, START_DATE, 
+      DURATION, SEND_AMOUNT, RECV_AMOUNT, 
+      SUM_AMOUNT, EVENT_ID, SWITCH_ID, 
+      FILE_ID, CREATED_DATE, EVENT_SOURCE_TYPE, 
+      MSC, LAC, CELL_ID, BILLING_CYCLE_ID, 
+      EVENT_TYPE_ID, BILL_FLOW_ID, SERV_ID, 
+      CUST_ID, PRODUCT_ID, BILLING_VISIT_AREA_CODE, 
+      ROAM_TYPE_ID, OFFER_ID1, OFFER_ID2, 
+      BILLING_AREA_CODE, BILLING_NBR, BILLING_ORG_ID, 
+      OFFER_ID4, CHARGE1, ACCT_ITEM_TYPE_ID1, 
+      BILL_MEASURE1, MEASURE_TYPE1, ACCT_ID1, 
+      OFFER_INSTANCE_ID1, ITEM_SOURCE_ID1, CHARGE2, 
+      ACCT_ITEM_TYPE_ID2, BILL_MEASURE2, MEASURE_TYPE2, 
+      ACCT_ID2, OFFER_INSTANCE_ID2, ITEM_SOURCE_ID2, 
+      CHARGE3, ACCT_ITEM_TYPE_ID3, BILL_MEASURE3, 
+      MEASURE_TYPE3, ACCT_ID3, OFFER_INSTANCE_ID3, 
+      ITEM_SOURCE_ID3, CHARGE4, ACCT_ITEM_TYPE_ID4, 
+      BILL_MEASURE4, MEASURE_TYPE4, ACCT_ID4, 
+      OFFER_INSTANCE_ID4, ITEM_SOURCE_ID4, BILLING_RECORD, 
+      ROAM_FLAG, RP_SESSION_ID, SOURCE_EVENT_TYPE, 
+      RESERVED_FIELD1, RESERVED_FIELD2, RESERVED_FIELD3, 
+      RESERVED_FIELD4, RESERVED_FIELD5, CARD_NO, 
+      EXTEND_VALUE1, BUSINESS_KEY, USER_TYPE, 
+      EXTEND_EVENT_VALUE01, EXTEND_EVENT_VALUE02, 
+      EXTEND_EVENT_VALUE03, EXTEND_EVENT_VALUE04, 
+      EXTEND_EVENT_VALUE05, EXTEND_EVENT_VALUE06, 
+      EXTEND_EVENT_VALUE07, EXTEND_EVENT_VALUE08, 
+      EXTEND_EVENT_VALUE09, EXTEND_EVENT_VALUE10, 
+      END_DATE, NO_BILL_FLAG, EXTEND_VALUE2, 
+      EXTEND_VALUE3, EXTEND_VALUE4, EXTEND_VALUE5, 
+      EXTEND_VALUE6, EXTEND_VALUE7, EXTEND_VALUE8, 
+      EXTEND_VALUE9, EXTEND_VALUE10, EVENT_SEQ, 
+      ORG_SEQUENCE, DOMAIN_NAME, ACCOUNT_AREA_CODE, 
+      FIRST_PRICING_MEASURE, IMEI, EXTEND_EVENT_ID01, 
+      EXTEND_EVENT_ID10, BIND_ATTR, LONG_TYPE_ID, 
+      ERROR_ID, USAGE_AMOUNT)
+    values (#{imsi,jdbcType=VARCHAR}, #{nai,jdbcType=VARCHAR}, #{nasIp,jdbcType=VARCHAR}, 
+      #{sessionId,jdbcType=VARCHAR}, #{pppId,jdbcType=VARCHAR}, #{pdsnAddress,jdbcType=VARCHAR}, 
+      #{pcfAddress,jdbcType=VARCHAR}, #{bsid,jdbcType=VARCHAR}, #{startDate,jdbcType=DATE}, 
+      #{duration,jdbcType=DECIMAL}, #{sendAmount,jdbcType=DECIMAL}, #{recvAmount,jdbcType=DECIMAL}, 
+      #{sumAmount,jdbcType=DECIMAL}, #{eventId,jdbcType=DECIMAL}, #{switchId,jdbcType=DECIMAL}, 
+      #{fileId,jdbcType=DECIMAL}, #{createdDate,jdbcType=DATE}, #{eventSourceType,jdbcType=DECIMAL}, 
+      #{msc,jdbcType=VARCHAR}, #{lac,jdbcType=VARCHAR}, #{cellId,jdbcType=VARCHAR}, #{billingCycleId,jdbcType=DECIMAL}, 
+      #{eventTypeId,jdbcType=DECIMAL}, #{billFlowId,jdbcType=DECIMAL}, #{servId,jdbcType=DECIMAL}, 
+      #{custId,jdbcType=DECIMAL}, #{productId,jdbcType=DECIMAL}, #{billingVisitAreaCode,jdbcType=VARCHAR}, 
+      #{roamTypeId,jdbcType=DECIMAL}, #{offerId1,jdbcType=DECIMAL}, #{offerId2,jdbcType=DECIMAL}, 
+      #{billingAreaCode,jdbcType=VARCHAR}, #{billingNbr,jdbcType=VARCHAR}, #{billingOrgId,jdbcType=DECIMAL}, 
+      #{offerId4,jdbcType=DECIMAL}, #{charge1,jdbcType=DECIMAL}, #{acctItemTypeId1,jdbcType=DECIMAL}, 
+      #{billMeasure1,jdbcType=DECIMAL}, #{measureType1,jdbcType=DECIMAL}, #{acctId1,jdbcType=DECIMAL}, 
+      #{offerInstanceId1,jdbcType=DECIMAL}, #{itemSourceId1,jdbcType=DECIMAL}, #{charge2,jdbcType=DECIMAL}, 
+      #{acctItemTypeId2,jdbcType=DECIMAL}, #{billMeasure2,jdbcType=DECIMAL}, #{measureType2,jdbcType=DECIMAL}, 
+      #{acctId2,jdbcType=DECIMAL}, #{offerInstanceId2,jdbcType=DECIMAL}, #{itemSourceId2,jdbcType=DECIMAL}, 
+      #{charge3,jdbcType=DECIMAL}, #{acctItemTypeId3,jdbcType=DECIMAL}, #{billMeasure3,jdbcType=DECIMAL}, 
+      #{measureType3,jdbcType=DECIMAL}, #{acctId3,jdbcType=DECIMAL}, #{offerInstanceId3,jdbcType=DECIMAL}, 
+      #{itemSourceId3,jdbcType=DECIMAL}, #{charge4,jdbcType=DECIMAL}, #{acctItemTypeId4,jdbcType=DECIMAL}, 
+      #{billMeasure4,jdbcType=DECIMAL}, #{measureType4,jdbcType=DECIMAL}, #{acctId4,jdbcType=DECIMAL}, 
+      #{offerInstanceId4,jdbcType=DECIMAL}, #{itemSourceId4,jdbcType=DECIMAL}, #{billingRecord,jdbcType=VARCHAR}, 
+      #{roamFlag,jdbcType=DECIMAL}, #{rpSessionId,jdbcType=VARCHAR}, #{sourceEventType,jdbcType=DECIMAL}, 
+      #{reservedField1,jdbcType=VARCHAR}, #{reservedField2,jdbcType=VARCHAR}, #{reservedField3,jdbcType=VARCHAR}, 
+      #{reservedField4,jdbcType=VARCHAR}, #{reservedField5,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
+      #{extendValue1,jdbcType=VARCHAR}, #{businessKey,jdbcType=DECIMAL}, #{userType,jdbcType=DECIMAL}, 
+      #{extendEventValue01,jdbcType=VARCHAR}, #{extendEventValue02,jdbcType=VARCHAR}, 
+      #{extendEventValue03,jdbcType=VARCHAR}, #{extendEventValue04,jdbcType=VARCHAR}, 
+      #{extendEventValue05,jdbcType=VARCHAR}, #{extendEventValue06,jdbcType=VARCHAR}, 
+      #{extendEventValue07,jdbcType=VARCHAR}, #{extendEventValue08,jdbcType=VARCHAR}, 
+      #{extendEventValue09,jdbcType=VARCHAR}, #{extendEventValue10,jdbcType=VARCHAR}, 
+      #{endDate,jdbcType=DATE}, #{noBillFlag,jdbcType=DECIMAL}, #{extendValue2,jdbcType=VARCHAR}, 
+      #{extendValue3,jdbcType=VARCHAR}, #{extendValue4,jdbcType=VARCHAR}, #{extendValue5,jdbcType=VARCHAR}, 
+      #{extendValue6,jdbcType=VARCHAR}, #{extendValue7,jdbcType=VARCHAR}, #{extendValue8,jdbcType=VARCHAR}, 
+      #{extendValue9,jdbcType=VARCHAR}, #{extendValue10,jdbcType=VARCHAR}, #{eventSeq,jdbcType=DECIMAL}, 
+      #{orgSequence,jdbcType=VARCHAR}, #{domainName,jdbcType=VARCHAR}, #{accountAreaCode,jdbcType=VARCHAR}, 
+      #{firstPricingMeasure,jdbcType=DECIMAL}, #{imei,jdbcType=VARCHAR}, #{extendEventId01,jdbcType=VARCHAR}, 
+      #{extendEventId10,jdbcType=VARCHAR}, #{bindAttr,jdbcType=VARCHAR}, #{longTypeId,jdbcType=DECIMAL}, 
+      #{errorId,jdbcType=DECIMAL}, #{usageAmount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="generator.MobileDataEvent043111801">
+    insert into ACCT.MOBILE_DATA_EVENT_0431_11801
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imsi != null">
+        IMSI,
+      </if>
+      <if test="nai != null">
+        NAI,
+      </if>
+      <if test="nasIp != null">
+        NAS_IP,
+      </if>
+      <if test="sessionId != null">
+        SESSION_ID,
+      </if>
+      <if test="pppId != null">
+        PPP_ID,
+      </if>
+      <if test="pdsnAddress != null">
+        PDSN_ADDRESS,
+      </if>
+      <if test="pcfAddress != null">
+        PCF_ADDRESS,
+      </if>
+      <if test="bsid != null">
+        BSID,
+      </if>
+      <if test="startDate != null">
+        START_DATE,
+      </if>
+      <if test="duration != null">
+        DURATION,
+      </if>
+      <if test="sendAmount != null">
+        SEND_AMOUNT,
+      </if>
+      <if test="recvAmount != null">
+        RECV_AMOUNT,
+      </if>
+      <if test="sumAmount != null">
+        SUM_AMOUNT,
+      </if>
+      <if test="eventId != null">
+        EVENT_ID,
+      </if>
+      <if test="switchId != null">
+        SWITCH_ID,
+      </if>
+      <if test="fileId != null">
+        FILE_ID,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="eventSourceType != null">
+        EVENT_SOURCE_TYPE,
+      </if>
+      <if test="msc != null">
+        MSC,
+      </if>
+      <if test="lac != null">
+        LAC,
+      </if>
+      <if test="cellId != null">
+        CELL_ID,
+      </if>
+      <if test="billingCycleId != null">
+        BILLING_CYCLE_ID,
+      </if>
+      <if test="eventTypeId != null">
+        EVENT_TYPE_ID,
+      </if>
+      <if test="billFlowId != null">
+        BILL_FLOW_ID,
+      </if>
+      <if test="servId != null">
+        SERV_ID,
+      </if>
+      <if test="custId != null">
+        CUST_ID,
+      </if>
+      <if test="productId != null">
+        PRODUCT_ID,
+      </if>
+      <if test="billingVisitAreaCode != null">
+        BILLING_VISIT_AREA_CODE,
+      </if>
+      <if test="roamTypeId != null">
+        ROAM_TYPE_ID,
+      </if>
+      <if test="offerId1 != null">
+        OFFER_ID1,
+      </if>
+      <if test="offerId2 != null">
+        OFFER_ID2,
+      </if>
+      <if test="billingAreaCode != null">
+        BILLING_AREA_CODE,
+      </if>
+      <if test="billingNbr != null">
+        BILLING_NBR,
+      </if>
+      <if test="billingOrgId != null">
+        BILLING_ORG_ID,
+      </if>
+      <if test="offerId4 != null">
+        OFFER_ID4,
+      </if>
+      <if test="charge1 != null">
+        CHARGE1,
+      </if>
+      <if test="acctItemTypeId1 != null">
+        ACCT_ITEM_TYPE_ID1,
+      </if>
+      <if test="billMeasure1 != null">
+        BILL_MEASURE1,
+      </if>
+      <if test="measureType1 != null">
+        MEASURE_TYPE1,
+      </if>
+      <if test="acctId1 != null">
+        ACCT_ID1,
+      </if>
+      <if test="offerInstanceId1 != null">
+        OFFER_INSTANCE_ID1,
+      </if>
+      <if test="itemSourceId1 != null">
+        ITEM_SOURCE_ID1,
+      </if>
+      <if test="charge2 != null">
+        CHARGE2,
+      </if>
+      <if test="acctItemTypeId2 != null">
+        ACCT_ITEM_TYPE_ID2,
+      </if>
+      <if test="billMeasure2 != null">
+        BILL_MEASURE2,
+      </if>
+      <if test="measureType2 != null">
+        MEASURE_TYPE2,
+      </if>
+      <if test="acctId2 != null">
+        ACCT_ID2,
+      </if>
+      <if test="offerInstanceId2 != null">
+        OFFER_INSTANCE_ID2,
+      </if>
+      <if test="itemSourceId2 != null">
+        ITEM_SOURCE_ID2,
+      </if>
+      <if test="charge3 != null">
+        CHARGE3,
+      </if>
+      <if test="acctItemTypeId3 != null">
+        ACCT_ITEM_TYPE_ID3,
+      </if>
+      <if test="billMeasure3 != null">
+        BILL_MEASURE3,
+      </if>
+      <if test="measureType3 != null">
+        MEASURE_TYPE3,
+      </if>
+      <if test="acctId3 != null">
+        ACCT_ID3,
+      </if>
+      <if test="offerInstanceId3 != null">
+        OFFER_INSTANCE_ID3,
+      </if>
+      <if test="itemSourceId3 != null">
+        ITEM_SOURCE_ID3,
+      </if>
+      <if test="charge4 != null">
+        CHARGE4,
+      </if>
+      <if test="acctItemTypeId4 != null">
+        ACCT_ITEM_TYPE_ID4,
+      </if>
+      <if test="billMeasure4 != null">
+        BILL_MEASURE4,
+      </if>
+      <if test="measureType4 != null">
+        MEASURE_TYPE4,
+      </if>
+      <if test="acctId4 != null">
+        ACCT_ID4,
+      </if>
+      <if test="offerInstanceId4 != null">
+        OFFER_INSTANCE_ID4,
+      </if>
+      <if test="itemSourceId4 != null">
+        ITEM_SOURCE_ID4,
+      </if>
+      <if test="billingRecord != null">
+        BILLING_RECORD,
+      </if>
+      <if test="roamFlag != null">
+        ROAM_FLAG,
+      </if>
+      <if test="rpSessionId != null">
+        RP_SESSION_ID,
+      </if>
+      <if test="sourceEventType != null">
+        SOURCE_EVENT_TYPE,
+      </if>
+      <if test="reservedField1 != null">
+        RESERVED_FIELD1,
+      </if>
+      <if test="reservedField2 != null">
+        RESERVED_FIELD2,
+      </if>
+      <if test="reservedField3 != null">
+        RESERVED_FIELD3,
+      </if>
+      <if test="reservedField4 != null">
+        RESERVED_FIELD4,
+      </if>
+      <if test="reservedField5 != null">
+        RESERVED_FIELD5,
+      </if>
+      <if test="cardNo != null">
+        CARD_NO,
+      </if>
+      <if test="extendValue1 != null">
+        EXTEND_VALUE1,
+      </if>
+      <if test="businessKey != null">
+        BUSINESS_KEY,
+      </if>
+      <if test="userType != null">
+        USER_TYPE,
+      </if>
+      <if test="extendEventValue01 != null">
+        EXTEND_EVENT_VALUE01,
+      </if>
+      <if test="extendEventValue02 != null">
+        EXTEND_EVENT_VALUE02,
+      </if>
+      <if test="extendEventValue03 != null">
+        EXTEND_EVENT_VALUE03,
+      </if>
+      <if test="extendEventValue04 != null">
+        EXTEND_EVENT_VALUE04,
+      </if>
+      <if test="extendEventValue05 != null">
+        EXTEND_EVENT_VALUE05,
+      </if>
+      <if test="extendEventValue06 != null">
+        EXTEND_EVENT_VALUE06,
+      </if>
+      <if test="extendEventValue07 != null">
+        EXTEND_EVENT_VALUE07,
+      </if>
+      <if test="extendEventValue08 != null">
+        EXTEND_EVENT_VALUE08,
+      </if>
+      <if test="extendEventValue09 != null">
+        EXTEND_EVENT_VALUE09,
+      </if>
+      <if test="extendEventValue10 != null">
+        EXTEND_EVENT_VALUE10,
+      </if>
+      <if test="endDate != null">
+        END_DATE,
+      </if>
+      <if test="noBillFlag != null">
+        NO_BILL_FLAG,
+      </if>
+      <if test="extendValue2 != null">
+        EXTEND_VALUE2,
+      </if>
+      <if test="extendValue3 != null">
+        EXTEND_VALUE3,
+      </if>
+      <if test="extendValue4 != null">
+        EXTEND_VALUE4,
+      </if>
+      <if test="extendValue5 != null">
+        EXTEND_VALUE5,
+      </if>
+      <if test="extendValue6 != null">
+        EXTEND_VALUE6,
+      </if>
+      <if test="extendValue7 != null">
+        EXTEND_VALUE7,
+      </if>
+      <if test="extendValue8 != null">
+        EXTEND_VALUE8,
+      </if>
+      <if test="extendValue9 != null">
+        EXTEND_VALUE9,
+      </if>
+      <if test="extendValue10 != null">
+        EXTEND_VALUE10,
+      </if>
+      <if test="eventSeq != null">
+        EVENT_SEQ,
+      </if>
+      <if test="orgSequence != null">
+        ORG_SEQUENCE,
+      </if>
+      <if test="domainName != null">
+        DOMAIN_NAME,
+      </if>
+      <if test="accountAreaCode != null">
+        ACCOUNT_AREA_CODE,
+      </if>
+      <if test="firstPricingMeasure != null">
+        FIRST_PRICING_MEASURE,
+      </if>
+      <if test="imei != null">
+        IMEI,
+      </if>
+      <if test="extendEventId01 != null">
+        EXTEND_EVENT_ID01,
+      </if>
+      <if test="extendEventId10 != null">
+        EXTEND_EVENT_ID10,
+      </if>
+      <if test="bindAttr != null">
+        BIND_ATTR,
+      </if>
+      <if test="longTypeId != null">
+        LONG_TYPE_ID,
+      </if>
+      <if test="errorId != null">
+        ERROR_ID,
+      </if>
+      <if test="usageAmount != null">
+        USAGE_AMOUNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imsi != null">
+        #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="nai != null">
+        #{nai,jdbcType=VARCHAR},
+      </if>
+      <if test="nasIp != null">
+        #{nasIp,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionId != null">
+        #{sessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="pppId != null">
+        #{pppId,jdbcType=VARCHAR},
+      </if>
+      <if test="pdsnAddress != null">
+        #{pdsnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="pcfAddress != null">
+        #{pcfAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="bsid != null">
+        #{bsid,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=DECIMAL},
+      </if>
+      <if test="sendAmount != null">
+        #{sendAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="recvAmount != null">
+        #{recvAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sumAmount != null">
+        #{sumAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="eventId != null">
+        #{eventId,jdbcType=DECIMAL},
+      </if>
+      <if test="switchId != null">
+        #{switchId,jdbcType=DECIMAL},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=DATE},
+      </if>
+      <if test="eventSourceType != null">
+        #{eventSourceType,jdbcType=DECIMAL},
+      </if>
+      <if test="msc != null">
+        #{msc,jdbcType=VARCHAR},
+      </if>
+      <if test="lac != null">
+        #{lac,jdbcType=VARCHAR},
+      </if>
+      <if test="cellId != null">
+        #{cellId,jdbcType=VARCHAR},
+      </if>
+      <if test="billingCycleId != null">
+        #{billingCycleId,jdbcType=DECIMAL},
+      </if>
+      <if test="eventTypeId != null">
+        #{eventTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="billFlowId != null">
+        #{billFlowId,jdbcType=DECIMAL},
+      </if>
+      <if test="servId != null">
+        #{servId,jdbcType=DECIMAL},
+      </if>
+      <if test="custId != null">
+        #{custId,jdbcType=DECIMAL},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=DECIMAL},
+      </if>
+      <if test="billingVisitAreaCode != null">
+        #{billingVisitAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="roamTypeId != null">
+        #{roamTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="offerId1 != null">
+        #{offerId1,jdbcType=DECIMAL},
+      </if>
+      <if test="offerId2 != null">
+        #{offerId2,jdbcType=DECIMAL},
+      </if>
+      <if test="billingAreaCode != null">
+        #{billingAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billingNbr != null">
+        #{billingNbr,jdbcType=VARCHAR},
+      </if>
+      <if test="billingOrgId != null">
+        #{billingOrgId,jdbcType=DECIMAL},
+      </if>
+      <if test="offerId4 != null">
+        #{offerId4,jdbcType=DECIMAL},
+      </if>
+      <if test="charge1 != null">
+        #{charge1,jdbcType=DECIMAL},
+      </if>
+      <if test="acctItemTypeId1 != null">
+        #{acctItemTypeId1,jdbcType=DECIMAL},
+      </if>
+      <if test="billMeasure1 != null">
+        #{billMeasure1,jdbcType=DECIMAL},
+      </if>
+      <if test="measureType1 != null">
+        #{measureType1,jdbcType=DECIMAL},
+      </if>
+      <if test="acctId1 != null">
+        #{acctId1,jdbcType=DECIMAL},
+      </if>
+      <if test="offerInstanceId1 != null">
+        #{offerInstanceId1,jdbcType=DECIMAL},
+      </if>
+      <if test="itemSourceId1 != null">
+        #{itemSourceId1,jdbcType=DECIMAL},
+      </if>
+      <if test="charge2 != null">
+        #{charge2,jdbcType=DECIMAL},
+      </if>
+      <if test="acctItemTypeId2 != null">
+        #{acctItemTypeId2,jdbcType=DECIMAL},
+      </if>
+      <if test="billMeasure2 != null">
+        #{billMeasure2,jdbcType=DECIMAL},
+      </if>
+      <if test="measureType2 != null">
+        #{measureType2,jdbcType=DECIMAL},
+      </if>
+      <if test="acctId2 != null">
+        #{acctId2,jdbcType=DECIMAL},
+      </if>
+      <if test="offerInstanceId2 != null">
+        #{offerInstanceId2,jdbcType=DECIMAL},
+      </if>
+      <if test="itemSourceId2 != null">
+        #{itemSourceId2,jdbcType=DECIMAL},
+      </if>
+      <if test="charge3 != null">
+        #{charge3,jdbcType=DECIMAL},
+      </if>
+      <if test="acctItemTypeId3 != null">
+        #{acctItemTypeId3,jdbcType=DECIMAL},
+      </if>
+      <if test="billMeasure3 != null">
+        #{billMeasure3,jdbcType=DECIMAL},
+      </if>
+      <if test="measureType3 != null">
+        #{measureType3,jdbcType=DECIMAL},
+      </if>
+      <if test="acctId3 != null">
+        #{acctId3,jdbcType=DECIMAL},
+      </if>
+      <if test="offerInstanceId3 != null">
+        #{offerInstanceId3,jdbcType=DECIMAL},
+      </if>
+      <if test="itemSourceId3 != null">
+        #{itemSourceId3,jdbcType=DECIMAL},
+      </if>
+      <if test="charge4 != null">
+        #{charge4,jdbcType=DECIMAL},
+      </if>
+      <if test="acctItemTypeId4 != null">
+        #{acctItemTypeId4,jdbcType=DECIMAL},
+      </if>
+      <if test="billMeasure4 != null">
+        #{billMeasure4,jdbcType=DECIMAL},
+      </if>
+      <if test="measureType4 != null">
+        #{measureType4,jdbcType=DECIMAL},
+      </if>
+      <if test="acctId4 != null">
+        #{acctId4,jdbcType=DECIMAL},
+      </if>
+      <if test="offerInstanceId4 != null">
+        #{offerInstanceId4,jdbcType=DECIMAL},
+      </if>
+      <if test="itemSourceId4 != null">
+        #{itemSourceId4,jdbcType=DECIMAL},
+      </if>
+      <if test="billingRecord != null">
+        #{billingRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="roamFlag != null">
+        #{roamFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="rpSessionId != null">
+        #{rpSessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceEventType != null">
+        #{sourceEventType,jdbcType=DECIMAL},
+      </if>
+      <if test="reservedField1 != null">
+        #{reservedField1,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedField2 != null">
+        #{reservedField2,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedField3 != null">
+        #{reservedField3,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedField4 != null">
+        #{reservedField4,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedField5 != null">
+        #{reservedField5,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue1 != null">
+        #{extendValue1,jdbcType=VARCHAR},
+      </if>
+      <if test="businessKey != null">
+        #{businessKey,jdbcType=DECIMAL},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=DECIMAL},
+      </if>
+      <if test="extendEventValue01 != null">
+        #{extendEventValue01,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue02 != null">
+        #{extendEventValue02,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue03 != null">
+        #{extendEventValue03,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue04 != null">
+        #{extendEventValue04,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue05 != null">
+        #{extendEventValue05,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue06 != null">
+        #{extendEventValue06,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue07 != null">
+        #{extendEventValue07,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue08 != null">
+        #{extendEventValue08,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue09 != null">
+        #{extendEventValue09,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventValue10 != null">
+        #{extendEventValue10,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="noBillFlag != null">
+        #{noBillFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="extendValue2 != null">
+        #{extendValue2,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue3 != null">
+        #{extendValue3,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue4 != null">
+        #{extendValue4,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue5 != null">
+        #{extendValue5,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue6 != null">
+        #{extendValue6,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue7 != null">
+        #{extendValue7,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue8 != null">
+        #{extendValue8,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue9 != null">
+        #{extendValue9,jdbcType=VARCHAR},
+      </if>
+      <if test="extendValue10 != null">
+        #{extendValue10,jdbcType=VARCHAR},
+      </if>
+      <if test="eventSeq != null">
+        #{eventSeq,jdbcType=DECIMAL},
+      </if>
+      <if test="orgSequence != null">
+        #{orgSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="domainName != null">
+        #{domainName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAreaCode != null">
+        #{accountAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPricingMeasure != null">
+        #{firstPricingMeasure,jdbcType=DECIMAL},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventId01 != null">
+        #{extendEventId01,jdbcType=VARCHAR},
+      </if>
+      <if test="extendEventId10 != null">
+        #{extendEventId10,jdbcType=VARCHAR},
+      </if>
+      <if test="bindAttr != null">
+        #{bindAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="longTypeId != null">
+        #{longTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="errorId != null">
+        #{errorId,jdbcType=DECIMAL},
+      </if>
+      <if test="usageAmount != null">
+        #{usageAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="generator.MobileDataEvent043111801Example" resultType="java.lang.Long">
+    select count(*) from ACCT.MOBILE_DATA_EVENT_0431_11801
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ACCT.MOBILE_DATA_EVENT_0431_11801
+    <set>
+      <if test="record.imsi != null">
+        IMSI = #{record.imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nai != null">
+        NAI = #{record.nai,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nasIp != null">
+        NAS_IP = #{record.nasIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sessionId != null">
+        SESSION_ID = #{record.sessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pppId != null">
+        PPP_ID = #{record.pppId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pdsnAddress != null">
+        PDSN_ADDRESS = #{record.pdsnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pcfAddress != null">
+        PCF_ADDRESS = #{record.pcfAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bsid != null">
+        BSID = #{record.bsid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startDate != null">
+        START_DATE = #{record.startDate,jdbcType=DATE},
+      </if>
+      <if test="record.duration != null">
+        DURATION = #{record.duration,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sendAmount != null">
+        SEND_AMOUNT = #{record.sendAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.recvAmount != null">
+        RECV_AMOUNT = #{record.recvAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sumAmount != null">
+        SUM_AMOUNT = #{record.sumAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.eventId != null">
+        EVENT_ID = #{record.eventId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.switchId != null">
+        SWITCH_ID = #{record.switchId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fileId != null">
+        FILE_ID = #{record.fileId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createdDate != null">
+        CREATED_DATE = #{record.createdDate,jdbcType=DATE},
+      </if>
+      <if test="record.eventSourceType != null">
+        EVENT_SOURCE_TYPE = #{record.eventSourceType,jdbcType=DECIMAL},
+      </if>
+      <if test="record.msc != null">
+        MSC = #{record.msc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lac != null">
+        LAC = #{record.lac,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cellId != null">
+        CELL_ID = #{record.cellId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billingCycleId != null">
+        BILLING_CYCLE_ID = #{record.billingCycleId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.eventTypeId != null">
+        EVENT_TYPE_ID = #{record.eventTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billFlowId != null">
+        BILL_FLOW_ID = #{record.billFlowId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.servId != null">
+        SERV_ID = #{record.servId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.custId != null">
+        CUST_ID = #{record.custId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productId != null">
+        PRODUCT_ID = #{record.productId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billingVisitAreaCode != null">
+        BILLING_VISIT_AREA_CODE = #{record.billingVisitAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roamTypeId != null">
+        ROAM_TYPE_ID = #{record.roamTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerId1 != null">
+        OFFER_ID1 = #{record.offerId1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerId2 != null">
+        OFFER_ID2 = #{record.offerId2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billingAreaCode != null">
+        BILLING_AREA_CODE = #{record.billingAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billingNbr != null">
+        BILLING_NBR = #{record.billingNbr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billingOrgId != null">
+        BILLING_ORG_ID = #{record.billingOrgId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerId4 != null">
+        OFFER_ID4 = #{record.offerId4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.charge1 != null">
+        CHARGE1 = #{record.charge1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctItemTypeId1 != null">
+        ACCT_ITEM_TYPE_ID1 = #{record.acctItemTypeId1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billMeasure1 != null">
+        BILL_MEASURE1 = #{record.billMeasure1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.measureType1 != null">
+        MEASURE_TYPE1 = #{record.measureType1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctId1 != null">
+        ACCT_ID1 = #{record.acctId1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerInstanceId1 != null">
+        OFFER_INSTANCE_ID1 = #{record.offerInstanceId1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemSourceId1 != null">
+        ITEM_SOURCE_ID1 = #{record.itemSourceId1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.charge2 != null">
+        CHARGE2 = #{record.charge2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctItemTypeId2 != null">
+        ACCT_ITEM_TYPE_ID2 = #{record.acctItemTypeId2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billMeasure2 != null">
+        BILL_MEASURE2 = #{record.billMeasure2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.measureType2 != null">
+        MEASURE_TYPE2 = #{record.measureType2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctId2 != null">
+        ACCT_ID2 = #{record.acctId2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerInstanceId2 != null">
+        OFFER_INSTANCE_ID2 = #{record.offerInstanceId2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemSourceId2 != null">
+        ITEM_SOURCE_ID2 = #{record.itemSourceId2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.charge3 != null">
+        CHARGE3 = #{record.charge3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctItemTypeId3 != null">
+        ACCT_ITEM_TYPE_ID3 = #{record.acctItemTypeId3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billMeasure3 != null">
+        BILL_MEASURE3 = #{record.billMeasure3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.measureType3 != null">
+        MEASURE_TYPE3 = #{record.measureType3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctId3 != null">
+        ACCT_ID3 = #{record.acctId3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerInstanceId3 != null">
+        OFFER_INSTANCE_ID3 = #{record.offerInstanceId3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemSourceId3 != null">
+        ITEM_SOURCE_ID3 = #{record.itemSourceId3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.charge4 != null">
+        CHARGE4 = #{record.charge4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctItemTypeId4 != null">
+        ACCT_ITEM_TYPE_ID4 = #{record.acctItemTypeId4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billMeasure4 != null">
+        BILL_MEASURE4 = #{record.billMeasure4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.measureType4 != null">
+        MEASURE_TYPE4 = #{record.measureType4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.acctId4 != null">
+        ACCT_ID4 = #{record.acctId4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.offerInstanceId4 != null">
+        OFFER_INSTANCE_ID4 = #{record.offerInstanceId4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemSourceId4 != null">
+        ITEM_SOURCE_ID4 = #{record.itemSourceId4,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billingRecord != null">
+        BILLING_RECORD = #{record.billingRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roamFlag != null">
+        ROAM_FLAG = #{record.roamFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rpSessionId != null">
+        RP_SESSION_ID = #{record.rpSessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceEventType != null">
+        SOURCE_EVENT_TYPE = #{record.sourceEventType,jdbcType=DECIMAL},
+      </if>
+      <if test="record.reservedField1 != null">
+        RESERVED_FIELD1 = #{record.reservedField1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reservedField2 != null">
+        RESERVED_FIELD2 = #{record.reservedField2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reservedField3 != null">
+        RESERVED_FIELD3 = #{record.reservedField3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reservedField4 != null">
+        RESERVED_FIELD4 = #{record.reservedField4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reservedField5 != null">
+        RESERVED_FIELD5 = #{record.reservedField5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardNo != null">
+        CARD_NO = #{record.cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue1 != null">
+        EXTEND_VALUE1 = #{record.extendValue1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessKey != null">
+        BUSINESS_KEY = #{record.businessKey,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userType != null">
+        USER_TYPE = #{record.userType,jdbcType=DECIMAL},
+      </if>
+      <if test="record.extendEventValue01 != null">
+        EXTEND_EVENT_VALUE01 = #{record.extendEventValue01,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue02 != null">
+        EXTEND_EVENT_VALUE02 = #{record.extendEventValue02,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue03 != null">
+        EXTEND_EVENT_VALUE03 = #{record.extendEventValue03,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue04 != null">
+        EXTEND_EVENT_VALUE04 = #{record.extendEventValue04,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue05 != null">
+        EXTEND_EVENT_VALUE05 = #{record.extendEventValue05,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue06 != null">
+        EXTEND_EVENT_VALUE06 = #{record.extendEventValue06,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue07 != null">
+        EXTEND_EVENT_VALUE07 = #{record.extendEventValue07,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue08 != null">
+        EXTEND_EVENT_VALUE08 = #{record.extendEventValue08,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue09 != null">
+        EXTEND_EVENT_VALUE09 = #{record.extendEventValue09,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventValue10 != null">
+        EXTEND_EVENT_VALUE10 = #{record.extendEventValue10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endDate != null">
+        END_DATE = #{record.endDate,jdbcType=DATE},
+      </if>
+      <if test="record.noBillFlag != null">
+        NO_BILL_FLAG = #{record.noBillFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="record.extendValue2 != null">
+        EXTEND_VALUE2 = #{record.extendValue2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue3 != null">
+        EXTEND_VALUE3 = #{record.extendValue3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue4 != null">
+        EXTEND_VALUE4 = #{record.extendValue4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue5 != null">
+        EXTEND_VALUE5 = #{record.extendValue5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue6 != null">
+        EXTEND_VALUE6 = #{record.extendValue6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue7 != null">
+        EXTEND_VALUE7 = #{record.extendValue7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue8 != null">
+        EXTEND_VALUE8 = #{record.extendValue8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue9 != null">
+        EXTEND_VALUE9 = #{record.extendValue9,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendValue10 != null">
+        EXTEND_VALUE10 = #{record.extendValue10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eventSeq != null">
+        EVENT_SEQ = #{record.eventSeq,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orgSequence != null">
+        ORG_SEQUENCE = #{record.orgSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="record.domainName != null">
+        DOMAIN_NAME = #{record.domainName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountAreaCode != null">
+        ACCOUNT_AREA_CODE = #{record.accountAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstPricingMeasure != null">
+        FIRST_PRICING_MEASURE = #{record.firstPricingMeasure,jdbcType=DECIMAL},
+      </if>
+      <if test="record.imei != null">
+        IMEI = #{record.imei,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventId01 != null">
+        EXTEND_EVENT_ID01 = #{record.extendEventId01,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendEventId10 != null">
+        EXTEND_EVENT_ID10 = #{record.extendEventId10,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bindAttr != null">
+        BIND_ATTR = #{record.bindAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longTypeId != null">
+        LONG_TYPE_ID = #{record.longTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.errorId != null">
+        ERROR_ID = #{record.errorId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.usageAmount != null">
+        USAGE_AMOUNT = #{record.usageAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ACCT.MOBILE_DATA_EVENT_0431_11801
+    set IMSI = #{record.imsi,jdbcType=VARCHAR},
+      NAI = #{record.nai,jdbcType=VARCHAR},
+      NAS_IP = #{record.nasIp,jdbcType=VARCHAR},
+      SESSION_ID = #{record.sessionId,jdbcType=VARCHAR},
+      PPP_ID = #{record.pppId,jdbcType=VARCHAR},
+      PDSN_ADDRESS = #{record.pdsnAddress,jdbcType=VARCHAR},
+      PCF_ADDRESS = #{record.pcfAddress,jdbcType=VARCHAR},
+      BSID = #{record.bsid,jdbcType=VARCHAR},
+      START_DATE = #{record.startDate,jdbcType=DATE},
+      DURATION = #{record.duration,jdbcType=DECIMAL},
+      SEND_AMOUNT = #{record.sendAmount,jdbcType=DECIMAL},
+      RECV_AMOUNT = #{record.recvAmount,jdbcType=DECIMAL},
+      SUM_AMOUNT = #{record.sumAmount,jdbcType=DECIMAL},
+      EVENT_ID = #{record.eventId,jdbcType=DECIMAL},
+      SWITCH_ID = #{record.switchId,jdbcType=DECIMAL},
+      FILE_ID = #{record.fileId,jdbcType=DECIMAL},
+      CREATED_DATE = #{record.createdDate,jdbcType=DATE},
+      EVENT_SOURCE_TYPE = #{record.eventSourceType,jdbcType=DECIMAL},
+      MSC = #{record.msc,jdbcType=VARCHAR},
+      LAC = #{record.lac,jdbcType=VARCHAR},
+      CELL_ID = #{record.cellId,jdbcType=VARCHAR},
+      BILLING_CYCLE_ID = #{record.billingCycleId,jdbcType=DECIMAL},
+      EVENT_TYPE_ID = #{record.eventTypeId,jdbcType=DECIMAL},
+      BILL_FLOW_ID = #{record.billFlowId,jdbcType=DECIMAL},
+      SERV_ID = #{record.servId,jdbcType=DECIMAL},
+      CUST_ID = #{record.custId,jdbcType=DECIMAL},
+      PRODUCT_ID = #{record.productId,jdbcType=DECIMAL},
+      BILLING_VISIT_AREA_CODE = #{record.billingVisitAreaCode,jdbcType=VARCHAR},
+      ROAM_TYPE_ID = #{record.roamTypeId,jdbcType=DECIMAL},
+      OFFER_ID1 = #{record.offerId1,jdbcType=DECIMAL},
+      OFFER_ID2 = #{record.offerId2,jdbcType=DECIMAL},
+      BILLING_AREA_CODE = #{record.billingAreaCode,jdbcType=VARCHAR},
+      BILLING_NBR = #{record.billingNbr,jdbcType=VARCHAR},
+      BILLING_ORG_ID = #{record.billingOrgId,jdbcType=DECIMAL},
+      OFFER_ID4 = #{record.offerId4,jdbcType=DECIMAL},
+      CHARGE1 = #{record.charge1,jdbcType=DECIMAL},
+      ACCT_ITEM_TYPE_ID1 = #{record.acctItemTypeId1,jdbcType=DECIMAL},
+      BILL_MEASURE1 = #{record.billMeasure1,jdbcType=DECIMAL},
+      MEASURE_TYPE1 = #{record.measureType1,jdbcType=DECIMAL},
+      ACCT_ID1 = #{record.acctId1,jdbcType=DECIMAL},
+      OFFER_INSTANCE_ID1 = #{record.offerInstanceId1,jdbcType=DECIMAL},
+      ITEM_SOURCE_ID1 = #{record.itemSourceId1,jdbcType=DECIMAL},
+      CHARGE2 = #{record.charge2,jdbcType=DECIMAL},
+      ACCT_ITEM_TYPE_ID2 = #{record.acctItemTypeId2,jdbcType=DECIMAL},
+      BILL_MEASURE2 = #{record.billMeasure2,jdbcType=DECIMAL},
+      MEASURE_TYPE2 = #{record.measureType2,jdbcType=DECIMAL},
+      ACCT_ID2 = #{record.acctId2,jdbcType=DECIMAL},
+      OFFER_INSTANCE_ID2 = #{record.offerInstanceId2,jdbcType=DECIMAL},
+      ITEM_SOURCE_ID2 = #{record.itemSourceId2,jdbcType=DECIMAL},
+      CHARGE3 = #{record.charge3,jdbcType=DECIMAL},
+      ACCT_ITEM_TYPE_ID3 = #{record.acctItemTypeId3,jdbcType=DECIMAL},
+      BILL_MEASURE3 = #{record.billMeasure3,jdbcType=DECIMAL},
+      MEASURE_TYPE3 = #{record.measureType3,jdbcType=DECIMAL},
+      ACCT_ID3 = #{record.acctId3,jdbcType=DECIMAL},
+      OFFER_INSTANCE_ID3 = #{record.offerInstanceId3,jdbcType=DECIMAL},
+      ITEM_SOURCE_ID3 = #{record.itemSourceId3,jdbcType=DECIMAL},
+      CHARGE4 = #{record.charge4,jdbcType=DECIMAL},
+      ACCT_ITEM_TYPE_ID4 = #{record.acctItemTypeId4,jdbcType=DECIMAL},
+      BILL_MEASURE4 = #{record.billMeasure4,jdbcType=DECIMAL},
+      MEASURE_TYPE4 = #{record.measureType4,jdbcType=DECIMAL},
+      ACCT_ID4 = #{record.acctId4,jdbcType=DECIMAL},
+      OFFER_INSTANCE_ID4 = #{record.offerInstanceId4,jdbcType=DECIMAL},
+      ITEM_SOURCE_ID4 = #{record.itemSourceId4,jdbcType=DECIMAL},
+      BILLING_RECORD = #{record.billingRecord,jdbcType=VARCHAR},
+      ROAM_FLAG = #{record.roamFlag,jdbcType=DECIMAL},
+      RP_SESSION_ID = #{record.rpSessionId,jdbcType=VARCHAR},
+      SOURCE_EVENT_TYPE = #{record.sourceEventType,jdbcType=DECIMAL},
+      RESERVED_FIELD1 = #{record.reservedField1,jdbcType=VARCHAR},
+      RESERVED_FIELD2 = #{record.reservedField2,jdbcType=VARCHAR},
+      RESERVED_FIELD3 = #{record.reservedField3,jdbcType=VARCHAR},
+      RESERVED_FIELD4 = #{record.reservedField4,jdbcType=VARCHAR},
+      RESERVED_FIELD5 = #{record.reservedField5,jdbcType=VARCHAR},
+      CARD_NO = #{record.cardNo,jdbcType=VARCHAR},
+      EXTEND_VALUE1 = #{record.extendValue1,jdbcType=VARCHAR},
+      BUSINESS_KEY = #{record.businessKey,jdbcType=DECIMAL},
+      USER_TYPE = #{record.userType,jdbcType=DECIMAL},
+      EXTEND_EVENT_VALUE01 = #{record.extendEventValue01,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE02 = #{record.extendEventValue02,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE03 = #{record.extendEventValue03,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE04 = #{record.extendEventValue04,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE05 = #{record.extendEventValue05,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE06 = #{record.extendEventValue06,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE07 = #{record.extendEventValue07,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE08 = #{record.extendEventValue08,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE09 = #{record.extendEventValue09,jdbcType=VARCHAR},
+      EXTEND_EVENT_VALUE10 = #{record.extendEventValue10,jdbcType=VARCHAR},
+      END_DATE = #{record.endDate,jdbcType=DATE},
+      NO_BILL_FLAG = #{record.noBillFlag,jdbcType=DECIMAL},
+      EXTEND_VALUE2 = #{record.extendValue2,jdbcType=VARCHAR},
+      EXTEND_VALUE3 = #{record.extendValue3,jdbcType=VARCHAR},
+      EXTEND_VALUE4 = #{record.extendValue4,jdbcType=VARCHAR},
+      EXTEND_VALUE5 = #{record.extendValue5,jdbcType=VARCHAR},
+      EXTEND_VALUE6 = #{record.extendValue6,jdbcType=VARCHAR},
+      EXTEND_VALUE7 = #{record.extendValue7,jdbcType=VARCHAR},
+      EXTEND_VALUE8 = #{record.extendValue8,jdbcType=VARCHAR},
+      EXTEND_VALUE9 = #{record.extendValue9,jdbcType=VARCHAR},
+      EXTEND_VALUE10 = #{record.extendValue10,jdbcType=VARCHAR},
+      EVENT_SEQ = #{record.eventSeq,jdbcType=DECIMAL},
+      ORG_SEQUENCE = #{record.orgSequence,jdbcType=VARCHAR},
+      DOMAIN_NAME = #{record.domainName,jdbcType=VARCHAR},
+      ACCOUNT_AREA_CODE = #{record.accountAreaCode,jdbcType=VARCHAR},
+      FIRST_PRICING_MEASURE = #{record.firstPricingMeasure,jdbcType=DECIMAL},
+      IMEI = #{record.imei,jdbcType=VARCHAR},
+      EXTEND_EVENT_ID01 = #{record.extendEventId01,jdbcType=VARCHAR},
+      EXTEND_EVENT_ID10 = #{record.extendEventId10,jdbcType=VARCHAR},
+      BIND_ATTR = #{record.bindAttr,jdbcType=VARCHAR},
+      LONG_TYPE_ID = #{record.longTypeId,jdbcType=DECIMAL},
+      ERROR_ID = #{record.errorId,jdbcType=DECIMAL},
+      USAGE_AMOUNT = #{record.usageAmount,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

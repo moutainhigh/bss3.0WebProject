@@ -21,7 +21,10 @@ public class BillException extends Exception {
 
 
     public BillException(String message, Throwable cause) {
-        super(message, cause);
+        //super(message, cause);
+        super(cause.toString());
+        this.errCode = message;
+        this.errMsg = cause.toString();
     }
 
     public BillException(String message) {

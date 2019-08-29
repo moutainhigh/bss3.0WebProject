@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.BillingCycle0615Dao">
+  <resultMap id="BaseResultMap" type="generator.BillingCycle0615">
+    <result column="BILLING_CYCLE_ID" jdbcType="DECIMAL" property="billingCycleId" />
+    <result column="BILLING_CYCLE_TYPE_ID" jdbcType="DECIMAL" property="billingCycleTypeId" />
+    <result column="CYCLE_BEGIN_DATE" jdbcType="DATE" property="cycleBeginDate" />
+    <result column="CYCLE_END_DATE" jdbcType="DATE" property="cycleEndDate" />
+    <result column="DUE_DATE" jdbcType="DATE" property="dueDate" />
+    <result column="BLOCK_DATE" jdbcType="DATE" property="blockDate" />
+    <result column="LAST_BILLING_CYCLE_ID" jdbcType="DECIMAL" property="lastBillingCycleId" />
+    <result column="STATE" jdbcType="VARCHAR" property="state" />
+    <result column="STATE_DATE" jdbcType="DATE" property="stateDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    BILLING_CYCLE_ID, BILLING_CYCLE_TYPE_ID, CYCLE_BEGIN_DATE, CYCLE_END_DATE, DUE_DATE, 
+    BLOCK_DATE, LAST_BILLING_CYCLE_ID, `STATE`, STATE_DATE
+  </sql>
+  <select id="selectByExample" parameterType="generator.BillingCycle0615Example" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ACCT.BILLING_CYCLE_0615
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="generator.BillingCycle0615Example">
+    delete from ACCT.BILLING_CYCLE_0615
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="generator.BillingCycle0615">
+    insert into ACCT.BILLING_CYCLE_0615 (BILLING_CYCLE_ID, BILLING_CYCLE_TYPE_ID, 
+      CYCLE_BEGIN_DATE, CYCLE_END_DATE, DUE_DATE, 
+      BLOCK_DATE, LAST_BILLING_CYCLE_ID, `STATE`, 
+      STATE_DATE)
+    values (#{billingCycleId,jdbcType=DECIMAL}, #{billingCycleTypeId,jdbcType=DECIMAL}, 
+      #{cycleBeginDate,jdbcType=DATE}, #{cycleEndDate,jdbcType=DATE}, #{dueDate,jdbcType=DATE}, 
+      #{blockDate,jdbcType=DATE}, #{lastBillingCycleId,jdbcType=DECIMAL}, #{state,jdbcType=VARCHAR}, 
+      #{stateDate,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="generator.BillingCycle0615">
+    insert into ACCT.BILLING_CYCLE_0615
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="billingCycleId != null">
+        BILLING_CYCLE_ID,
+      </if>
+      <if test="billingCycleTypeId != null">
+        BILLING_CYCLE_TYPE_ID,
+      </if>
+      <if test="cycleBeginDate != null">
+        CYCLE_BEGIN_DATE,
+      </if>
+      <if test="cycleEndDate != null">
+        CYCLE_END_DATE,
+      </if>
+      <if test="dueDate != null">
+        DUE_DATE,
+      </if>
+      <if test="blockDate != null">
+        BLOCK_DATE,
+      </if>
+      <if test="lastBillingCycleId != null">
+        LAST_BILLING_CYCLE_ID,
+      </if>
+      <if test="state != null">
+        `STATE`,
+      </if>
+      <if test="stateDate != null">
+        STATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="billingCycleId != null">
+        #{billingCycleId,jdbcType=DECIMAL},
+      </if>
+      <if test="billingCycleTypeId != null">
+        #{billingCycleTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="cycleBeginDate != null">
+        #{cycleBeginDate,jdbcType=DATE},
+      </if>
+      <if test="cycleEndDate != null">
+        #{cycleEndDate,jdbcType=DATE},
+      </if>
+      <if test="dueDate != null">
+        #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="blockDate != null">
+        #{blockDate,jdbcType=DATE},
+      </if>
+      <if test="lastBillingCycleId != null">
+        #{lastBillingCycleId,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="stateDate != null">
+        #{stateDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="generator.BillingCycle0615Example" resultType="java.lang.Long">
+    select count(*) from ACCT.BILLING_CYCLE_0615
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ACCT.BILLING_CYCLE_0615
+    <set>
+      <if test="record.billingCycleId != null">
+        BILLING_CYCLE_ID = #{record.billingCycleId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.billingCycleTypeId != null">
+        BILLING_CYCLE_TYPE_ID = #{record.billingCycleTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cycleBeginDate != null">
+        CYCLE_BEGIN_DATE = #{record.cycleBeginDate,jdbcType=DATE},
+      </if>
+      <if test="record.cycleEndDate != null">
+        CYCLE_END_DATE = #{record.cycleEndDate,jdbcType=DATE},
+      </if>
+      <if test="record.dueDate != null">
+        DUE_DATE = #{record.dueDate,jdbcType=DATE},
+      </if>
+      <if test="record.blockDate != null">
+        BLOCK_DATE = #{record.blockDate,jdbcType=DATE},
+      </if>
+      <if test="record.lastBillingCycleId != null">
+        LAST_BILLING_CYCLE_ID = #{record.lastBillingCycleId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.state != null">
+        `STATE` = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stateDate != null">
+        STATE_DATE = #{record.stateDate,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ACCT.BILLING_CYCLE_0615
+    set BILLING_CYCLE_ID = #{record.billingCycleId,jdbcType=DECIMAL},
+      BILLING_CYCLE_TYPE_ID = #{record.billingCycleTypeId,jdbcType=DECIMAL},
+      CYCLE_BEGIN_DATE = #{record.cycleBeginDate,jdbcType=DATE},
+      CYCLE_END_DATE = #{record.cycleEndDate,jdbcType=DATE},
+      DUE_DATE = #{record.dueDate,jdbcType=DATE},
+      BLOCK_DATE = #{record.blockDate,jdbcType=DATE},
+      LAST_BILLING_CYCLE_ID = #{record.lastBillingCycleId,jdbcType=DECIMAL},
+      `STATE` = #{record.state,jdbcType=VARCHAR},
+      STATE_DATE = #{record.stateDate,jdbcType=DATE}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

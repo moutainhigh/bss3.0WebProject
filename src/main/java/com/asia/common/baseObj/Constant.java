@@ -129,6 +129,10 @@ public class Constant{
 		 * 套餐使用量明细查询
 		 */
 		public static final String getUnitedAccuDetail=Constant.BASE_URL_BON3+"/billing/acct/std/getUnitedAccuDetail";
+		/**
+		 * 账单查询
+		 */
+		public static final String getOweList=Constant.BASE_URL_BON3+"/billing/acct/std/getOweList";
 		private Bon3(){}
 	}
 	

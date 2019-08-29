@@ -1,9 +1,8 @@
 package com.asia.service;
 
-import com.asia.domain.localApi.QryMonthHighFeeReq;
-import com.asia.domain.localApi.QryMonthHighFeeRes;
-import com.asia.domain.localApi.UserMeterOrderReq;
-import com.asia.domain.localApi.UserMeterOrderRes;
+import com.asia.domain.localApi.*;
+import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
+import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
 import org.apache.http.client.ClientProtocolException;
 
 import java.io.IOException;
@@ -28,6 +27,7 @@ public interface IlocalService {
      * qryWlanRemain  宽带到期提醒
      * qryOverAccuFee 累积量超出查询
      * userMeterOrderService  详单禁查
+     * printRecordService 详单打印记录
      */
     QryMonthHighFeeRes qryMonthHighFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     QryMonthHighFeeRes qryRealHighFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
@@ -38,6 +38,8 @@ public interface IlocalService {
     QryMonthHighFeeRes qryWlanRemain(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     UserMeterOrderRes  userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-
+    MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
+    QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
+    StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException;
 
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
+import com.asia.domain.bon3.StdCcrQueryServReq;
 import com.asia.service.impl.Bon3ServiceImpl;
 import com.asiainfo.account.model.domain.*;
 import com.asiainfo.account.model.request.*;
@@ -37,12 +38,17 @@ public class Bon3Controller{
 	 * @since V1.0.0
 	 */
 	@PostMapping("/searchServInfo")
-	public String searchServInfo(@RequestBody StdCcrQueryServRequest stdCcrQueryServ,
+	public String searchServInfo(@RequestBody StdCcrQueryServReq stdCcrQueryServ,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
 		LogUtil.opeLog("/bon3/searchServInfo","body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
 			+" header>>"+JSON.toJSONString(headers), this.getClass());
 		StdCcaQueryServResponse info=new StdCcaQueryServResponse();
+        StdCcrQueryServRequest queryServReq = new StdCcrQueryServRequest();
+		StdCcrQueryServ queryServ = new StdCcrQueryServ();
+		queryServReq.setStdCcrQueryServ(stdCcrQueryServ.getStdCcrQueryServ());
+		//根据系统落日志表
+		String systemId = stdCcrQueryServ.getSystemId();
 		try {
 			info.setStdCcaQueryServ(new StdCcaQueryServ());
 			info.getStdCcaQueryServ().setCustName("客户名称");
@@ -54,7 +60,7 @@ public class Bon3Controller{
 			info.getStdCcaQueryServ().setStateDate("20180903120101");
 			info.getStdCcaQueryServ().setPaymentFlag("1");
 			info.getStdCcaQueryServ().setHomeAreaCode("0531");
-//			info = bon3ServiceImpl.searchServInfo(stdCcrQueryServ, headers);
+			info = bon3ServiceImpl.searchServInfo(queryServReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/bon3/searchServInfo服务调用失败", e, this.getClass());

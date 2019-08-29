@@ -1,15 +1,15 @@
 package com.asia.domain.localApi;
 
-import com.asia.common.baseObj.BaseBonResDomain;
+import com.asia.common.baseObj.BaseDomain;
 
 /**
  * @author WangBaoQiang
  * @ClassName: UserMeterOrderReq
- * @description: TODO
+ * @description: 详单禁查
  * @date 2019/8/1013:40
  * @Version 1.0
  */
-public class UserMeterOrderReq  extends BaseBonResDomain {
+public class UserMeterOrderReq  extends BaseDomain {
 
     /**
      * action :

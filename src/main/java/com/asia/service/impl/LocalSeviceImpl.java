@@ -1,10 +1,9 @@
 package com.asia.service.impl;
 
 import com.asia.dao.OrclCommonDao;
-import com.asia.domain.localApi.QryMonthHighFeeReq;
-import com.asia.domain.localApi.QryMonthHighFeeRes;
-import com.asia.domain.localApi.UserMeterOrderReq;
-import com.asia.domain.localApi.UserMeterOrderRes;
+import com.asia.domain.localApi.*;
+import com.asia.domain.localApi.child.AgreementConsumeSetBean;
+import com.asia.domain.localApi.child.AgreementConsumeSetTypeBean;
 import com.asia.domain.localApi.child.IntfCommServiceListBean;
 import com.asia.domain.localApi.child.IntfCommServiceListTypeBean;
 import com.asia.internal.common.CommonUserInfo;
@@ -13,6 +12,8 @@ import com.asia.mapper.orclmapper.*;
 import com.asia.service.IlocalService;
 import com.asia.vo.*;
 import com.asiainfo.account.model.domain.StdCcaQueryServ;
+import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
+import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,10 @@ public class LocalSeviceImpl implements IlocalService {
     ResultInfo resultInfo;
     @Autowired
     CommonUserInfo commonUserInfo;
+    @Autowired
+    InfoHdUserFeeMapper infoHdUserFeeMapperDao;
+    @Autowired
+    Bon3ServiceImpl bon3Service;
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //月账话费高额
     @Override
@@ -311,9 +316,32 @@ public class LocalSeviceImpl implements IlocalService {
             return qryMonthHighFeeRes;
         }
     }
+    //详单打印记录
+    @Override
+ public MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException {
+        MeterPrintActionRes meterPrintActionRes = new MeterPrintActionRes();
+        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        //访问数据库
+        resultInfo = orclCommonDao.preserveMeterPrintLog(body);
+        if ("0".equals(resultInfo.getCode())) {
+            meterPrintActionRes.setResult("0");
+            meterPrintActionRes.setCode("0");
+            meterPrintActionRes.setMsg(resultInfo.getMessage());
+            return meterPrintActionRes;
+        }else if("1".equals(resultInfo.getCode())){
+            meterPrintActionRes.setResult("1");
+            meterPrintActionRes.setMsg(resultInfo.getMessage());
+            return meterPrintActionRes;
+        }else {
+            meterPrintActionRes.setResult("2");
+            meterPrintActionRes.setMsg(resultInfo.getMessage());
+            return meterPrintActionRes;
+        }
+    }
     //详单禁查
     @Override
- public  UserMeterOrderRes userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers)
+    public  UserMeterOrderRes userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers)
             throws ClientProtocolException, IOException {
         UserMeterOrderRes userMeterOrderRes = new UserMeterOrderRes();
         StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
@@ -342,5 +370,41 @@ public class LocalSeviceImpl implements IlocalService {
             return userMeterOrderRes;
         }
     }
+    @Override
+   public QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body, Map<String, String> headers) throws ClientProtocolException, IOException {
+        QueryAgreementConsumptionRes queryAgreementConsumptionRes = new QueryAgreementConsumptionRes();
+        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        List<AgreementConsumeSetBean> agreementConsumeSetBeanList = new ArrayList<>();
+        AgreementConsumeSetBean agreementConsumeSetBean = new AgreementConsumeSetBean();
+        AgreementConsumeSetTypeBean agreementConsumeSetTypeBean = new AgreementConsumeSetTypeBean();
+        String accNumb  = body.getValue();
+        String userType = body.getUserType();
+        String valueType = body.getValueType();
+        //调账务服务查询用户信息
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "",headers);
+        String servId = stdCcaQueryServ.getServId();
+        queryAgreementConsumptionRes.setResult("0");
+        List<InfoHdUserFee>  infoHdUserFeeList=  infoHdUserFeeMapperDao.selectInfoHdUserFee(servId);
+        if (infoHdUserFeeList.size() > 0) {
+            for (InfoHdUserFee hdUserFee : infoHdUserFeeList) {
+                agreementConsumeSetBean.setOfferInstId(hdUserFee.getOfferId().toString());
+                agreementConsumeSetBean.setProdInstId(hdUserFee.getProdId().toString());
+                agreementConsumeSetBean.setRentMonth(hdUserFee.getRentMonth().toString());
+                agreementConsumeSetBean.setTotalFee(hdUserFee.getCrmTotalFee());
+                agreementConsumeSetBean.setUsedFee(hdUserFee.getBillTotalFee().toString());
+                agreementConsumeSetBeanList.add(agreementConsumeSetBean);
+                agreementConsumeSetTypeBean.setAgreementConsumeSetType(agreementConsumeSetBeanList);
+            }
+            queryAgreementConsumptionRes.setAgreementConsumeSet(agreementConsumeSetTypeBean);
+        } else {
+            queryAgreementConsumptionRes.setMsg("数据为空");
+        }
+        return  queryAgreementConsumptionRes;
+    }
+    @Override
+   public StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException {
+        StdCcaRealTimeBillQueryResponse stdCcaRealTimeBillQueryResponse = new StdCcaRealTimeBillQueryResponse();
 
+        return new StdCcaRealTimeBillQueryResponse();
+    }
 }

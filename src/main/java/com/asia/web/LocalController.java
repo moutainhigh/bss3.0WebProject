@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
-import com.asia.domain.localApi.QryMonthHighFeeReq;
-import com.asia.domain.localApi.QryMonthHighFeeRes;
-import com.asia.domain.localApi.UserMeterOrderReq;
-import com.asia.domain.localApi.UserMeterOrderRes;
+import com.asia.domain.localApi.*;
+import com.asia.service.impl.Bon3ServiceImpl;
 import com.asia.service.impl.LocalSeviceImpl;
+import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
+import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +20,18 @@ import java.util.Map;
 /**
  * @author WangBaoQiang
  * @ClassName: LocalController
- * @description: TODO
+ * @description: 本地化接口
  * @date 2019/8/619:29
  * @Version 1.0
  */
 @RequestMapping( value="/local",produces="application/json;charset=UTF-8")
 @RestController
 public class LocalController {
+    private static final Logger logger = LoggerFactory.getLogger(LocalController.class);
     @Autowired
     private LocalSeviceImpl localSevice;
+    @Autowired
+    private Bon3ServiceImpl bon3Service;
     //月账高额
     @PostMapping("/queryMonthHighFee")
     public String qryMonthHighFee(@RequestBody QryMonthHighFeeReq qryMonthHighFeeReq,
@@ -206,4 +211,62 @@ public class LocalController {
         }
         return JSON.toJSONString(userMeterOrderRes, SerializerFeature.WriteMapNullValue);
     }
+    //详单打印
+    @PostMapping("/printRecordService")
+    public String printRecordService(@RequestBody MeterPrintActionReq meterPrintActionReq,
+                                        @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/local/printRecordService","body>>"+JSON.toJSONString(meterPrintActionReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers), this.getClass());
+        MeterPrintActionRes meterPrintActionRes=new MeterPrintActionRes();
+        try {
+            meterPrintActionRes = localSevice.printRecordService(meterPrintActionReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/local/userMeterOrderService服务调用失败", e, this.getClass());
+            meterPrintActionRes.setCode(Constant.ResultCode.ERROR);
+            meterPrintActionRes.setMsg(e.getMessage());
+            return JSON.toJSONString(meterPrintActionRes, SerializerFeature.WriteMapNullValue);
+        }
+        return JSON.toJSONString(meterPrintActionRes, SerializerFeature.WriteMapNullValue);
+    }
+    //协议消费金额查询
+    @PostMapping("/queryAgreementConsumption")
+    public String queryAgreementConsumption(@RequestBody QueryAgreementConsumptionReq queryAgreementConsumptionReq,
+                                     @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        logger.debug("/local/queryAgreementConsumption","body>>"+JSON.toJSONString(queryAgreementConsumptionReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers), this.getClass());
+         QueryAgreementConsumptionRes queryAgreementConsumptionRes=new QueryAgreementConsumptionRes();
+        try {
+            queryAgreementConsumptionRes = localSevice.queryAgreementConsumption(queryAgreementConsumptionReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            logger.error("/local/queryAgreementConsumption服务调用失败", e, this.getClass());
+            queryAgreementConsumptionRes.setCode(Constant.ResultCode.ERROR);
+            queryAgreementConsumptionRes.setMsg(e.getMessage());
+            return JSON.toJSONString(queryAgreementConsumptionRes, SerializerFeature.WriteMapNullValue);
+        }
+        return JSON.toJSONString(queryAgreementConsumptionRes, SerializerFeature.WriteMapNullValue);
+    }
+    //增值账单查询
+    @PostMapping("/queryAddValueList")
+    public String queryAddValueList(@RequestBody StdCcrRealTimeBillQueryRequest stdCcrRealTimeBillQueryRequest,
+                                            @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        logger.debug("/local/queryAgreementConsumption","body>>"+JSON.toJSONString(stdCcrRealTimeBillQueryRequest,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers), this.getClass());
+        StdCcaRealTimeBillQueryResponse info=new StdCcaRealTimeBillQueryResponse();
+        try {
+            info = bon3Service.getOweList(stdCcrRealTimeBillQueryRequest,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            logger.error("/local/queryAgreementConsumption服务调用失败", e, this.getClass());
+            info.setErrorCode(Constant.ResultCode.ERROR);
+            info.setErrorMsg(e.getMessage());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
+
 }

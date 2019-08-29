@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.InfoHdUserFeeMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.InfoHdUserFee">
+    <result column="OFFER_ID" jdbcType="DECIMAL" property="offerId" />
+    <result column="PROD_ID" jdbcType="DECIMAL" property="prodId" />
+    <result column="OFFER_TYPE" jdbcType="VARCHAR" property="offerType" />
+    <result column="OFFER_START_DATE" jdbcType="DATE" property="offerStartDate" />
+    <result column="BILL_TOTAL_FEE" jdbcType="DECIMAL" property="billTotalFee" />
+    <result column="CRM_TOTAL_FEE" jdbcType="VARCHAR" property="crmTotalFee" />
+    <result column="END_TYPE" jdbcType="VARCHAR" property="endType" />
+    <result column="RENT_MONTH" jdbcType="DECIMAL" property="rentMonth" />
+    <result column="OFFER_SPEC_ID" jdbcType="DECIMAL" property="offerSpecId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    OFFER_ID, PROD_ID, OFFER_TYPE, OFFER_START_DATE, BILL_TOTAL_FEE, CRM_TOTAL_FEE, END_TYPE, 
+    RENT_MONTH, OFFER_SPEC_ID
+  </sql>
+  <select id="selectInfoHdUserFee" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from INFO_HD_USER_FEE
+    where PROD_ID = #{prodId}
+  </select>
+
+</mapper>

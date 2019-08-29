@@ -33,7 +33,7 @@ public class Bon3ServiceImpl {
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
-	public StdCcaQueryServResponse searchServInfo(StdCcrQueryServRequest stdCcrQueryServ,Map<String,String> headers) 
+	public StdCcaQueryServResponse searchServInfo(StdCcrQueryServRequest stdCcrQueryServ, Map<String,String> headers)
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.searchServInfo,
 				JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue), headers);
@@ -177,7 +177,7 @@ public class Bon3ServiceImpl {
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
-	public StdCcaUserResourceQueryDetailResponse getUnitedAccuDetail(StdCcrUserResourceQueryDetailRequest stdCcrUserResourceQueryDetail,Map<String,String> headers) 
+	public StdCcaUserResourceQueryDetailResponse d(StdCcrUserResourceQueryDetailRequest stdCcrUserResourceQueryDetail,Map<String,String> headers)
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getUnitedAccuDetail, 
 				JSON.toJSONString(stdCcrUserResourceQueryDetail,SerializerFeature.WriteMapNullValue), headers);
@@ -190,5 +190,24 @@ public class Bon3ServiceImpl {
 			return new StdCcaUserResourceQueryDetailResponse();
 		}
 	}
-	
+	/**
+	 * @Author WangBaoQiang
+	 * @Description 实时账单查询
+	 * @Date 11:08 2019/8/29
+	 * @Param [stdCcrRealTimeBillQueryRequest, headers]
+	 * @return com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse
+	*/
+	public StdCcaRealTimeBillQueryResponse getOweList(StdCcrRealTimeBillQueryRequest stdCcrRealTimeBillQueryRequest, Map<String,String> headers)
+			throws ClientProtocolException, IOException{
+		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getOweList,
+				JSON.toJSONString(stdCcrRealTimeBillQueryRequest,SerializerFeature.WriteMapNullValue), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), StdCcaRealTimeBillQueryResponse.class) ;
+		}else{
+			return new StdCcaRealTimeBillQueryResponse();
+		}
+	}
 }

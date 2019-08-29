@@ -2,7 +2,7 @@ package com.asia;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.asia.domain.bon3_drop.StdCcrQueryServ;
+import com.asia.domain.bon3.StdCcrQueryServ;
 
 public class Bon3Test{
 	/**

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.EChannlMeterPrintLogMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.EChannlMeterPrintLog">
+    <result column="KEY_ID" jdbcType="VARCHAR" property="keyId" />
+    <result column="PHONE_ID" jdbcType="VARCHAR" property="phoneId" />
+    <result column="SYSTEM_ID" jdbcType="VARCHAR" property="systemId" />
+    <result column="ACTION_TYPE" jdbcType="VARCHAR" property="actionType" />
+    <result column="ACTION_REMARK" jdbcType="VARCHAR" property="actionRemark" />
+    <result column="ACTION_DATE" jdbcType="DATE" property="actionDate" />
+    <result column="REGION_CODE" jdbcType="VARCHAR" property="regionCode" />
+    <result column="PRINT_MONTH" jdbcType="VARCHAR" property="printMonth" />
+    <result column="VALID_DATE" jdbcType="DATE" property="validDate" />
+    <result column="EXPIR_DATE" jdbcType="DATE" property="expirDate" />
+    <result column="TERMINAL_ID" jdbcType="VARCHAR" property="terminalId" />
+    <result column="OP_ID" jdbcType="VARCHAR" property="opId" />
+    <result column="SERIAL_ID" jdbcType="VARCHAR" property="serialId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    KEY_ID, PHONE_ID, SYSTEM_ID, ACTION_TYPE, ACTION_REMARK, ACTION_DATE, REGION_CODE, 
+    PRINT_MONTH, VALID_DATE, EXPIR_DATE, TERMINAL_ID, OP_ID, SERIAL_ID
+  </sql>
+
+  <insert id="insertEChannlMeterPrintLog" parameterType="com.asia.vo.EChannlMeterPrintLog">
+    insert into ACCT.E_CHANNL_METER_PRINT_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="keyId != null">
+        KEY_ID,
+      </if>
+      <if test="phoneId != null">
+        PHONE_ID,
+      </if>
+      <if test="systemId != null">
+        SYSTEM_ID,
+      </if>
+      <if test="actionType != null">
+        ACTION_TYPE,
+      </if>
+      <if test="actionRemark != null">
+        ACTION_REMARK,
+      </if>
+      <if test="actionDate != null">
+        ACTION_DATE,
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE,
+      </if>
+      <if test="printMonth != null">
+        PRINT_MONTH,
+      </if>
+      <if test="validDate != null">
+        VALID_DATE,
+      </if>
+      <if test="expirDate != null">
+        EXPIR_DATE,
+      </if>
+      <if test="terminalId != null">
+        TERMINAL_ID,
+      </if>
+      <if test="opId != null">
+        OP_ID,
+      </if>
+      <if test="serialId != null">
+        SERIAL_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="keyId != null">
+        #{keyId,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneId != null">
+        #{phoneId,jdbcType=VARCHAR},
+      </if>
+      <if test="systemId != null">
+        #{systemId,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionRemark != null">
+        #{actionRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="actionDate != null">
+        #{actionDate,jdbcType=DATE},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="printMonth != null">
+        #{printMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="validDate != null">
+        #{validDate,jdbcType=DATE},
+      </if>
+      <if test="expirDate != null">
+        #{expirDate,jdbcType=DATE},
+      </if>
+      <if test="terminalId != null">
+        #{terminalId,jdbcType=VARCHAR},
+      </if>
+      <if test="opId != null">
+        #{opId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialId != null">
+        #{serialId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

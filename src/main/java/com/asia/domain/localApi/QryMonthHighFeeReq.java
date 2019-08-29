@@ -1,15 +1,15 @@
 package com.asia.domain.localApi;
 
-import com.asia.common.baseObj.BaseBonResDomain;
+import com.asia.common.baseObj.BaseDomain;
 
 /**
  * @author WangBaoQiang
  * @ClassName: QryMonthHighFeeReq
- * @description: TODO
+ * @description: 智慧万号通用查询
  * @date 2019/8/611:13
  * @Version 1.0
  */
-public class QryMonthHighFeeReq extends BaseBonResDomain {
+public class QryMonthHighFeeReq extends BaseDomain {
 
 
     /**
