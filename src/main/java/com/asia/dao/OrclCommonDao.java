@@ -3,12 +3,17 @@ package com.asia.dao;
 import com.asia.common.utils.StringUtil;
 import com.asia.common.utils.UUID;
 import com.asia.domain.localApi.MeterPrintActionReq;
+import com.asia.domain.localApi.MobileNumberQueryReq;
+import com.asia.domain.localApi.MobileNumberQueryRes;
+import com.asia.domain.localApi.child.MobileNumberQueryServiceListBean;
+import com.asia.domain.localApi.child.MobileNumberQueryServiceListTypeBean;
 import com.asia.internal.common.BillException;
 import com.asia.internal.common.ResultInfo;
 import com.asia.internal.errcode.ErrorCodePublicEnum;
 import com.asia.mapper.orclmapper.EChannlMeterPrintLogMapper;
 import com.asia.mapper.orclmapper.IfUserMeterMapper;
 import com.asia.mapper.orclmapper.InfoOverAccuFeeMapper;
+import com.asia.mapper.orclmapper.MobileNumberQueryMapper;
 import com.asia.vo.*;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
@@ -16,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +43,8 @@ public class OrclCommonDao {
     IfUserMeterMapper ifUserMeterMapperDao;
     @Autowired
     EChannlMeterPrintLogMapper eChannlMeterPrintLogMapperDao;
+    @Autowired
+    MobileNumberQueryMapper mobileNumberQueryDao;
     public ResultInfo overAccuData(long accNum, String queryMoth, Map map) {
         String paramName = "";
         Map returnMap = new HashMap();
@@ -201,5 +209,26 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(new BillException("2",e));
         }
         return  resultInfo;
+    }
+
+    public MobileNumberQueryRes moBileNumberQuery(MobileNumberQueryReq mobileNumberQueryReq, Map<String, String> headers){
+        MobileNumberQueryRes mobileNumberQueryRes=new MobileNumberQueryRes();
+
+        MobileNumberQueryServiceListBean mobileNumberQueryServiceListBean=new MobileNumberQueryServiceListBean();
+
+        MobileNumberQueryServiceListTypeBean mobileNumberQueryServiceListTypeBean=new MobileNumberQueryServiceListTypeBean();
+
+        String dataValue=mobileNumberQueryDao.moBileNumberQuery(mobileNumberQueryReq.getValue());
+
+        mobileNumberQueryServiceListBean.setDataValue(dataValue);
+
+        List<MobileNumberQueryServiceListBean> list=new ArrayList<MobileNumberQueryServiceListBean>();
+        list.add(mobileNumberQueryServiceListBean);
+
+        mobileNumberQueryServiceListTypeBean.setDataInfo(list);
+        mobileNumberQueryRes.setDataInfoSet(mobileNumberQueryServiceListTypeBean);
+        mobileNumberQueryRes.setResult("0");
+        return mobileNumberQueryRes;
+
     }
 }

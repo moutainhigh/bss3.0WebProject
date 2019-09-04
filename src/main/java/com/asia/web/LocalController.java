@@ -269,4 +269,70 @@ public class LocalController {
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
 
+
+    //是否为电信号段（查号头表）
+    @PostMapping("/mobileNumberQueryService")
+    public String mobileNumberQueryService(@RequestBody MobileNumberQueryReq mobileNumberQueryReq,
+                                           @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        logger.debug("/local/mobileNumberQueryService","body>>"+JSON.toJSONString(mobileNumberQueryReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers), this.getClass());
+        MobileNumberQueryRes info=new MobileNumberQueryRes();
+        try {
+            info = localSevice.moBileNumberQuery(mobileNumberQueryReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            logger.error("/local/mobileNumberQueryService服务调用失败", e, this.getClass());
+            info.setErrorCode(Constant.ResultCode.ERROR);
+            info.setErrorMsg(e.getMessage());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
+
+
+    //查询余额信息，返回违约金、专用账目组、专用账目组
+    @PostMapping("/accountBalanceCpcpQuery")
+    public String accountBalanceCpcpQuery(@RequestBody AccountBalanceCpcpQueryReq accountBalanceCpcpQueryReq,
+                                           @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        logger.debug("/local/accountBalanceCpcpQuery","body>>"+JSON.toJSONString(accountBalanceCpcpQueryReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers), this.getClass());
+        AccountBalanceCpcpQueryRes info=new AccountBalanceCpcpQueryRes();
+        try {
+            info = localSevice.accountBalanceCpcpQuery(accountBalanceCpcpQueryReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            logger.error("/local/accountBalanceCpcpQuery服务调用失败", e, this.getClass());
+            info.setErrorCode(Constant.ResultCode.ERROR);
+            info.setErrorMsg(e.getMessage());
+            info.setIsSucess("0");
+            info.setMsg(e.getMessage());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
+
+
+    //查询用户的增值账单，（三级账单递归展示）
+    @PostMapping("/queryAddValueFee")
+    public String queryAddValueFee(@RequestBody QueryAddValueFeeReq queryAddValueFeeReq,
+                                          @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        logger.debug("/local/queryAddValueFeeReq","body>>"+JSON.toJSONString(queryAddValueFeeReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers), this.getClass());
+        QueryAddValueFeeRes info=new QueryAddValueFeeRes();
+        try {
+            info = localSevice.queryAddValueFee(queryAddValueFeeReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            logger.error("/local/queryAddValueFeeReq服务调用失败", e, this.getClass());
+            info.setErrorCode(Constant.ResultCode.ERROR);
+            info.setErrorMsg(e.getMessage());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
+
+
 }

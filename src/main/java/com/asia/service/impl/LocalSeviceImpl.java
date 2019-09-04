@@ -1,11 +1,13 @@
 package com.asia.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.asia.common.utils.HttpUtil;
+import com.asia.common.utils.HttpUtil.HttpResult;
 import com.asia.dao.OrclCommonDao;
 import com.asia.domain.localApi.*;
-import com.asia.domain.localApi.child.AgreementConsumeSetBean;
-import com.asia.domain.localApi.child.AgreementConsumeSetTypeBean;
-import com.asia.domain.localApi.child.IntfCommServiceListBean;
-import com.asia.domain.localApi.child.IntfCommServiceListTypeBean;
+import com.asia.domain.localApi.child.*;
 import com.asia.internal.common.CommonUserInfo;
 import com.asia.internal.common.ResultInfo;
 import com.asia.mapper.orclmapper.*;
@@ -407,4 +409,257 @@ public class LocalSeviceImpl implements IlocalService {
 
         return new StdCcaRealTimeBillQueryResponse();
     }
+
+    //是否为电信号段（查号头表）
+    public MobileNumberQueryRes moBileNumberQuery(MobileNumberQueryReq mobileNumberQueryReq,Map<String, String> headers){
+        return orclCommonDao.moBileNumberQuery(mobileNumberQueryReq,headers);
+    }
+
+    //查询余额信息，返回违约金、专用账目组、专用账目组
+    public AccountBalanceCpcpQueryRes accountBalanceCpcpQuery(AccountBalanceCpcpQueryReq accountBalanceCpcpQueryReq,Map<String, String> headers) throws IOException {
+        AccountBalanceCpcpQueryRes result=new AccountBalanceCpcpQueryRes();
+        HashMap<String, Object> operAttrStructMap = new HashMap<String, Object>();//操作人属性
+        String staffId=accountBalanceCpcpQueryReq.getStaffId();
+        String systemId=accountBalanceCpcpQueryReq.getSystemId();
+        String accNum=accountBalanceCpcpQueryReq.getAccNum();
+        String accNumType=accountBalanceCpcpQueryReq.getAccNumType();
+        String areaId=accountBalanceCpcpQueryReq.getAccNumAreaCode();
+        String operOrgId="0";
+        if(systemId=="1"){//随便写的业务逻辑
+            operOrgId="2";
+        }
+        operAttrStructMap.put("staffId", staffId);
+        operAttrStructMap.put("operOrgId", operOrgId);
+        operAttrStructMap.put("operTime", "");
+        operAttrStructMap.put("operPost", 0);
+        operAttrStructMap.put("operServiceId", "");
+        operAttrStructMap.put("lanId", 0);
+
+        HashMap<String, Object> svcObjectStructMap = new HashMap<String, Object>();//服务对象条件
+        svcObjectStructMap.put("objType", "3");
+        svcObjectStructMap.put("objValue", accNum);
+        svcObjectStructMap.put("objAttr", accNumType);
+        svcObjectStructMap.put("dataArea", "");
+
+        JSONObject obj = new JSONObject();
+        obj.put("operAttrStruct", operAttrStructMap);
+        obj.put("svcObjectStruct", svcObjectStructMap);
+        obj.put("queryFlag", "1");
+        obj.put("queryItemType", "0");
+        obj.put("areacode", areaId);
+        obj.put("systemId", systemId);
+        String query = obj.toString();
+
+        Map<String, String> object = new HashMap<String, String>();
+        object.put("appID", "1111111");
+
+        HttpResult result2 = HttpUtil.doPostJson("http://136.160.153.42:8026/billsrv/openApi/QueryBalance", query, object);
+        if(result2.getData()==null){
+            result.setIsSucess("0");
+            result.setMsg("查询余额失败");
+            return result;
+        }
+      /*  String array="{\"areaCode\":null," +
+                "\"balanceQuery\":[{" +
+                "\"accNbr\":null," +
+                "\"acctBalanceId\":null," +
+                "\"acctId\":null," +
+                "\"available\":null," +
+                "\"balance\":null," +
+                "\"balanceTypeFlag\":null," +
+                "\"cycleType\":null," +
+                "\"cycleUpper\":null," +
+                "\"desc\":null," +
+                "\"effDate\":null," +
+                "\"expDate\":null," +
+                "\"prodInstId\":null," +
+                "\"reserveBalance\":null," +
+                "\"shareRuleFlag\":null," +
+                "\"state\":null,\"used\":null" +
+                "}]," +
+                "\"paymentFlag\":null," +
+                "\"queryFlag\":null," +
+                "\"queryItemType\":null," +
+                "\"realBalance\":null," +
+                "\"resultCode\":null," +
+                "\"resultMsg\":null";*/
+
+            JSONObject json = JSON.parseObject(result2.getData());
+            List<Map<String,Object>> list=(List<Map<String, Object>>) json.get("balanceQuery");
+            String realBalance = json.get("realBalance").toString();
+            List<BalanceInfosListBean> infosList=new ArrayList<BalanceInfosListBean>();
+            List<BalanceItemsListBean> itemsList=new ArrayList<BalanceItemsListBean>();
+            int num1=0;
+            int num2=0;
+            int num3=0;
+            int num4=0;
+            int num5=0;
+            for (int i=0;i<list.size();i++){
+
+                String balance=list.get(i).get("balance").toString();
+                String balanceTypeFlag=list.get(i).get("balanceTypeFlag").toString();
+                String available=list.get(i).get("available").toString();
+                String desc=list.get(i).get("desc").toString();
+                String effDate=list.get(i).get("effDate").toString();
+                String expDate=list.get(i).get("expDate").toString();
+                if(balanceTypeFlag.equals("0")){
+                    num1+=Integer.parseInt(balance);
+                }else if(balanceTypeFlag.equals("1")){
+                    num2+=Integer.parseInt(balance);
+                }else if(balanceTypeFlag.equals("2")){
+                    num3+=Integer.parseInt(balance);
+                }else if(balanceTypeFlag.equals("3")){
+                    num4+=Integer.parseInt(balance);
+                }else if(balanceTypeFlag.equals("4")){
+                    num5+=Integer.parseInt(balance);
+                }
+
+
+
+                BalanceItemsListBean balanceItemsListBean=new BalanceItemsListBean();
+                balanceItemsListBean.setAcctNbr(accNum);
+                balanceItemsListBean.setBalance(available);
+                balanceItemsListBean.setBalanceType(desc);
+                balanceItemsListBean.setEffDate(effDate);
+                balanceItemsListBean.setExpDate(expDate);
+                balanceItemsListBean.setItem_group_name("");
+                balanceItemsListBean.setLevel("帐户级别");
+
+
+                itemsList.add(balanceItemsListBean);
+            }
+            BalanceInfosListBean balanceInfosListBean=new BalanceInfosListBean();
+            balanceInfosListBean.setAocBalance(String.valueOf(num1));
+            balanceInfosListBean.setAocUnitName("通用余额");
+            infosList.add(balanceInfosListBean);
+            balanceInfosListBean.setAocBalance(String.valueOf(num2));
+            balanceInfosListBean.setAocUnitName("专用余额");
+            infosList.add(balanceInfosListBean);
+            balanceInfosListBean.setAocBalance(String.valueOf(num3));
+            balanceInfosListBean.setAocUnitName("用户级");
+            infosList.add(balanceInfosListBean);
+            balanceInfosListBean.setAocBalance(String.valueOf(num4));
+            balanceInfosListBean.setAocUnitName("用户账目组级");
+            infosList.add(balanceInfosListBean);
+            balanceInfosListBean.setAocBalance(String.valueOf(num5));
+            balanceInfosListBean.setAocUnitName("账户账目组级");
+            infosList.add(balanceInfosListBean);
+
+            result.setBalanceInfos(infosList);
+            result.setBalanceItems(itemsList);
+            //判断是否欠费
+            if(Integer.parseInt(realBalance)>0){
+                result.setBalanceAvl(realBalance);
+                result.setDueCharge("0");
+            }else{
+                JSONObject obj2 = new JSONObject();
+                obj.put("billQueryType", "2");
+                obj.put("destinationAccount", accNumType+accNum);
+                obj.put("destinationAttr", accNumType);
+                obj.put("queryFla", "1");
+                obj.put("feeQueryFlag", "0");
+                obj.put("operAttrStruct", operAttrStructMap);
+                String query2 = obj2.toString();
+
+                Map<String, String> object2 = new HashMap<String, String>();
+                object2.put("appID", "1111111");
+                HttpResult result3 = HttpUtil.doPostJson("http://136.160.153.42:8026/billsrv/openApi/QryBill", query2, object2);
+                if(result3.getData()==null){
+                    result.setIsSucess("0");
+                    result.setMsg("查询欠费失败");
+                    return result;
+                }
+                JSONObject json2 = JSON.parseObject(result3.getData());
+                result.setBalanceAvl("0");
+                result.setDueCharge(json2.get("due").toString());
+            }
+            result.setIsBalanceInfoSucess("1");
+            result.setIsBalanceItemSucess("1");
+            result.setIsOweInfoSucess("1");
+            result.setIsSucess("1");
+            result.setMsg("成功");
+            result.setOweCharge("0");
+            result.setOweInfoMsg("成功");
+
+
+        return result;
+    }
+
+    //查询用户的增值账单，（三级账单递归展示）
+    public QueryAddValueFeeRes queryAddValueFee(QueryAddValueFeeReq queryAddValueFeeReq,
+                                                Map<String,String> heads) throws IOException {
+        QueryAddValueFeeRes result=new QueryAddValueFeeRes();
+        QueryAddValueFeeResBean queryAddValueFeeResBean=new QueryAddValueFeeResBean();
+        QueryAddValueFeeResListBean bean=new QueryAddValueFeeResListBean();
+        String query=queryAddValueFeeReq.toString();
+        List<QueryAddValueFeeResListBean> list=new ArrayList<QueryAddValueFeeResListBean>();
+
+        Map<String, String> object = new HashMap<String, String>();
+        object.put("appID", "1111111");
+        HttpResult result2 = HttpUtil.doPostJson("http://136.160.153.42:8026/billing/acct/std/getOweList", query, object);
+        JSONObject json = JSON.parseObject(result2.getData());
+        Map<String,Object> map=(Map)json.get("stdCcaCustomizeBillQueryBill");
+        String acctName=map.get("acctName").toString();
+        List<Map<String,Object>> itemList=(List)map.get("itemInformation");
+        int sumCharge=0;
+        for(int i=0;i<itemList.size();i++){
+            String showlevel=itemList.get(i).get("showlevel").toString();
+            String classId=itemList.get(i).get("classId").toString();
+            String parentClassId=itemList.get(i).get("parentClassId").toString();
+            String charge=itemList.get(i).get("charge").toString();
+            String accNbrDetail=itemList.get(i).get("accNbrDetail").toString();
+            String chargeTypeName=itemList.get(i).get("chargeTypeName").toString();
+            String productOffName=itemList.get(i).get("productOffName").toString();
+            if(classId.equals("2005")||classId.equals("2006")){
+                sumCharge +=Integer.parseInt(charge);
+                bean.setShowlevel(showlevel);
+                bean.setClassId(classId);
+                bean.setParentClassId(parentClassId);
+                bean.setCharge(charge);
+                bean.setAccNbrDetail(accNbrDetail);
+                bean.setChargeTypeName(chargeTypeName);
+                bean.setProductOffName(productOffName);
+                list.add(bean);
+                for(int m=0;m<itemList.size();m++){
+                    String showlevel2=itemList.get(m).get("showlevel").toString();
+                    String classId2=itemList.get(m).get("classId").toString();
+                    String parentClassId2=itemList.get(m).get("parentClassId").toString();
+                    String charge2=itemList.get(m).get("charge").toString();
+                    String accNbrDetail2=itemList.get(m).get("accNbrDetail").toString();
+                    String chargeTypeName2=itemList.get(m).get("chargeTypeName").toString();
+                    String productOffName2=itemList.get(m).get("productOffName").toString();
+                    if(classId2.equals(parentClassId)&&classId.equals("2005")){//2005与2006 同一个父类，取一个
+                        bean.setShowlevel(showlevel2);
+                        bean.setClassId(classId2);
+                        bean.setParentClassId(parentClassId2);
+                        bean.setCharge(charge2);
+                        bean.setAccNbrDetail(accNbrDetail2);
+                        bean.setChargeTypeName(chargeTypeName2);
+                        bean.setProductOffName(productOffName2);
+                        list.add(bean);
+                    }
+                    if(parentClassId2.equals(classId)){//取其子类
+                        bean.setShowlevel(showlevel2);
+                        bean.setClassId(classId2);
+                        bean.setParentClassId(parentClassId2);
+                        bean.setCharge(charge2);
+                        bean.setAccNbrDetail(accNbrDetail2);
+                        bean.setChargeTypeName(chargeTypeName2);
+                        bean.setProductOffName(productOffName2);
+                        list.add(bean);
+                    }
+
+                }
+
+            }
+
+        }
+        queryAddValueFeeResBean.setItemInformation(list);
+        queryAddValueFeeResBean.setSumCharge(String.valueOf(sumCharge));
+        queryAddValueFeeResBean.setAcctName(acctName);
+        result.setStdCcaCustomizeBillQueryBill(queryAddValueFeeResBean);
+        return  result;
+
+    }
+
 }
