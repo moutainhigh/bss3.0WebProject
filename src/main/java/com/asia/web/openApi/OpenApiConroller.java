@@ -18,6 +18,7 @@ import com.asia.domain.openApi.RtBillItemRes.IncrBillItem;
 import com.asia.domain.openApi.RtBillItemRes.SmsBillItem;
 import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
+import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.ordmapper.ProdInstRouteMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
@@ -104,7 +105,7 @@ public class OpenApiConroller{
 			returnInfo.setResultCode(Constant.ResultCode.OPENAPI_OK);
 			returnInfo.setItemInformatinList(new ArrayList<>());
 			returnInfo.getItemInformatinList().add(new ItemInformation());
-//			returnInfo=openAPIServiceImpl.qryInstantFeeList(qryInstantFeeListReq, headers);
+			returnInfo=openAPIServiceImpl.qryInstantFeeList(qryInstantFeeListReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/QryInstantFeeList服务调用失败", e, this.getClass());
@@ -298,7 +299,7 @@ public class OpenApiConroller{
 				+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RechargeBalanceRes returnInfo=new RechargeBalanceRes();
 		try {
-//			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
+			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rechargeBalance服务调用失败", e, this.getClass());

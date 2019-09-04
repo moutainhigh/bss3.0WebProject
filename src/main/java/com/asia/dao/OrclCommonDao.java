@@ -3,12 +3,13 @@ package com.asia.dao;
 import com.asia.common.utils.StringUtil;
 import com.asia.common.utils.UUID;
 import com.asia.domain.localApi.MeterPrintActionReq;
+import com.asia.domain.openApi.RechargeBalanceReq;
+import com.asia.domain.openApi.child.OperAttrStruct;
+import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.internal.common.BillException;
 import com.asia.internal.common.ResultInfo;
 import com.asia.internal.errcode.ErrorCodePublicEnum;
-import com.asia.mapper.orclmapper.EChannlMeterPrintLogMapper;
-import com.asia.mapper.orclmapper.IfUserMeterMapper;
-import com.asia.mapper.orclmapper.InfoOverAccuFeeMapper;
+import com.asia.mapper.orclmapper.*;
 import com.asia.vo.*;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
@@ -19,6 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.math.BigDecimal;
+import java.util.Date;
+
+
+
 /**
  * @author WangBaoQiang
  * @ClassName: OverAccuDao
@@ -37,6 +43,14 @@ public class OrclCommonDao {
     IfUserMeterMapper ifUserMeterMapperDao;
     @Autowired
     EChannlMeterPrintLogMapper eChannlMeterPrintLogMapperDao;
+    @Autowired
+    VcChargeRecordMapper vcChargeRecordMapperDao;
+    @Autowired
+    TerminalChargeRecordMapper terminalChargeRecordMapperDao;
+    @Autowired
+    CreditFeeRecordMapper creditFeeRecordMapperDao;
+    @Autowired
+    BussihallChargeRecordMapper bussihallChargeRecordMapperDao;
     public ResultInfo overAccuData(long accNum, String queryMoth, Map map) {
         String paramName = "";
         Map returnMap = new HashMap();
@@ -201,5 +215,130 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(new BillException("2",e));
         }
         return  resultInfo;
+    }
+    /**
+     * @Author WangBaoQiang
+     * @Description 检查缴费流水是否存在
+     * @Date 15:05 2019/8/31
+     * @Param [rechargeBalanceReq]
+     * @return com.asia.internal.common.ResultInfo
+    */
+    public ResultInfo checkSerialnumberExist(RechargeBalanceReq rechargeBalanceReq) {
+        ResultInfo resultInfo = new ResultInfo();
+        OperAttrStruct operAttrStruct = new OperAttrStruct();
+        operAttrStruct = rechargeBalanceReq.getOperAttrStruct();
+        if (StringUtil.isEmpty(operAttrStruct.getOperOrgId())) {
+            resultInfo.setResultInfo(ErrorCodePublicEnum.CHANNEL_ID_NO_FOUND);
+            return resultInfo;
+        }
+        String channelId = operAttrStruct.getOperOrgId().toString();
+        String tableName = "";
+        long cnt=0;
+        long flowId = rechargeBalanceReq.getFlowId();
+        if ("4102".equals(channelId)) {//VC充值 vc_charge_record
+            cnt = vcChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
+        } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
+            cnt = terminalChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
+        } else if ("9".equals(channelId)) {//crm credit_fee_record
+            cnt = creditFeeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
+        } else {//bussihall_charge_record
+            cnt = bussihallChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
+        }
+        if (cnt > 0) {
+            resultInfo.setResultInfo(ErrorCodePublicEnum.PAY_SERIALNUMBER_IS_EXIST);
+            return resultInfo;
+        }
+        resultInfo.setResultInfo(ErrorCodePublicEnum.SUCCESS);
+        return resultInfo;
+    }
+    /**
+     * @Author WangBaoQiang
+     * @Description 插入流水号
+     * @Date 15:57 2019/9/3
+     * @Param [rechargeBalanceReq]
+     * @return com.asia.internal.common.ResultInfo
+    */
+    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId) {
+        ResultInfo resultInfo = new ResultInfo();
+        VcChargeRecord vcChargeRecord = new VcChargeRecord();
+        TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
+        BussihallChargeRecord bussihallChargeRecord = new BussihallChargeRecord();
+        CreditFeeRecord creditFeeRecord = new CreditFeeRecord();
+        OperAttrStruct operAttrStruct = new OperAttrStruct();
+        SvcObjectStruct svcObjectStruct = new SvcObjectStruct();
+
+        operAttrStruct = rechargeBalanceReq.getOperAttrStruct();
+        svcObjectStruct = rechargeBalanceReq.getSvcObjectStruct();
+        if (StringUtil.isEmpty(operAttrStruct.getOperOrgId())) {
+            resultInfo.setResultInfo(ErrorCodePublicEnum.CHANNEL_ID_NO_FOUND);
+            return resultInfo;
+        }
+        String channelId = operAttrStruct.getOperOrgId().toString();
+        //工号
+        String staffId = operAttrStruct.getStaffId().toString();
+        //外围流水
+        String otherPaymentId = rechargeBalanceReq.getFlowId().toString();
+        //号码
+        String acctNbr = svcObjectStruct.getObjValue();
+        //号码类型
+        String valueType = svcObjectStruct.getObjAttr();
+        //缴费流水
+        long flowId = rechargeBalanceReq.getFlowId();
+        //充值金额
+        long amount = rechargeBalanceReq.getRechargeAmount();
+        String tableName = "";
+        long cnt=0;
+        if ("4102".equals(channelId)) {//VC充值 vc_charge_record
+            vcChargeRecord.setAccNbr(acctNbr);
+            vcChargeRecord.setBusiCode(channelId);
+            vcChargeRecord.setOtherPaymentId(otherPaymentId);
+            vcChargeRecord.setStaffId(staffId);
+            vcChargeRecord.setPaymentDate(new Date());
+            vcChargeRecord.setCreatedDate(new Date());
+            vcChargeRecord.setState(Short.parseShort("0"));
+            vcChargeRecord.setAmount(BigDecimal.valueOf(amount));
+            vcChargeRecord.setPaymentId(paymentId);
+            cnt = vcChargeRecordMapperDao.insertVcChargeRecord(vcChargeRecord);
+        } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
+            terminalChargeRecord.setAccNbr(acctNbr);
+            terminalChargeRecord.setBusiCode(channelId);
+            terminalChargeRecord.setOtherPaymentId(otherPaymentId);
+            terminalChargeRecord.setStaffId(staffId);
+            terminalChargeRecord.setAmount(BigDecimal.valueOf(amount));
+            terminalChargeRecord.setPaymentDate(new Date());
+            terminalChargeRecord.setCreatedDate(new Date());
+            terminalChargeRecord.setState(Short.parseShort("0"));
+            terminalChargeRecord.setPaymentId(paymentId);
+            cnt = terminalChargeRecordMapperDao.insertTerminalChargeRecord(terminalChargeRecord);
+        } else if ("9".equals(channelId)) {//crm credit_fee_record
+            creditFeeRecord.setAccNbr(acctNbr);
+            creditFeeRecord.setBusiCode(channelId);
+            creditFeeRecord.setOtherPaymentId(otherPaymentId);
+            creditFeeRecord.setStaffId(staffId);
+            creditFeeRecord.setAmount(BigDecimal.valueOf(amount));
+            creditFeeRecord.setPaymentDate(new Date());
+            creditFeeRecord.setCreatedDate(new Date());
+            creditFeeRecord.setState(Short.parseShort("0"));
+            creditFeeRecord.setPaymentId(paymentId);
+
+            cnt = creditFeeRecordMapperDao.insertCreditFeeRecord(creditFeeRecord);
+        } else {//bussihall_charge_record
+            bussihallChargeRecord.setAccNbr(acctNbr);
+            bussihallChargeRecord.setBusiCode(channelId);
+            bussihallChargeRecord.setOtherPaymentId(otherPaymentId);
+            bussihallChargeRecord.setStaffId(staffId);
+            bussihallChargeRecord.setAmount(BigDecimal.valueOf(amount));
+            bussihallChargeRecord.setPaymentDate(new Date());
+            bussihallChargeRecord.setCreatedDate(new Date());
+            bussihallChargeRecord.setState(Short.parseShort("0"));
+            bussihallChargeRecord.setPaymentId(paymentId);
+            cnt = bussihallChargeRecordMapperDao.insertBussihallChargeRecord(bussihallChargeRecord);
+        }
+        if (cnt < 0) {
+            resultInfo.setResultInfo(ErrorCodePublicEnum.DB_INSERT_ERROR);
+            return resultInfo;
+        }
+        resultInfo.setResultInfo(ErrorCodePublicEnum.SUCCESS);
+        return resultInfo;
     }
 }

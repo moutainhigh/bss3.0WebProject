@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
+import com.asia.dao.OrclCommonDao;
 import com.asia.domain.openApi.*;
 import com.asia.domain.openApi.child.BillingCycle;
+import com.asia.internal.common.ResultInfo;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,6 +38,8 @@ public class OpenAPIServiceImpl{
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
+	@Autowired
+	OrclCommonDao orclCommonDao;
 	public QryInstantFeeRes qryInstantFee(QryInstantFeeReq qryInstantFeeReq,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryInstantFee, qryInstantFeeReq.toString(), headers);
@@ -221,11 +226,31 @@ public class OpenAPIServiceImpl{
 	 */
 	public RechargeBalanceRes rechargeBalance(RechargeBalanceReq body,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
+		// TODO: 2019/9/3 判断计费流水是否重复
+		ResultInfo resultInfo = new ResultInfo();
+		resultInfo = orclCommonDao.checkSerialnumberExist(body);
+		RechargeBalanceRes rechargeBalanceRes = new RechargeBalanceRes();
+		if (!"0".equals(resultInfo.getCode())) {
+			rechargeBalanceRes.setResultCode(resultInfo.getCode());
+			rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
+			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
+		}//end
 		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rechargeBalance, body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
 			headers.putAll(result.getHeaders());
+			//插入充值记录
+            rechargeBalanceRes = JSON.parseObject(result.getData(), RechargeBalanceRes.class);
+            long paymentId = 0;
+            if ("0".equals(rechargeBalanceRes.getResultCode())) {
+				resultInfo = orclCommonDao.insertSerialnumber(body,paymentId);
+				if (!"0".equals(resultInfo.getCode())) {
+					rechargeBalanceRes.setResultCode(resultInfo.getCode());
+					rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
+					return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
+				}
+            }
 			return JSON.parseObject(result.getData(), RechargeBalanceRes.class) ;
 		}else{
 			return new RechargeBalanceRes();

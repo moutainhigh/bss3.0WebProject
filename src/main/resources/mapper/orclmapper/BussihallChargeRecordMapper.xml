@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.BussihallChargeRecordMapper">
+  <resultMap id="BaseResultMap" type="com.asia.vo.BussihallChargeRecord">
+    <result column="PAYMENT_ID" jdbcType="DECIMAL" property="paymentId" />
+    <result column="OTHER_PAYMENT_ID" jdbcType="VARCHAR" property="otherPaymentId" />
+    <result column="ACC_NBR" jdbcType="VARCHAR" property="accNbr" />
+    <result column="USER_TYPE" jdbcType="DECIMAL" property="userType" />
+    <result column="BILL_TYPE" jdbcType="DECIMAL" property="billType" />
+    <result column="CREATED_DATE" jdbcType="DATE" property="createdDate" />
+    <result column="PAYMENT_DATE" jdbcType="DATE" property="paymentDate" />
+    <result column="AMOUNT" jdbcType="DECIMAL" property="amount" />
+    <result column="STATE" jdbcType="DECIMAL" property="state" />
+    <result column="SO_REGION_CODE" jdbcType="VARCHAR" property="soRegionCode" />
+    <result column="IS_REGION_CODE" jdbcType="VARCHAR" property="isRegionCode" />
+    <result column="STAFF_ID" jdbcType="VARCHAR" property="staffId" />
+    <result column="BUSI_CODE" jdbcType="VARCHAR" property="busiCode" />
+    <result column="MSG" jdbcType="VARCHAR" property="msg" />
+    <result column="UNPAY_PAYMENT_ID" jdbcType="VARCHAR" property="unpayPaymentId" />
+    <result column="UNPAY_OTHER_PAYMENT_ID" jdbcType="VARCHAR" property="unpayOtherPaymentId" />
+    <result column="STS_DATE" jdbcType="VARCHAR" property="stsDate" />
+    <result column="REM1" jdbcType="VARCHAR" property="rem1" />
+    <result column="REM2" jdbcType="VARCHAR" property="rem2" />
+    <result column="REM3" jdbcType="VARCHAR" property="rem3" />
+    <result column="REM4" jdbcType="VARCHAR" property="rem4" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    PAYMENT_ID, OTHER_PAYMENT_ID, ACC_NBR, USER_TYPE, BILL_TYPE, CREATED_DATE, PAYMENT_DATE, 
+    AMOUNT, `STATE`, SO_REGION_CODE, IS_REGION_CODE, STAFF_ID, BUSI_CODE, MSG, UNPAY_PAYMENT_ID, 
+    UNPAY_OTHER_PAYMENT_ID, STS_DATE, REM1, REM2, REM3, REM4
+  </sql>
+  <insert id="insertBussihallChargeRecord" parameterType="generator.BussihallChargeRecord">
+    insert into ACCT.BUSSIHALL_CHARGE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paymentId != null">
+        PAYMENT_ID,
+      </if>
+      <if test="otherPaymentId != null">
+        OTHER_PAYMENT_ID,
+      </if>
+      <if test="accNbr != null">
+        ACC_NBR,
+      </if>
+      <if test="userType != null">
+        USER_TYPE,
+      </if>
+      <if test="billType != null">
+        BILL_TYPE,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="paymentDate != null">
+        PAYMENT_DATE,
+      </if>
+      <if test="amount != null">
+        AMOUNT,
+      </if>
+      <if test="state != null">
+        `STATE`,
+      </if>
+      <if test="soRegionCode != null">
+        SO_REGION_CODE,
+      </if>
+      <if test="isRegionCode != null">
+        IS_REGION_CODE,
+      </if>
+      <if test="staffId != null">
+        STAFF_ID,
+      </if>
+      <if test="busiCode != null">
+        BUSI_CODE,
+      </if>
+      <if test="msg != null">
+        MSG,
+      </if>
+      <if test="unpayPaymentId != null">
+        UNPAY_PAYMENT_ID,
+      </if>
+      <if test="unpayOtherPaymentId != null">
+        UNPAY_OTHER_PAYMENT_ID,
+      </if>
+      <if test="stsDate != null">
+        STS_DATE,
+      </if>
+      <if test="rem1 != null">
+        REM1,
+      </if>
+      <if test="rem2 != null">
+        REM2,
+      </if>
+      <if test="rem3 != null">
+        REM3,
+      </if>
+      <if test="rem4 != null">
+        REM4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paymentId != null">
+        #{paymentId,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPaymentId != null">
+        #{otherPaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="accNbr != null">
+        #{accNbr,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=DECIMAL},
+      </if>
+      <if test="billType != null">
+        #{billType,jdbcType=DECIMAL},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=DATE},
+      </if>
+      <if test="paymentDate != null">
+        #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=DECIMAL},
+      </if>
+      <if test="soRegionCode != null">
+        #{soRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isRegionCode != null">
+        #{isRegionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null">
+        #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="busiCode != null">
+        #{busiCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="unpayPaymentId != null">
+        #{unpayPaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="unpayOtherPaymentId != null">
+        #{unpayOtherPaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="stsDate != null">
+        #{stsDate,jdbcType=VARCHAR},
+      </if>
+      <if test="rem1 != null">
+        #{rem1,jdbcType=VARCHAR},
+      </if>
+      <if test="rem2 != null">
+        #{rem2,jdbcType=VARCHAR},
+      </if>
+      <if test="rem3 != null">
+        #{rem3,jdbcType=VARCHAR},
+      </if>
+      <if test="rem4 != null">
+        #{rem4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="getCntFromOtherPaymentId" parameterType="java.util.HashMap" resultType="java.lang.Long">
+    select count(PAYMENT_ID) from ACCT.VC_CHARGE_RECORD
+   where
+   OTHER_PAYMENT_ID = #{otherPayMentId}
+   and busi_code = #{busiCode}
+   and created_date >= trunc(sysdate)
+  </select>
+</mapper>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.CreditFeeRecordDao">
+  <resultMap id="BaseResultMap" type="generator.CreditFeeRecord">
+    <result column="PAYMENT_ID" jdbcType="DECIMAL" property="paymentId" />
+    <result column="OTHER_PAYMENT_ID" jdbcType="VARCHAR" property="otherPaymentId" />
+    <result column="ACCT_ID" jdbcType="VARCHAR" property="acctId" />
+    <result column="ACC_NBR" jdbcType="VARCHAR" property="accNbr" />
+    <result column="CREATED_DATE" jdbcType="DATE" property="createdDate" />
+    <result column="PAYMENT_DATE" jdbcType="DATE" property="paymentDate" />
+    <result column="AMOUNT" jdbcType="DECIMAL" property="amount" />
+    <result column="STATE" jdbcType="DECIMAL" property="state" />
+    <result column="STAFF_ID" jdbcType="VARCHAR" property="staffId" />
+    <result column="BUSI_CODE" jdbcType="VARCHAR" property="busiCode" />
+    <result column="MSG" jdbcType="VARCHAR" property="msg" />
+    <result column="REM1" jdbcType="VARCHAR" property="rem1" />
+    <result column="REM2" jdbcType="VARCHAR" property="rem2" />
+    <result column="REM3" jdbcType="VARCHAR" property="rem3" />
+    <result column="REM4" jdbcType="VARCHAR" property="rem4" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PAYMENT_ID, OTHER_PAYMENT_ID, ACCT_ID, ACC_NBR, CREATED_DATE, PAYMENT_DATE, AMOUNT, 
+    `STATE`, STAFF_ID, BUSI_CODE, MSG, REM1, REM2, REM3, REM4
+  </sql>
+  <select id="selectByExample" parameterType="generator.CreditFeeRecordExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ACCT.CREDIT_FEE_RECORD
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="generator.CreditFeeRecordExample">
+    delete from ACCT.CREDIT_FEE_RECORD
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="generator.CreditFeeRecord">
+    insert into ACCT.CREDIT_FEE_RECORD (PAYMENT_ID, OTHER_PAYMENT_ID, ACCT_ID, 
+      ACC_NBR, CREATED_DATE, PAYMENT_DATE, 
+      AMOUNT, `STATE`, STAFF_ID, 
+      BUSI_CODE, MSG, REM1, 
+      REM2, REM3, REM4)
+    values (#{paymentId,jdbcType=DECIMAL}, #{otherPaymentId,jdbcType=VARCHAR}, #{acctId,jdbcType=VARCHAR}, 
+      #{accNbr,jdbcType=VARCHAR}, #{createdDate,jdbcType=DATE}, #{paymentDate,jdbcType=DATE}, 
+      #{amount,jdbcType=DECIMAL}, #{state,jdbcType=DECIMAL}, #{staffId,jdbcType=VARCHAR}, 
+      #{busiCode,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, #{rem1,jdbcType=VARCHAR}, 
+      #{rem2,jdbcType=VARCHAR}, #{rem3,jdbcType=VARCHAR}, #{rem4,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="generator.CreditFeeRecord">
+    insert into ACCT.CREDIT_FEE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paymentId != null">
+        PAYMENT_ID,
+      </if>
+      <if test="otherPaymentId != null">
+        OTHER_PAYMENT_ID,
+      </if>
+      <if test="acctId != null">
+        ACCT_ID,
+      </if>
+      <if test="accNbr != null">
+        ACC_NBR,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="paymentDate != null">
+        PAYMENT_DATE,
+      </if>
+      <if test="amount != null">
+        AMOUNT,
+      </if>
+      <if test="state != null">
+        `STATE`,
+      </if>
+      <if test="staffId != null">
+        STAFF_ID,
+      </if>
+      <if test="busiCode != null">
+        BUSI_CODE,
+      </if>
+      <if test="msg != null">
+        MSG,
+      </if>
+      <if test="rem1 != null">
+        REM1,
+      </if>
+      <if test="rem2 != null">
+        REM2,
+      </if>
+      <if test="rem3 != null">
+        REM3,
+      </if>
+      <if test="rem4 != null">
+        REM4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paymentId != null">
+        #{paymentId,jdbcType=DECIMAL},
+      </if>
+      <if test="otherPaymentId != null">
+        #{otherPaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="acctId != null">
+        #{acctId,jdbcType=VARCHAR},
+      </if>
+      <if test="accNbr != null">
+        #{accNbr,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=DATE},
+      </if>
+      <if test="paymentDate != null">
+        #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=DECIMAL},
+      </if>
+      <if test="staffId != null">
+        #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="busiCode != null">
+        #{busiCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="rem1 != null">
+        #{rem1,jdbcType=VARCHAR},
+      </if>
+      <if test="rem2 != null">
+        #{rem2,jdbcType=VARCHAR},
+      </if>
+      <if test="rem3 != null">
+        #{rem3,jdbcType=VARCHAR},
+      </if>
+      <if test="rem4 != null">
+        #{rem4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="generator.CreditFeeRecordExample" resultType="java.lang.Long">
+    select count(*) from ACCT.CREDIT_FEE_RECORD
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ACCT.CREDIT_FEE_RECORD
+    <set>
+      <if test="record.paymentId != null">
+        PAYMENT_ID = #{record.paymentId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.otherPaymentId != null">
+        OTHER_PAYMENT_ID = #{record.otherPaymentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acctId != null">
+        ACCT_ID = #{record.acctId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accNbr != null">
+        ACC_NBR = #{record.accNbr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdDate != null">
+        CREATED_DATE = #{record.createdDate,jdbcType=DATE},
+      </if>
+      <if test="record.paymentDate != null">
+        PAYMENT_DATE = #{record.paymentDate,jdbcType=DATE},
+      </if>
+      <if test="record.amount != null">
+        AMOUNT = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.state != null">
+        `STATE` = #{record.state,jdbcType=DECIMAL},
+      </if>
+      <if test="record.staffId != null">
+        STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.busiCode != null">
+        BUSI_CODE = #{record.busiCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msg != null">
+        MSG = #{record.msg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rem1 != null">
+        REM1 = #{record.rem1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rem2 != null">
+        REM2 = #{record.rem2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rem3 != null">
+        REM3 = #{record.rem3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rem4 != null">
+        REM4 = #{record.rem4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ACCT.CREDIT_FEE_RECORD
+    set PAYMENT_ID = #{record.paymentId,jdbcType=DECIMAL},
+      OTHER_PAYMENT_ID = #{record.otherPaymentId,jdbcType=VARCHAR},
+      ACCT_ID = #{record.acctId,jdbcType=VARCHAR},
+      ACC_NBR = #{record.accNbr,jdbcType=VARCHAR},
+      CREATED_DATE = #{record.createdDate,jdbcType=DATE},
+      PAYMENT_DATE = #{record.paymentDate,jdbcType=DATE},
+      AMOUNT = #{record.amount,jdbcType=DECIMAL},
+      `STATE` = #{record.state,jdbcType=DECIMAL},
+      STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
+      BUSI_CODE = #{record.busiCode,jdbcType=VARCHAR},
+      MSG = #{record.msg,jdbcType=VARCHAR},
+      REM1 = #{record.rem1,jdbcType=VARCHAR},
+      REM2 = #{record.rem2,jdbcType=VARCHAR},
+      REM3 = #{record.rem3,jdbcType=VARCHAR},
+      REM4 = #{record.rem4,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>
