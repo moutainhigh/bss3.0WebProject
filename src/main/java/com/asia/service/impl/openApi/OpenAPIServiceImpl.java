@@ -1,5 +1,7 @@
 package com.asia.service.impl.openApi;
-
+import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
+import com.asia.mapper.ordmapper.ProdInstRouteMapper;
+import com.asia.service.impl.Bon3ServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
@@ -8,6 +10,11 @@ import com.asia.dao.OrclCommonDao;
 import com.asia.domain.openApi.*;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.internal.common.ResultInfo;
+import com.asia.service.impl.Bon3ServiceImpl;
+import com.asiainfo.account.model.domain.StdCcaQueryServ;
+import com.asiainfo.account.model.domain.StdCcrQueryServ;
+import com.asiainfo.account.model.request.StdCcrQueryServRequest;
+import com.asiainfo.account.model.response.StdCcaQueryServResponse;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +35,8 @@ import java.util.Map;
  */
 @Service
 public class OpenAPIServiceImpl{
-	
+
+
 	/**
 	 * qryInstantFee:(实时话费查询). <br/>
 	 * @author yinyanzhen
@@ -40,6 +49,13 @@ public class OpenAPIServiceImpl{
 	 */
 	@Autowired
 	OrclCommonDao orclCommonDao;
+	@Autowired
+	private Bon3ServiceImpl bon3Service;
+	@Autowired
+	private IntfServCustChangeContrastMapper intfServCustChangeContrastDao;
+	@Autowired
+	private ProdInstRouteMapper prodInstRouteMapperDao;
+
 	public QryInstantFeeRes qryInstantFee(QryInstantFeeReq qryInstantFeeReq,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryInstantFee, qryInstantFeeReq.toString(), headers);
@@ -269,6 +285,33 @@ public class OpenAPIServiceImpl{
 	 */
 	public RtBillItemRes rtBillItem(RtBillItemReq body,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
+		RtBillItemRes returnInfo=new RtBillItemRes();
+		// TODO: 2019/7/30 过户增加判断
+		String acctNumb = body.getSvcObjectStruct().getObjValue();
+		Map map = new HashMap();
+		//调用用户信息查询接口 begin
+		StdCcaQueryServResponse info=new StdCcaQueryServResponse();
+		StdCcrQueryServRequest stdCcrQueryServRequest = new StdCcrQueryServRequest();
+		StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+		StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
+		stdCcrQueryServ.setAreaCode("0431");
+		stdCcrQueryServ.setQueryType("1");
+		stdCcrQueryServ.setValue("17390026401");
+		stdCcrQueryServ.setValueType("1");
+		stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
+
+		//info = bon3Service.searchServInfo(stdCcrQueryServRequest,headers);
+		stdCcaQueryServ = info.getStdCcaQueryServ();
+		String servId = "310000012365";//stdCcaQueryServ.getServId();
+		map.put("servId", servId);
+		List<Map<String, Object>> owenCustList = intfServCustChangeContrastDao.selectIntfServCustChangeContrast(map);
+		if (owenCustList.size() > 1) {
+			Map owenCustMap = owenCustList.get(0);
+
+		}
+		long prodInstId = 123;
+		List<Map<String, Object>> prodInstRouteList = new ArrayList<Map<String, Object>>();
+		prodInstRouteList = prodInstRouteMapperDao.selectProdInstRouteId(prodInstId);
 		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rtBillItem, body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){

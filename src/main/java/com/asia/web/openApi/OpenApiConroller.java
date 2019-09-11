@@ -323,6 +323,7 @@ public class OpenApiConroller{
 		LogUtil.opeLog("/openApi/rtBillItem","body>>"+body.toString()
 			+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
+		/*RtBillItemRes returnInfo=new RtBillItemRes();
 		// TODO: 2019/7/30 过户增加判断
 		String acctNumb = body.getSvcObjectStruct().getObjValue();
 		Map map = new HashMap();
@@ -348,7 +349,7 @@ public class OpenApiConroller{
 		}
 		long prodInstId = 123;
 		List<Map<String, Object>> prodInstRouteList = new ArrayList<Map<String, Object>>();
-		prodInstRouteList = prodInstRouteMapperDao.selectProdInstRouteId(prodInstId);
+		prodInstRouteList = prodInstRouteMapperDao.selectProdInstRouteId(prodInstId);*/
 		try {
 			returnInfo.setSmsBillItems(new ArrayList<>());
 			returnInfo.getSmsBillItems().add(new SmsBillItem());
@@ -358,7 +359,7 @@ public class OpenApiConroller{
 			returnInfo.getIncrBillItems().add(new IncrBillItem());
 			returnInfo.setDataBillItems(new ArrayList<>());
 			returnInfo.getDataBillItems().add(new DataBillItem());
-//			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
+			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
