@@ -18,7 +18,6 @@ import com.asia.domain.openApi.RtBillItemRes.IncrBillItem;
 import com.asia.domain.openApi.RtBillItemRes.SmsBillItem;
 import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
-import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.ordmapper.ProdInstRouteMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
@@ -358,7 +357,7 @@ public class OpenApiConroller{
 			returnInfo.getIncrBillItems().add(new IncrBillItem());
 			returnInfo.setDataBillItems(new ArrayList<>());
 			returnInfo.getDataBillItems().add(new DataBillItem());
-//			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
+			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
