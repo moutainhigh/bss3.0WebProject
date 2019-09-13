@@ -1,11 +1,12 @@
 package com.asia.common.syntomq.datasyn;
 
-import com.al.nppm.business.syntomq.tool.CTGMqTool;
-import com.al.nppm.business.syntomq.tool.STATUS;
-import com.al.nppm.common.utils.DateUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.asia.common.syntomq.tool.CTGMqTool;
+import com.asia.common.syntomq.tool.DateUtils;
+import com.asia.common.syntomq.tool.STATUS;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -243,7 +244,7 @@ public class DataSynDeal {
 	public static STATUS APIbuildSendMsg(List table, Map<String, Object> params) throws Exception {
 		Msg msg = buildMsg(table,params);
 		if (msg.check() == null) {
-			return CTGMqTool.send( params.get( "message_id" ).toString(), 
+			return CTGMqTool.send( params.get( "message_id" ).toString(),
 					        params.get( "message_type" ).toString(), 
 					        JSON.toJSON( msg.getMap() ).toString() );
 		}
