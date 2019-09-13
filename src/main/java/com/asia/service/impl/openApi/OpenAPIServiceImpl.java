@@ -1,4 +1,6 @@
 package com.asia.service.impl.openApi;
+import com.asia.domain.openApi.child.SvcObjectStruct;
+import com.asia.internal.common.CommonUserInfo;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.ordmapper.ProdInstRouteMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
@@ -55,6 +57,8 @@ public class OpenAPIServiceImpl{
 	private IntfServCustChangeContrastMapper intfServCustChangeContrastDao;
 	@Autowired
 	private ProdInstRouteMapper prodInstRouteMapperDao;
+	@Autowired
+	CommonUserInfo commonUserInfo;
 
 	public QryInstantFeeRes qryInstantFee(QryInstantFeeReq qryInstantFeeReq,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
@@ -141,7 +145,7 @@ public class OpenAPIServiceImpl{
 	/**
 	 * qryBill:(欠费查询). <br/>
 	 * @author yinyanzhen
-	 * @param body.to
+	 * @param body
 	 * @param headers
 	 * @return
 	 * @throws ClientProtocolException
@@ -251,6 +255,51 @@ public class OpenAPIServiceImpl{
 			rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
 			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
 		}//end
+
+		StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+		SvcObjectStruct svcObjectStruct=body.getSvcObjectStruct();
+		//调账务服务查询用户信息
+		stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "", "",
+				"",headers);
+		if(stdCcaQueryServ!=null){
+			String state=stdCcaQueryServ.getServState();
+			if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+				rechargeBalanceRes.setResultCode("256");
+				rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
+				return rechargeBalanceRes;
+			}
+		}else{
+			rechargeBalanceRes.setResultCode("256");
+			rechargeBalanceRes.setResultMsg("用户信息为空");
+			return rechargeBalanceRes;
+		}
+		String local_net=stdCcaQueryServ.getHomeAreaCode();
+
+		//特殊业务组的跨地市缴费限制
+		if("3003".equals(body.getSystemId()))
+		{
+			if (!"433".equals(local_net))
+			{
+				//BE_SERV_REJECT_ERROR
+				String errinfo = "该业务渠道不允许跨地市缴费！";
+				rechargeBalanceRes.setResultCode("256");
+				rechargeBalanceRes.setResultMsg(errinfo);
+				return rechargeBalanceRes;
+			}
+		}
+
+
+		// 取工号配置
+		/*int staffId = -1;
+		try {
+			staffId = Integer.parseInt("1");
+		} catch(Exception e) {
+			rechargeBalanceRes.setResultCode("-20");
+			rechargeBalanceRes.setResultMsg("工号格式不对");
+			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
+
+		}*/
+
 		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rechargeBalance, body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
