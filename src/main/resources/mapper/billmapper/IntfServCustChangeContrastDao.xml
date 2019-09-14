@@ -7,7 +7,7 @@
   </sql>
   <select id="selectIntfServCustChangeContrast" parameterType="java.util.HashMap" resultType="java.util.Map">
     select 
-    <include refid="Base_Column_List" />
+    max(DATE_FORMAT(a.CHANGE_DATE,'%Y%m%d')) changeDate
     from intf_serv_cust_change_contrast
     where SERV_ID = #{servId,jdbcType=BIGINT}
   </select>

@@ -1,7 +1,6 @@
 package com.asia.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;

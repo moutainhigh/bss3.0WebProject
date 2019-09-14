@@ -18,15 +18,13 @@ import com.asia.domain.openApi.RtBillItemRes.IncrBillItem;
 import com.asia.domain.openApi.RtBillItemRes.SmsBillItem;
 import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
-import com.asia.domain.openApi.child.OperAttrStruct;
+import com.asia.internal.common.BillException;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.ordmapper.ProdInstRouteMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
 import com.asia.service.impl.openApi.OpenAPIServiceImpl;
-import com.asiainfo.account.model.domain.StdCcaQueryServ;
-import com.asiainfo.account.model.domain.StdCcrQueryServ;
-import com.asiainfo.account.model.request.StdCcrQueryServRequest;
-import com.asiainfo.account.model.response.StdCcaQueryServResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +46,7 @@ import java.util.Map;
 @RequestMapping(value="/openApi",produces="application/json;charset=UTF-8")
 @RestController
 public class OpenApiConroller{
+	private static final Logger logger = LoggerFactory.getLogger(OpenApiConroller.class);
 	@Autowired
 	private OpenAPIServiceImpl openAPIServiceImpl;
 	@Autowired
@@ -323,33 +322,6 @@ public class OpenApiConroller{
 		LogUtil.opeLog("/openApi/rtBillItem","body>>"+body.toString()
 			+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
-		/*RtBillItemRes returnInfo=new RtBillItemRes();
-		// TODO: 2019/7/30 过户增加判断
-		String acctNumb = body.getSvcObjectStruct().getObjValue();
-		Map map = new HashMap();
-		//调用用户信息查询接口 begin
-		StdCcaQueryServResponse info=new StdCcaQueryServResponse();
-		StdCcrQueryServRequest stdCcrQueryServRequest = new StdCcrQueryServRequest();
-		StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
-		StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
-		stdCcrQueryServ.setAreaCode("0431");
-		stdCcrQueryServ.setQueryType("1");
-		stdCcrQueryServ.setValue("17390026401");
-		stdCcrQueryServ.setValueType("1");
-		stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
-
-		info = bon3Service.searchServInfo(stdCcrQueryServRequest,headers);
-		stdCcaQueryServ = info.getStdCcaQueryServ();
-		String servId = "310000012365";//stdCcaQueryServ.getServId();
-		map.put("servId", servId);
-		List<Map<String, Object>> owenCustList = intfServCustChangeContrastDao.selectIntfServCustChangeContrast(map);
-		if (owenCustList.size() > 1) {
-			Map owenCustMap = owenCustList.get(0);
-
-		}
-		long prodInstId = 123;
-		List<Map<String, Object>> prodInstRouteList = new ArrayList<Map<String, Object>>();
-		prodInstRouteList = prodInstRouteMapperDao.selectProdInstRouteId(prodInstId);*/
 		try {
 			returnInfo.setSmsBillItems(new ArrayList<>());
 			returnInfo.getSmsBillItems().add(new SmsBillItem());
@@ -359,10 +331,15 @@ public class OpenApiConroller{
 			returnInfo.getIncrBillItems().add(new IncrBillItem());
 			returnInfo.setDataBillItems(new ArrayList<>());
 			returnInfo.getDataBillItems().add(new DataBillItem());
-			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
-			headers.forEach((key,val)->{response.setHeader(key, val);});
+			returnInfo = openAPIServiceImpl.rtBillItem(body, headers);
+			headers.forEach(response::setHeader);
+		} catch (BillException err) {
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
+			returnInfo.setResultCode("-1");
+			returnInfo.setResultMsg(e.getMessage());
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
