@@ -26,6 +26,10 @@ public class RechargeBalanceReq extends BaseDomain{
 	private String rechargeUnit;
 	//充值量 
 	private Integer rechargeAmount;
+	//工号
+	//private String staffId;
+	private String systemId;
+
 
 	public OperAttrStruct getOperAttrStruct() {
 		return operAttrStruct;
@@ -89,5 +93,21 @@ public class RechargeBalanceReq extends BaseDomain{
 
 	public void setRechargeAmount(Integer rechargeAmount) {
 		this.rechargeAmount = rechargeAmount;
+	}
+
+	/*public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
+	}*/
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

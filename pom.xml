@@ -173,12 +173,6 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.9.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.ctg.mq</groupId>
-            <artifactId>ctg-mq-api</artifactId>
-            <version>2.2.6</version>
-        </dependency>
-
         <!--mybatis单元测试引入结束-->
 	</dependencies>
 

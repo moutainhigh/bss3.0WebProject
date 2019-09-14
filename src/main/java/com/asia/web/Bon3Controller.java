@@ -60,7 +60,7 @@ public class Bon3Controller{
 			info.getStdCcaQueryServ().setStateDate("20180903120101");
 			info.getStdCcaQueryServ().setPaymentFlag("1");
 			info.getStdCcaQueryServ().setHomeAreaCode("0531");
-			info = bon3ServiceImpl.searchServInfo(queryServReq, headers);
+			//info = bon3ServiceImpl.searchServInfo(queryServReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/bon3/searchServInfo服务调用失败", e, this.getClass());
