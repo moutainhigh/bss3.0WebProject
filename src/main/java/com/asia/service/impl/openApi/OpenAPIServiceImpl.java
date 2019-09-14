@@ -184,7 +184,8 @@ public class OpenAPIServiceImpl{
 			headers.putAll(result.getHeaders());
 			return JSON.parseObject(result.getData(), QueryBalanceRes.class) ;
 		}else{
-			return new QueryBalanceRes();
+			//return new QueryBalanceRes();
+			return JSON.parseObject(result.getData(), QueryBalanceRes.class) ;
 		}
 	}
 	
