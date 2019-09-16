@@ -183,7 +183,8 @@ public class OpenAPIServiceImpl{
 			headers.putAll(result.getHeaders());
 			return JSON.parseObject(result.getData(), QueryBalanceRes.class) ;
 		}else{
-			return new QueryBalanceRes();
+			//return new QueryBalanceRes();
+			return JSON.parseObject(result.getData(), QueryBalanceRes.class) ;
 		}
 	}
 	
@@ -377,6 +378,29 @@ public class OpenAPIServiceImpl{
 			return JSON.parseObject(result.getData(), RtBillItemRes.class) ;
 		}else{
 			return new RtBillItemRes();
+		}
+	}
+
+	/**
+	 * 充值回退（冲正）
+	 *
+	 * */
+	public RollRechargeBalanceRes rollRechargeBalnce(RollRechargeBalanceReq body,Map<String,String> headers) throws IOException {
+		RollRechargeBalanceRes rechargeBalanceRes=new RollRechargeBalanceRes();
+		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rollRechargeBalnce, body.toString(), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			rechargeBalanceRes=JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
+			String reqServiceId=rechargeBalanceRes.getReqServiceId();
+			ResultInfo resultInfo =orclCommonDao.updateSerialnumber(body,0,reqServiceId);
+			if (!"0".equals(resultInfo.getCode())) {
+				return  JSON.parseObject(resultInfo.toString(),RollRechargeBalanceRes.class) ;
+			}
+			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class) ;
+		}else{
+			return new RollRechargeBalanceRes();
 		}
 	}
 }

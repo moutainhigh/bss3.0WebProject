@@ -10,4 +10,6 @@ public interface TerminalChargeRecordMapper {
 
     int insertTerminalChargeRecord(TerminalChargeRecord record);
 
+    int updateTerminalChargeRecord(TerminalChargeRecord record);
+
 }

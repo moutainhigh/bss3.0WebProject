@@ -218,9 +218,9 @@ public class OpenApiConroller{
 		LogUtil.opeLog("/openApi/queryBalance","body>>"+body+" header>>"+JSON.toJSONString(headers), this.getClass());
 		QueryBalanceRes returnInfo=new QueryBalanceRes();
 		try {
-			returnInfo.setBalanceQuery(new ArrayList<>());
-			returnInfo.getBalanceQuery().add(new BalanceQuery());
-//			returnInfo=openAPIServiceImpl.queryBalance(body, headers);
+			//returnInfo.setBalanceQuery(new ArrayList<>());
+			//returnInfo.getBalanceQuery().add(new BalanceQuery());
+			returnInfo=openAPIServiceImpl.queryBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/queryBalance服务调用失败", e, this.getClass());
@@ -352,7 +352,8 @@ public class OpenApiConroller{
 		    returnInfo.setReqServiceId("100001111101");
             returnInfo.setResultCode("0");
             returnInfo.setResultMsg("");
-//			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
+            returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
+			//returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", e, this.getClass());

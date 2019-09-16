@@ -20,7 +20,8 @@ public class Constant{
 	
 	public static final String BASE_URL_BON3="http://136.160.161.82:8026/";
 	//"http://XX.XX.XX.XX:xx/";
-	public static final String BASE_URL_OPENAPI="http://136.160.161.82:8026//billsrv/openApi/";
+	//public static final String BASE_URL_OPENAPI="http://136.160.161.82:8026//billsrv/openApi/";
+	public static final String BASE_URL_OPENAPI="http://136.160.161.100:8083/billing/acct";
 	public static final String BASE_URL_OPENAPI_INVOICE="http://137.0.31.177:8001/serviceAgent/rest";
 	public static final String TEST_BASE_URL_OPENAPI="http://136.160.161.224:8085/bss/billing/qcdr";
 	/**
@@ -71,6 +72,11 @@ public class Constant{
 		 */
 		//public static final String rtBillItem=Constant.BASE_URL_OPENAPI+"/RtBillItem";
 		public static final String rtBillItem=Constant.TEST_BASE_URL_OPENAPI+"/RtBillItem";
+
+		/**
+		 * 充值回退（冲正）
+		 * */
+		public static final String rollRechargeBalnce=Constant.BASE_URL_OPENAPI+"/RollRechargeBalance";
 	}
 	
 	/**

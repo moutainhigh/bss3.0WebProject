@@ -170,4 +170,13 @@
    and busi_code = #{busiCode}
    and created_date >= trunc(sysdate)
   </select>
+
+
+  <update id="updateBussihallChargeRecord" parameterType="generator.BussihallChargeRecord">
+    update  ACCT.BUSSIHALL_CHARGE_RECORD t set
+      t.state = -1,t.UNPAY_PAYMENT_ID=#{unpayPaymentId},
+      t.UNPAY_OTHER_PAYMENT_ID=#{unpayOtherPaymentId}
+    where
+        PAYMENT_ID = #{paymentId} and  OTHER_PAYMENT_ID= #{otherPaymentId}
+  </update>
 </mapper>
