@@ -331,7 +331,7 @@ public class OpenAPIServiceImpl{
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
-	public RtBillItemRes rtBillItem(RtBillItemReq body,Map<String,String> headers) 
+	public RtBillItemRes rtBillItem(RtBillItemReq body,Map<String,String> headers,boolean isSms)
 			throws Exception{
 		// TODO: 2019/7/30 过户增加判断
 		String accNbr = body.getSvcObjectStruct().getObjValue();
@@ -370,6 +370,10 @@ public class OpenAPIServiceImpl{
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
 			headers.putAll(result.getHeaders());
+			// TODO: 2019/9/14 插入短信通知表
+			if (isSms) {
+
+			}
 			return JSON.parseObject(result.getData(), RtBillItemRes.class) ;
 		}else{
 			return new RtBillItemRes();

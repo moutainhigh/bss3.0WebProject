@@ -1,9 +1,11 @@
 package com.asia.domain.openApi;
 
-import java.util.List;
-
 import com.asia.common.baseObj.BaseApiResDomain;
 import com.asia.common.baseObj.BaseDomain;
+import com.asia.domain.openApi.child.OperAttrStruct;
+import com.asia.domain.openApi.child.SvcObjectStruct;
+
+import java.util.List;
 /**
  * ClassName: RtBillItemRes <br/>
  * date: 2019年4月29日 下午3:24:44 <br/>
@@ -11,6 +13,8 @@ import com.asia.common.baseObj.BaseDomain;
  */
 public class RtBillItemRes  extends BaseApiResDomain{
 	private static final long serialVersionUID = 3635612640417432719L;
+	private  OperAttrStruct operAttrStruct;
+	private SvcObjectStruct svcObjectStruct;
 	//话单类型
 	private String cdrType;
 	//总记录数
@@ -23,6 +27,23 @@ public class RtBillItemRes  extends BaseApiResDomain{
 	private List<SmsBillItem> smsBillItems;
 	//增值详单
 	private List<IncrBillItem> incrBillItems;
+
+	public OperAttrStruct getOperAttrStruct() {
+		return operAttrStruct;
+	}
+
+	public void setOperAttrStruct(OperAttrStruct operAttrStruct) {
+		this.operAttrStruct = operAttrStruct;
+	}
+
+	public SvcObjectStruct getSvcObjectStruct() {
+		return svcObjectStruct;
+	}
+
+	public void setSvcObjectStruct(SvcObjectStruct svcObjectStruct) {
+		this.svcObjectStruct = svcObjectStruct;
+	}
+
 	/**
 	 * 语音清单
 	 */
@@ -218,11 +239,11 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		//发送时间
 		private String sendTime;
 		//通信费
-		private Integer smsFee;
+		private Integer fee;
 		//短信类型
 		private String smsType;
 		//收发类型
-		private String sendType;
+		private String callType;
 		
 		public String getChargeNo() {
 			return chargeNo;
@@ -242,23 +263,27 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setSendTime(String sendTime) {
 			this.sendTime = sendTime;
 		}
-		public Integer getSmsFee() {
-			return smsFee;
-		}
-		public void setSmsFee(Integer smsFee) {
-			this.smsFee = smsFee;
-		}
 		public String getSmsType() {
 			return smsType;
 		}
 		public void setSmsType(String smsType) {
-			this.smsType = smsType;
+			this.callType = smsType;
 		}
-		public String getSendType() {
-			return sendType;
+
+		public Integer getFee() {
+			return fee;
 		}
-		public void setSendType(String sendType) {
-			this.sendType = sendType;
+
+		public void setFee(Integer fee) {
+			this.fee = fee;
+		}
+
+		public String getCallType() {
+			return callType;
+		}
+
+		public void setCallType(String callType) {
+			this.callType = callType;
 		}
 	}
 	/**
