@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -323,15 +322,7 @@ public class OpenApiConroller{
 			+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
 		try {
-			returnInfo.setSmsBillItems(new ArrayList<>());
-			returnInfo.getSmsBillItems().add(new SmsBillItem());
-			returnInfo.setVoiceBillItems(new ArrayList<>());
-			returnInfo.getVoiceBillItems().add(new VoiceBillItem());
-			returnInfo.setIncrBillItems(new ArrayList<>());
-			returnInfo.getIncrBillItems().add(new IncrBillItem());
-			returnInfo.setDataBillItems(new ArrayList<>());
-			returnInfo.getDataBillItems().add(new DataBillItem());
-			returnInfo = openAPIServiceImpl.rtBillItem(body, headers);
+			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,true);
 			headers.forEach(response::setHeader);
 		} catch (BillException err) {
 			returnInfo.setResultCode(err.getErrCode());
@@ -385,5 +376,39 @@ public class OpenApiConroller{
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
-	
+	/**
+	 * @Author WangBaoQiang
+	 * @Description //详单查询不发送短信
+	 * @Date 10:37 2019/9/14
+	 * @Param [body, headers, response]
+	 * @return java.lang.String
+	*/
+	@PostMapping("/RtBillItemNoSms")
+	public String RtBillItemNoSms(@RequestBody RtBillItemReq body,
+							 @RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
+		//记录业务日志
+		LogUtil.opeLog("/openApi/rtBillItem","body>>"+body.toString()
+				+" header>>"+JSON.toJSONString(headers), this.getClass());
+		RtBillItemRes returnInfo=new RtBillItemRes();
+		try {
+			returnInfo.setSmsBillItems(new ArrayList<>());
+			returnInfo.getSmsBillItems().add(new SmsBillItem());
+			returnInfo.setVoiceBillItems(new ArrayList<>());
+			returnInfo.getVoiceBillItems().add(new VoiceBillItem());
+			returnInfo.setIncrBillItems(new ArrayList<>());
+			returnInfo.getIncrBillItems().add(new IncrBillItem());
+			returnInfo.setDataBillItems(new ArrayList<>());
+			returnInfo.getDataBillItems().add(new DataBillItem());
+			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,false);
+			headers.forEach(response::setHeader);
+		} catch (BillException err) {
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+		} catch (Exception e) {
+			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
+			returnInfo.setResultCode("-1");
+			returnInfo.setResultMsg(e.getMessage());
+		}
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+	}
 }

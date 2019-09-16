@@ -2,6 +2,7 @@ package com.asia.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
@@ -9,6 +10,7 @@ import com.asiainfo.account.model.request.*;
 import com.asiainfo.account.model.response.*;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,9 +35,12 @@ public class Bon3ServiceImpl {
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
+	@Autowired
+	private AcctApiUrl acctApiUrl;
+
 	public StdCcaQueryServResponse searchServInfo(StdCcrQueryServRequest stdCcrQueryServ, Map<String,String> headers)
 			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.searchServInfo,
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getSearchServInfo(),
 				JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
