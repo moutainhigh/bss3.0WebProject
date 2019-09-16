@@ -11,10 +11,21 @@ import com.asia.common.baseObj.BaseDomain;
  */
 public class RtBillItemRes  extends BaseApiResDomain{
 	private static final long serialVersionUID = 3635612640417432719L;
-	//话单类型
-	private String cdrType;
 	//总记录数
 	private Integer totalRecord;
+	private Integer startDate;//查询开始日期
+	private Integer endDate;//查询结束日期
+    private String provinceCode;//归属省
+    private String cdrType;//话单类型
+    private Integer page;//页码
+    private Integer row;//行数
+    private Integer totalFee;//总费用
+    private Integer totalVolume;//总流量
+
+    //操作人属性
+	private OperAttrStruct operAttrStruct;
+	//服务对象
+	private SvcObjectStruct svcObjectStruct;
 	//语音详单
 	private List<VoiceBillItem> voiceBillItems;
 	//数据详单
@@ -23,6 +34,108 @@ public class RtBillItemRes  extends BaseApiResDomain{
 	private List<SmsBillItem> smsBillItems;
 	//增值详单
 	private List<IncrBillItem> incrBillItems;
+
+    /**
+     * 服务对象
+     * (范围不少于2-用户标识3-用户号码)
+     * */
+    private static class SvcObjectStruct {
+        private String  objType;//对象类型 1-帐户标识2-用户标识3-用户号码4-客户标识5-销售品实例
+        private String objValue;//对象值 如果是用户号码且用户号码属性为固话、宽带时，此值要求带区号，含0
+        private String objAttr;//用户号码属性
+        private String dataArea;//数据范围
+
+        public String getObjType() {
+            return objType;
+        }
+
+        public void setObjType(String objType) {
+            this.objType = objType;
+        }
+
+        public String getObjValue() {
+            return objValue;
+        }
+
+        public void setObjValue(String objValue) {
+            this.objValue = objValue;
+        }
+
+        public String getObjAttr() {
+            return objAttr;
+        }
+
+        public void setObjAttr(String objAttr) {
+            this.objAttr = objAttr;
+        }
+
+        public String getDataArea() {
+            return dataArea;
+        }
+
+        public void setDataArea(String dataArea) {
+            this.dataArea = dataArea;
+        }
+    }
+	/**
+     * 操作人属性
+     * */
+	private static class OperAttrStruct {
+	    private Integer staffId;//操作工号标识
+	    private Integer operOrgId;//操作组织标识
+	    private String  operTime;//操作时间
+        private Integer operPost;//操作岗位
+        private String  operServiceI;//业务流水标识
+        private Integer lanId;//本地网标识
+
+        public Integer getStaffId() {
+            return staffId;
+        }
+
+        public void setStaffId(Integer staffId) {
+            this.staffId = staffId;
+        }
+
+        public Integer getOperOrgId() {
+            return operOrgId;
+        }
+
+        public void setOperOrgId(Integer operOrgId) {
+            this.operOrgId = operOrgId;
+        }
+
+        public String getOperTime() {
+            return operTime;
+        }
+
+        public void setOperTime(String operTime) {
+            this.operTime = operTime;
+        }
+
+        public Integer getOperPost() {
+            return operPost;
+        }
+
+        public void setOperPost(Integer operPost) {
+            this.operPost = operPost;
+        }
+
+        public String getOperServiceI() {
+            return operServiceI;
+        }
+
+        public void setOperServiceI(String operServiceI) {
+            this.operServiceI = operServiceI;
+        }
+
+        public Integer getLanId() {
+            return lanId;
+        }
+
+        public void setLanId(Integer lanId) {
+            this.lanId = lanId;
+        }
+    }
 	/**
 	 * 语音清单
 	 */
@@ -404,4 +517,76 @@ public class RtBillItemRes  extends BaseApiResDomain{
 	public void setIncrBillItems(List<IncrBillItem> incrBillItems) {
 		this.incrBillItems = incrBillItems;
 	}
+
+    public OperAttrStruct getOperAttrStruct() {
+        return operAttrStruct;
+    }
+
+    public void setOperAttrStruct(OperAttrStruct operAttrStruct) {
+        this.operAttrStruct = operAttrStruct;
+    }
+
+    public SvcObjectStruct getSvcObjectStruct() {
+        return svcObjectStruct;
+    }
+
+    public void setSvcObjectStruct(SvcObjectStruct svcObjectStruct) {
+        this.svcObjectStruct = svcObjectStruct;
+    }
+
+    public Integer getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Integer startDate) {
+        this.startDate = startDate;
+    }
+
+    public Integer getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Integer endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getProvinceCode() {
+        return provinceCode;
+    }
+
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getRow() {
+        return row;
+    }
+
+    public void setRow(Integer row) {
+        this.row = row;
+    }
+
+    public Integer getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(Integer totalFee) {
+        this.totalFee = totalFee;
+    }
+
+    public Integer getTotalVolume() {
+        return totalVolume;
+    }
+
+    public void setTotalVolume(Integer totalVolume) {
+        this.totalVolume = totalVolume;
+    }
 }
