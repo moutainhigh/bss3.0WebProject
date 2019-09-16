@@ -72,6 +72,11 @@ public class Constant{
 		 */
 		//public static final String rtBillItem=Constant.BASE_URL_OPENAPI+"/RtBillItem";
 		public static final String rtBillItem=Constant.TEST_BASE_URL_OPENAPI+"/RtBillItem";
+
+		/**
+		 * 充值回退（冲正）
+		 * */
+		public static final String rollRechargeBalnce=Constant.BASE_URL_OPENAPI+"/RollRechargeBalance";
 	}
 	
 	/**

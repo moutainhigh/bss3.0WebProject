@@ -8,4 +8,5 @@ public interface CreditFeeRecordMapper {
     long getCntFromOtherPaymentId(@Param("otherPaymentId") long ohterPaymentId,
                                   @Param("busiCode") String busiCode);
     int insertCreditFeeRecord(CreditFeeRecord record);
+    int updateCreditFeeRecord(CreditFeeRecord record);
 }

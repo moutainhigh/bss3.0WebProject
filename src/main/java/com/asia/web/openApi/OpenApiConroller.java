@@ -361,7 +361,8 @@ public class OpenApiConroller{
 		    returnInfo.setReqServiceId("100001111101");
             returnInfo.setResultCode("0");
             returnInfo.setResultMsg("");
-//			returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
+            returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
+			//returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", e, this.getClass());

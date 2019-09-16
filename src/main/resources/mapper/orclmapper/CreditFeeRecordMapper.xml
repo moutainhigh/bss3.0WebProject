@@ -127,4 +127,12 @@
    and busi_code = #{busiCode}
    and created_date >= trunc(sysdate)
   </select>
+
+
+  <update id="updateCreditFeeRecord" parameterType="com.asia.vo.CreditFeeRecord">
+    update  ACCT.CREDIT_FEE_RECORD t set
+      t.state = -1
+    where
+        PAYMENT_ID = #{paymentId} and  OTHER_PAYMENT_ID= #{otherPaymentId}
+  </update>
 </mapper>

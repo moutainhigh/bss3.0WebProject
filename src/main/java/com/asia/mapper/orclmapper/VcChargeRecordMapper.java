@@ -9,4 +9,5 @@ public interface VcChargeRecordMapper {
                                   @Param("busiCode") String busiCode);
     int insertVcChargeRecord(VcChargeRecord record);
 
+    int updateVcChargeRecord(VcChargeRecord record);
   }

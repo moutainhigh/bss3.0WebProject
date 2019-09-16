@@ -10,4 +10,6 @@ public interface BussihallChargeRecordMapper {
 
     int insertBussihallChargeRecord(BussihallChargeRecord record);
 
+    int updateBussihallChargeRecord(BussihallChargeRecord record);
+
 }

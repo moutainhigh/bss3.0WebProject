@@ -8,6 +8,7 @@ import com.asia.domain.localApi.MobileNumberQueryRes;
 import com.asia.domain.localApi.child.MobileNumberQueryServiceListBean;
 import com.asia.domain.localApi.child.MobileNumberQueryServiceListTypeBean;
 import com.asia.domain.openApi.RechargeBalanceReq;
+import com.asia.domain.openApi.RollRechargeBalanceReq;
 import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.internal.common.BillException;
@@ -350,6 +351,71 @@ public class OrclCommonDao {
         return resultInfo;
     }
 
+    /**
+     * @Author ChenJian
+     * @Description 修改流水号（冲正回退、冲正）
+     * @Date 15:57 2019/9/14
+     * @Param [rechargeBalanceReq]
+     * @return com.asia.internal.common.ResultInfo
+     */
+    public ResultInfo updateSerialnumber(RollRechargeBalanceReq rechargeBalanceReq, long paymentId,String reqServiceId) {
+        ResultInfo resultInfo = new ResultInfo();
+        VcChargeRecord vcChargeRecord = new VcChargeRecord();
+        TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
+        BussihallChargeRecord bussihallChargeRecord = new BussihallChargeRecord();
+        CreditFeeRecord creditFeeRecord = new CreditFeeRecord();
+        OperAttrStruct operAttrStruct = new OperAttrStruct();
+        SvcObjectStruct svcObjectStruct = new SvcObjectStruct();
+
+        operAttrStruct = rechargeBalanceReq.getOperAttrStruct();
+
+        String channelId = operAttrStruct.getOperOrgId().toString();
+        //工号
+        String staffId = operAttrStruct.getStaffId().toString();
+        //外围流水
+        String otherPaymentId = rechargeBalanceReq.getSrcServiceId().toString();
+        //号码
+        String acctNbr = svcObjectStruct.getObjValue();
+        //号码类型
+        String valueType = svcObjectStruct.getObjAttr();
+        //缴费流水
+        long flowId = Long.parseLong(rechargeBalanceReq.getSrcServiceId());
+        //充值金额
+        //long amount = rechargeBalanceReq.getRechargeAmount();
+        String tableName = "";
+        long cnt=0;
+        if ("4102".equals(channelId)) {//VC充值 vc_charge_record
+            vcChargeRecord.setPaymentId(paymentId);
+            vcChargeRecord.setOtherPaymentId(otherPaymentId);
+            vcChargeRecord.setUnpayOtherPaymentId(reqServiceId);
+            vcChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
+            cnt = vcChargeRecordMapperDao.updateVcChargeRecord(vcChargeRecord);
+        } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
+            terminalChargeRecord.setOtherPaymentId(otherPaymentId);
+            terminalChargeRecord.setPaymentId(paymentId);
+            terminalChargeRecord.setUnpayOtherPaymentId(reqServiceId);
+            terminalChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
+            cnt = terminalChargeRecordMapperDao.updateTerminalChargeRecord(terminalChargeRecord);
+        } else if ("9".equals(channelId)) {//crm credit_fee_record
+            creditFeeRecord.setOtherPaymentId(otherPaymentId);
+            creditFeeRecord.setPaymentId(paymentId);
+            cnt = creditFeeRecordMapperDao.updateCreditFeeRecord(creditFeeRecord);
+        } else {//bussihall_charge_record
+            bussihallChargeRecord.setOtherPaymentId(otherPaymentId);
+            bussihallChargeRecord.setPaymentId(paymentId);
+            bussihallChargeRecord.setUnpayOtherPaymentId(reqServiceId);
+            bussihallChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
+            cnt = bussihallChargeRecordMapperDao.updateBussihallChargeRecord(bussihallChargeRecord);
+        }
+        if (cnt < 0) {
+            resultInfo.setResultInfo(ErrorCodePublicEnum.DB_INSERT_ERROR);
+            return resultInfo;
+        }
+        resultInfo.setResultInfo(ErrorCodePublicEnum.SUCCESS);
+        return resultInfo;
+    }
+
+    //是否为电信号段（查号头表）
     public MobileNumberQueryRes moBileNumberQuery(MobileNumberQueryReq mobileNumberQueryReq, Map<String, String> headers){
         MobileNumberQueryRes mobileNumberQueryRes=new MobileNumberQueryRes();
 

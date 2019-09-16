@@ -118,7 +118,7 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		//用户号码/宽带帐号
 		private String chargeNo;
 		//漫游类型
-		private Integer roamType;
+		private String listType;
 		//NAI
 		private String nai;
 		//开始时间
@@ -145,12 +145,15 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setChargeNo(String chargeNo) {
 			this.chargeNo = chargeNo;
 		}
-		public Integer getRoamType() {
-			return roamType;
+
+		public String getListType() {
+			return listType;
 		}
-		public void setRoamType(Integer roamType) {
-			this.roamType = roamType;
+
+		public void setListType(String listType) {
+			this.listType = listType;
 		}
+
 		public String getNai() {
 			return nai;
 		}
@@ -216,11 +219,11 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		//对方号码
 		private String calledNo;
 		//发送时间
-		private String sendTime;
+		private String startTime;
 		//通信费
-		private Integer smsFee;
+		private Integer fee;
 		//短信类型
-		private String smsType;
+		private String callType;
 		//收发类型
 		private String sendType;
 		
@@ -236,24 +239,37 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setCalledNo(String calledNo) {
 			this.calledNo = calledNo;
 		}
-		public String getSendTime() {
-			return sendTime;
+		/*public String getSendTime() {
+			return startTime;
 		}
-		public void setSendTime(String sendTime) {
-			this.sendTime = sendTime;
+		public void setSendTime(String startTime) {
+			this.startTime = startTime;
+		}*/
+
+		public String getStartTime() {
+			return startTime;
 		}
-		public Integer getSmsFee() {
-			return smsFee;
+
+		public void setStartTime(String startTime) {
+			this.startTime = startTime;
 		}
-		public void setSmsFee(Integer smsFee) {
-			this.smsFee = smsFee;
+
+		public Integer getFee() {
+			return fee;
 		}
-		public String getSmsType() {
-			return smsType;
+
+		public void setFee(Integer fee) {
+			this.fee = fee;
 		}
-		public void setSmsType(String smsType) {
-			this.smsType = smsType;
+
+		public String getCallType() {
+			return callType;
 		}
+
+		public void setCallType(String callType) {
+			this.callType = callType;
+		}
+
 		public String getSendType() {
 			return sendType;
 		}
@@ -268,30 +284,30 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		private static final long serialVersionUID = 7337972630562641395L;
 		//用户号码
 		private String chargeNo;
-		//订购时间
-		private String orderTime;
+		//扣费时间
+		private String startTime;
 		//提供商编码
 		private String spCode;
 		//提供商名称
 		private String spName;
-		//业务类型
-		private String productType;
+		//业务名称
+		private String businessType;
 		//业务名称
 		private String productName;
-		//信息服务费
-		private Integer infoFee;
+		//费用
+		private Integer Fee;
+		//收费类型
+		private String feeType;
+		//业务内容
+		private String businessInfo;
+
 		public String getChargeNo() {
 			return chargeNo;
 		}
 		public void setChargeNo(String chargeNo) {
 			this.chargeNo = chargeNo;
 		}
-		public String getOrderTime() {
-			return orderTime;
-		}
-		public void setOrderTime(String orderTime) {
-			this.orderTime = orderTime;
-		}
+
 		public String getSpCode() {
 			return spCode;
 		}
@@ -304,23 +320,52 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setSpName(String spName) {
 			this.spName = spName;
 		}
-		public String getProductType() {
-			return productType;
-		}
-		public void setProductType(String productType) {
-			this.productType = productType;
-		}
+
 		public String getProductName() {
 			return productName;
 		}
 		public void setProductName(String productName) {
 			this.productName = productName;
 		}
-		public Integer getInfoFee() {
-			return infoFee;
+
+		public String getStartTime() {
+			return startTime;
 		}
-		public void setInfoFee(Integer infoFee) {
-			this.infoFee = infoFee;
+
+		public void setStartTime(String startTime) {
+			this.startTime = startTime;
+		}
+
+		public String getBusinessType() {
+			return businessType;
+		}
+
+		public void setBusinessType(String businessType) {
+			this.businessType = businessType;
+		}
+
+		public Integer getFee() {
+			return Fee;
+		}
+
+		public void setFee(Integer fee) {
+			Fee = fee;
+		}
+
+		public String getFeeType() {
+			return feeType;
+		}
+
+		public void setFeeType(String feeType) {
+			this.feeType = feeType;
+		}
+
+		public String getBusinessInfo() {
+			return businessInfo;
+		}
+
+		public void setBusinessInfo(String businessInfo) {
+			this.businessInfo = businessInfo;
 		}
 	}
 	public String getCdrType() {
