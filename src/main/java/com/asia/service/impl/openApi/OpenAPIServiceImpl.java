@@ -1,6 +1,7 @@
 package com.asia.service.impl.openApi;
 
 import com.alibaba.fastjson.JSON;
+import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
@@ -58,7 +59,8 @@ public class OpenAPIServiceImpl{
 	CommonUserInfo commonUserInfo;
 	@Autowired
 	IfUserMeterMapper ifUserMeterMapperDao;
-
+	@Autowired
+	AcctApiUrl acctApiUrl;
 	public QryInstantFeeRes qryInstantFee(QryInstantFeeReq qryInstantFeeReq,Map<String,String> headers)
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryInstantFee, qryInstantFeeReq.toString(), headers);
@@ -176,7 +178,7 @@ public class OpenAPIServiceImpl{
 	 */
 	public QueryBalanceRes queryBalance(QueryBalanceReq body,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.queryBalance, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQueryBalance(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -366,7 +368,7 @@ public class OpenAPIServiceImpl{
 			body.setStartDate(effDate);
 		}
 
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rtBillItem, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRtBillItem(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
