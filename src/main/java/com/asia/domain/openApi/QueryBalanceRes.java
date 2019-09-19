@@ -15,7 +15,7 @@ public class QueryBalanceRes extends BaseApiResDomain{
 	//实时可用总余额 
 	private Integer realBalance ;
 	//电话区号
-	private Integer areaCode ;
+	private String areaCode ;
 	//查询业务类型
 	private Integer queryFlag ;
 	//查询余额类型
@@ -28,7 +28,7 @@ public class QueryBalanceRes extends BaseApiResDomain{
 	public static class BalanceQuery extends BaseDomain{
 		private static final long serialVersionUID = -6426229905909963576L;
 		//帐户标识 
-		private Integer acctId;
+		private String acctId;
 		//用户标识 
 		private Integer prodInstId;
 		//用户号码 
@@ -61,10 +61,10 @@ public class QueryBalanceRes extends BaseApiResDomain{
 		private String balanceTypeFlag;
 		
 		
-		public Integer getAcctId() {
+		public String getAcctId() {
 			return acctId;
 		}
-		public void setAcctId(Integer acctId) {
+		public void setAcctId(String acctId) {
 			this.acctId = acctId;
 		}
 		public Integer getProdInstId() {
@@ -168,11 +168,11 @@ public class QueryBalanceRes extends BaseApiResDomain{
 		this.realBalance = realBalance;
 	}
 
-	public Integer getAreaCode() {
+	public String getAreaCode() {
 		return areaCode;
 	}
 
-	public void setAreaCode(Integer areaCode) {
+	public void setAreaCode(String areaCode) {
 		this.areaCode = areaCode;
 	}
 

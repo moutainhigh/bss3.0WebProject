@@ -136,7 +136,7 @@ public class OpenApiConroller{
 			
 			returnInfo.getPaymentInfoList().add(paymentInfo);
 			
-//			returnInfo=openAPIServiceImpl.qryPayment(qryPaymentReq, headers);
+			returnInfo=openAPIServiceImpl.qryPayment(qryPaymentReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryPayment服务调用失败", e, this.getClass());
@@ -194,7 +194,7 @@ public class OpenApiConroller{
 			acctItemGroup.setAcctItemType(new ArrayList<>());
 			acctItemGroup.getAcctItemType().add(new AcctItemType());
 			feeBillingCycle.getAcctItemGroupList().add(acctItemGroup);
-//			returnInfo=openAPIServiceImpl.qryBill(body, headers);
+			returnInfo=openAPIServiceImpl.qryBill(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryBill服务调用失败", e, this.getClass());
@@ -245,9 +245,9 @@ public class OpenApiConroller{
 				+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		QryBalanceRecordDetailRes returnInfo=new QryBalanceRecordDetailRes();
 		try {
-			returnInfo.setBalanceChangeList(new ArrayList<>());
-			returnInfo.getBalanceChangeList().add(new BalanceChangeList());
-//			returnInfo=openAPIServiceImpl.qryBalanceRecordDetail(body, headers);
+			/*returnInfo.setBalanceChangeList(new ArrayList<>());
+			returnInfo.getBalanceChangeList().add(new BalanceChangeList());*/
+			returnInfo=openAPIServiceImpl.qryBalanceRecordDetail(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryBalanceRecordDetail服务调用失败", e, this.getClass());

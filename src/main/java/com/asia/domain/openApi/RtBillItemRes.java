@@ -1,9 +1,11 @@
 package com.asia.domain.openApi;
 
-import java.util.List;
-
 import com.asia.common.baseObj.BaseApiResDomain;
 import com.asia.common.baseObj.BaseDomain;
+import com.asia.domain.openApi.child.OperAttrStruct;
+import com.asia.domain.openApi.child.SvcObjectStruct;
+
+import java.util.List;
 /**
  * ClassName: RtBillItemRes <br/>
  * date: 2019年4月29日 下午3:24:44 <br/>
@@ -11,21 +13,20 @@ import com.asia.common.baseObj.BaseDomain;
  */
 public class RtBillItemRes  extends BaseApiResDomain{
 	private static final long serialVersionUID = 3635612640417432719L;
+	private  OperAttrStruct operAttrStruct;
+	private SvcObjectStruct svcObjectStruct;
+	//话单类型
+	private String cdrType;
 	//总记录数
 	private Integer totalRecord;
-	private Integer startDate;//查询开始日期
-	private Integer endDate;//查询结束日期
-    private String provinceCode;//归属省
-    private String cdrType;//话单类型
-    private Integer page;//页码
-    private Integer row;//行数
-    private Integer totalFee;//总费用
-    private Integer totalVolume;//总流量
+	private Integer startDate;
+	private Integer endDate;
+	private String provinceCode;
+	private Integer page;
+	private Integer row;
+	private Integer totalFee;
+	private Integer totalVolume;
 
-    //操作人属性
-	private OperAttrStruct operAttrStruct;
-	//服务对象
-	private SvcObjectStruct svcObjectStruct;
 	//语音详单
 	private List<VoiceBillItem> voiceBillItems;
 	//数据详单
@@ -35,107 +36,22 @@ public class RtBillItemRes  extends BaseApiResDomain{
 	//增值详单
 	private List<IncrBillItem> incrBillItems;
 
-    /**
-     * 服务对象
-     * (范围不少于2-用户标识3-用户号码)
-     * */
-    private static class SvcObjectStruct {
-        private String  objType;//对象类型 1-帐户标识2-用户标识3-用户号码4-客户标识5-销售品实例
-        private String objValue;//对象值 如果是用户号码且用户号码属性为固话、宽带时，此值要求带区号，含0
-        private String objAttr;//用户号码属性
-        private String dataArea;//数据范围
+	public OperAttrStruct getOperAttrStruct() {
+		return operAttrStruct;
+	}
 
-        public String getObjType() {
-            return objType;
-        }
+	public void setOperAttrStruct(OperAttrStruct operAttrStruct) {
+		this.operAttrStruct = operAttrStruct;
+	}
 
-        public void setObjType(String objType) {
-            this.objType = objType;
-        }
+	public SvcObjectStruct getSvcObjectStruct() {
+		return svcObjectStruct;
+	}
 
-        public String getObjValue() {
-            return objValue;
-        }
+	public void setSvcObjectStruct(SvcObjectStruct svcObjectStruct) {
+		this.svcObjectStruct = svcObjectStruct;
+	}
 
-        public void setObjValue(String objValue) {
-            this.objValue = objValue;
-        }
-
-        public String getObjAttr() {
-            return objAttr;
-        }
-
-        public void setObjAttr(String objAttr) {
-            this.objAttr = objAttr;
-        }
-
-        public String getDataArea() {
-            return dataArea;
-        }
-
-        public void setDataArea(String dataArea) {
-            this.dataArea = dataArea;
-        }
-    }
-	/**
-     * 操作人属性
-     * */
-	private static class OperAttrStruct {
-	    private Integer staffId;//操作工号标识
-	    private Integer operOrgId;//操作组织标识
-	    private String  operTime;//操作时间
-        private Integer operPost;//操作岗位
-        private String  operServiceI;//业务流水标识
-        private Integer lanId;//本地网标识
-
-        public Integer getStaffId() {
-            return staffId;
-        }
-
-        public void setStaffId(Integer staffId) {
-            this.staffId = staffId;
-        }
-
-        public Integer getOperOrgId() {
-            return operOrgId;
-        }
-
-        public void setOperOrgId(Integer operOrgId) {
-            this.operOrgId = operOrgId;
-        }
-
-        public String getOperTime() {
-            return operTime;
-        }
-
-        public void setOperTime(String operTime) {
-            this.operTime = operTime;
-        }
-
-        public Integer getOperPost() {
-            return operPost;
-        }
-
-        public void setOperPost(Integer operPost) {
-            this.operPost = operPost;
-        }
-
-        public String getOperServiceI() {
-            return operServiceI;
-        }
-
-        public void setOperServiceI(String operServiceI) {
-            this.operServiceI = operServiceI;
-        }
-
-        public Integer getLanId() {
-            return lanId;
-        }
-
-        public void setLanId(Integer lanId) {
-            this.lanId = lanId;
-        }
-    }
 	/**
 	 * 语音清单
 	 */
@@ -231,7 +147,7 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		//用户号码/宽带帐号
 		private String chargeNo;
 		//漫游类型
-		private String listType;
+		private Integer roamType;
 		//NAI
 		private String nai;
 		//开始时间
@@ -258,15 +174,12 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setChargeNo(String chargeNo) {
 			this.chargeNo = chargeNo;
 		}
-
-		public String getListType() {
-			return listType;
+		public Integer getRoamType() {
+			return roamType;
 		}
-
-		public void setListType(String listType) {
-			this.listType = listType;
+		public void setRoamType(Integer roamType) {
+			this.roamType = roamType;
 		}
-
 		public String getNai() {
 			return nai;
 		}
@@ -336,9 +249,9 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		//通信费
 		private Integer fee;
 		//短信类型
-		private String callType;
+		private String smsType;
 		//收发类型
-		private String sendType;
+		private String callType;
 		
 		public String getChargeNo() {
 			return chargeNo;
@@ -352,19 +265,11 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setCalledNo(String calledNo) {
 			this.calledNo = calledNo;
 		}
-		/*public String getSendTime() {
-			return startTime;
+		public String getSmsType() {
+			return smsType;
 		}
-		public void setSendTime(String startTime) {
-			this.startTime = startTime;
-		}*/
-
-		public String getStartTime() {
-			return startTime;
-		}
-
-		public void setStartTime(String startTime) {
-			this.startTime = startTime;
+		public void setSmsType(String smsType) {
+			this.callType = smsType;
 		}
 
 		public Integer getFee() {
@@ -383,11 +288,12 @@ public class RtBillItemRes  extends BaseApiResDomain{
 			this.callType = callType;
 		}
 
-		public String getSendType() {
-			return sendType;
+		public String getStartTime() {
+			return startTime;
 		}
-		public void setSendType(String sendType) {
-			this.sendType = sendType;
+
+		public void setStartTime(String startTime) {
+			this.startTime = startTime;
 		}
 	}
 	/**
@@ -401,44 +307,25 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		private String startTime;
 		//提供商编码
 		private String spCode;
-		//提供商名称
-		private String spName;
-		//业务名称
-		private String businessType;
-		//业务名称
-		private String productName;
-		//费用
-		private Integer Fee;
-		//收费类型
-		private String feeType;
 		//业务内容
 		private String businessInfo;
-
+		//业务名称
+		private String businessType;
+		//收费类型
+		private String feeType;
+		//费用
+		private Integer fee;
 		public String getChargeNo() {
 			return chargeNo;
 		}
 		public void setChargeNo(String chargeNo) {
 			this.chargeNo = chargeNo;
 		}
-
 		public String getSpCode() {
 			return spCode;
 		}
 		public void setSpCode(String spCode) {
 			this.spCode = spCode;
-		}
-		public String getSpName() {
-			return spName;
-		}
-		public void setSpName(String spName) {
-			this.spName = spName;
-		}
-
-		public String getProductName() {
-			return productName;
-		}
-		public void setProductName(String productName) {
-			this.productName = productName;
 		}
 
 		public String getStartTime() {
@@ -449,20 +336,20 @@ public class RtBillItemRes  extends BaseApiResDomain{
 			this.startTime = startTime;
 		}
 
+		public String getBusinessInfo() {
+			return businessInfo;
+		}
+
+		public void setBusinessInfo(String businessInfo) {
+			this.businessInfo = businessInfo;
+		}
+
 		public String getBusinessType() {
 			return businessType;
 		}
 
 		public void setBusinessType(String businessType) {
 			this.businessType = businessType;
-		}
-
-		public Integer getFee() {
-			return Fee;
-		}
-
-		public void setFee(Integer fee) {
-			Fee = fee;
 		}
 
 		public String getFeeType() {
@@ -473,12 +360,12 @@ public class RtBillItemRes  extends BaseApiResDomain{
 			this.feeType = feeType;
 		}
 
-		public String getBusinessInfo() {
-			return businessInfo;
+		public Integer getFee() {
+			return fee;
 		}
 
-		public void setBusinessInfo(String businessInfo) {
-			this.businessInfo = businessInfo;
+		public void setFee(Integer fee) {
+			this.fee = fee;
 		}
 	}
 	public String getCdrType() {
@@ -518,75 +405,59 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		this.incrBillItems = incrBillItems;
 	}
 
-    public OperAttrStruct getOperAttrStruct() {
-        return operAttrStruct;
-    }
+	public Integer getStartDate() {
+		return startDate;
+	}
 
-    public void setOperAttrStruct(OperAttrStruct operAttrStruct) {
-        this.operAttrStruct = operAttrStruct;
-    }
+	public void setStartDate(Integer startDate) {
+		this.startDate = startDate;
+	}
 
-    public SvcObjectStruct getSvcObjectStruct() {
-        return svcObjectStruct;
-    }
+	public Integer getEndDate() {
+		return endDate;
+	}
 
-    public void setSvcObjectStruct(SvcObjectStruct svcObjectStruct) {
-        this.svcObjectStruct = svcObjectStruct;
-    }
+	public void setEndDate(Integer endDate) {
+		this.endDate = endDate;
+	}
 
-    public Integer getStartDate() {
-        return startDate;
-    }
+	public String getProvinceCode() {
+		return provinceCode;
+	}
 
-    public void setStartDate(Integer startDate) {
-        this.startDate = startDate;
-    }
+	public void setProvinceCode(String provinceCode) {
+		this.provinceCode = provinceCode;
+	}
 
-    public Integer getEndDate() {
-        return endDate;
-    }
+	public Integer getPage() {
+		return page;
+	}
 
-    public void setEndDate(Integer endDate) {
-        this.endDate = endDate;
-    }
+	public void setPage(Integer page) {
+		this.page = page;
+	}
 
-    public String getProvinceCode() {
-        return provinceCode;
-    }
+	public Integer getRow() {
+		return row;
+	}
 
-    public void setProvinceCode(String provinceCode) {
-        this.provinceCode = provinceCode;
-    }
+	public void setRow(Integer row) {
+		this.row = row;
+	}
 
-    public Integer getPage() {
-        return page;
-    }
+	public Integer getTotalFee() {
+		return totalFee;
+	}
 
-    public void setPage(Integer page) {
-        this.page = page;
-    }
+	public void setTotalFee(Integer totalFee) {
+		this.totalFee = totalFee;
+	}
 
-    public Integer getRow() {
-        return row;
-    }
+	public Integer getTotalVolume() {
+		return totalVolume;
+	}
 
-    public void setRow(Integer row) {
-        this.row = row;
-    }
-
-    public Integer getTotalFee() {
-        return totalFee;
-    }
-
-    public void setTotalFee(Integer totalFee) {
-        this.totalFee = totalFee;
-    }
-
-    public Integer getTotalVolume() {
-        return totalVolume;
-    }
-
-    public void setTotalVolume(Integer totalVolume) {
-        this.totalVolume = totalVolume;
-    }
+	public void setTotalVolume(Integer totalVolume) {
+		this.totalVolume = totalVolume;
+	}
 }
