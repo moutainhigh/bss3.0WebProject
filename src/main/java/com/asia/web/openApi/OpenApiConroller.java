@@ -224,6 +224,8 @@ public class OpenApiConroller{
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/queryBalance服务调用失败", e, this.getClass());
+			returnInfo.setResultCode("2001");
+			returnInfo.setResultMsg(e.getMessage());
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}

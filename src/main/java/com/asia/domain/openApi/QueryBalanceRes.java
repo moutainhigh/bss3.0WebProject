@@ -1,10 +1,10 @@
 package com.asia.domain.openApi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.asia.common.baseObj.BaseApiResDomain;
 import com.asia.common.baseObj.BaseDomain;
+
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ClassName: QueryBalanceRes <br/>
  * date: 2019年4月29日 下午3:03:57 <br/>
@@ -28,7 +28,7 @@ public class QueryBalanceRes extends BaseApiResDomain{
 	public static class BalanceQuery extends BaseDomain{
 		private static final long serialVersionUID = -6426229905909963576L;
 		//帐户标识 
-		private String acctId;
+		private long acctId;
 		//用户标识 
 		private Integer prodInstId;
 		//用户号码 
@@ -61,10 +61,10 @@ public class QueryBalanceRes extends BaseApiResDomain{
 		private String balanceTypeFlag;
 		
 		
-		public String getAcctId() {
+		public long getAcctId() {
 			return acctId;
 		}
-		public void setAcctId(String acctId) {
+		public void setAcctId(long acctId) {
 			this.acctId = acctId;
 		}
 		public Integer getProdInstId() {
