@@ -413,4 +413,59 @@ public class OpenApiConroller{
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
+
+
+    /**
+     * QryReturnBalanceDetail:(话费返还记录查询). <br/>
+     * @author Chenjian
+     * @param body
+     * @param headers
+     * @param response
+     * @return
+     * @since V1.0.0
+     */
+    @PostMapping("/QryReturnBalanceDetail")
+    public String QryReturnBalanceDetail(@RequestBody QryReturnBalanceDetailReq body,
+                              @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/openApi/QryReturnBalanceDetail","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+        QryReturnBalanceDetailRes returnInfo=new QryReturnBalanceDetailRes();
+        try {
+           // returnInfo.setItemInformationList(new ArrayList<>());
+            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+			returnInfo=openAPIServiceImpl.qryReturnBalanceDetail(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryReturnBalanceDetail服务调用失败", e, this.getClass());
+        }
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+    }
+
+    /**
+     * QryBalanceRecord:(余额变动汇总查询). <br/>
+     * @author Chenjian
+     * @param body
+     * @param headers
+     * @param response
+     * @return
+     * @since V1.0.0
+     */
+    @PostMapping("/QryBalanceRecord")
+    public String QryBalanceRecord(@RequestBody QryBalanceRecordReq body,
+                                         @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/openApi/QryBalanceRecord","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+        QryBalanceRecordRes returnInfo=new QryBalanceRecordRes();
+        try {
+            // returnInfo.setItemInformationList(new ArrayList<>());
+            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+            returnInfo=openAPIServiceImpl.qryBalanceRecord(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryBalanceRecord服务调用失败", e, this.getClass());
+        }
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+    }
+
+
 }

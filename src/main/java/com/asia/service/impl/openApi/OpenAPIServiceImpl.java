@@ -405,4 +405,43 @@ public class OpenAPIServiceImpl{
 			return new RollRechargeBalanceRes();
 		}
 	}
+
+    /**
+     * 话费返还记录查询
+     *
+     * */
+	public QryReturnBalanceDetailRes qryReturnBalanceDetail(QryReturnBalanceDetailReq body,
+                                                             Map<String,String> headers) throws IOException {
+        QryReturnBalanceDetailRes rechargeBalanceRes=new QryReturnBalanceDetailRes();
+        HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryReturnBalanceDetail, body.toString(), headers);
+        //状态码为请求成功
+        if(result.getCode() == HttpStatus.SC_OK){
+            headers.clear();
+            headers.putAll(result.getHeaders());
+            return JSON.parseObject(result.getData(), QryReturnBalanceDetailRes.class) ;
+        }else{
+            return new QryReturnBalanceDetailRes();
+        }
+
+    }
+
+
+    /**
+     * 余额变动汇总查询
+     *
+     * */
+    public QryBalanceRecordRes qryBalanceRecord(QryBalanceRecordReq body,
+                                                            Map<String,String> headers) throws IOException {
+        QryBalanceRecordRes qryBalanceRecordRes=new QryBalanceRecordRes();
+        HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryBalanceRecord, body.toString(), headers);
+        //状态码为请求成功
+        if(result.getCode() == HttpStatus.SC_OK){
+            headers.clear();
+            headers.putAll(result.getHeaders());
+            return JSON.parseObject(result.getData(), QryBalanceRecordRes.class) ;
+        }else{
+            return new QryBalanceRecordRes();
+        }
+
+    }
 }
