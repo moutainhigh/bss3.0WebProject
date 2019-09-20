@@ -13,7 +13,7 @@ import com.asia.common.baseObj.BaseDomain;
 public class QryBillRes extends BaseApiResDomain{
 	private static final long serialVersionUID = 638256277682422410L;
 	//帐户标识
-	private Long acctId;
+	private long acctId;
 	//帐户名称
 	private String acctName;
 	//接入号码

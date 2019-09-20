@@ -15,7 +15,7 @@ public class RechargeBalanceReq extends BaseDomain{
 	//服务对象条件 
 	private SvcObjectStruct svcObjectStruct;
 	//充值请求流水
-	private Integer flowId;
+	private long flowId;
 	//充值来源 
 	private String rechargeSource;
 	//被充值用户号码类型
@@ -47,11 +47,11 @@ public class RechargeBalanceReq extends BaseDomain{
 		this.svcObjectStruct = svcObjectStruct;
 	}
 
-	public Integer getFlowId() {
+	public long getFlowId() {
 		return flowId;
 	}
 
-	public void setFlowId(Integer flowId) {
+	public void setFlowId(long flowId) {
 		this.flowId = flowId;
 	}
 
