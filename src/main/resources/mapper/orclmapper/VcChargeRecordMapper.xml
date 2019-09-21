@@ -78,7 +78,7 @@
         BUSI_CODE,
       </if>
       <if test="state != null">
-        `STATE`,
+        STATE,
       </if>
       <if test="stsDate != null">
         STS_DATE,

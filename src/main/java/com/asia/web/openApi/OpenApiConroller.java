@@ -351,9 +351,9 @@ public class OpenApiConroller{
 				+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RollRechargeBalanceRes returnInfo=new RollRechargeBalanceRes();
 		try {
-		    returnInfo.setReqServiceId("100001111101");
+		   /* returnInfo.setReqServiceId("100001111101");
             returnInfo.setResultCode("0");
-            returnInfo.setResultMsg("");
+            returnInfo.setResultMsg("");*/
             returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
 			//returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});

@@ -313,9 +313,9 @@ public class OpenAPIServiceImpl{
             if ("0".equals(rechargeBalanceRes.getResultCode())) {
 				resultInfo = orclCommonDao.insertSerialnumber(body,paymentId);
 				if (!"0".equals(resultInfo.getCode())) {
-					rechargeBalanceRes.setResultCode(resultInfo.getCode());
-					rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
-					return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
+					/*rechargeBalanceRes.setResultCode(resultInfo.getCode());
+					rechargeBalanceRes.setResultMsg(resultInfo.getMessage());*/
+					return  JSON.parseObject(result.getData(),RechargeBalanceRes.class) ;
 				}
             }
 			return JSON.parseObject(result.getData(), RechargeBalanceRes.class) ;
