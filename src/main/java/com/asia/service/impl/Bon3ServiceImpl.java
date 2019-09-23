@@ -6,6 +6,7 @@ import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
+import com.asia.domain.bon3.StdCcrQueryServRes;
 import com.asiainfo.account.model.request.*;
 import com.asiainfo.account.model.response.*;
 import org.apache.commons.httpclient.HttpStatus;
@@ -38,7 +39,7 @@ public class Bon3ServiceImpl {
 	@Autowired
 	private AcctApiUrl acctApiUrl;
 
-	public StdCcaQueryServResponse searchServInfo(StdCcrQueryServRequest stdCcrQueryServ, Map<String,String> headers)
+	public StdCcrQueryServRes searchServInfo(StdCcrQueryServRequest stdCcrQueryServ, Map<String,String> headers)
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getSearchServInfo(),
 				JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue), headers);
@@ -46,9 +47,9 @@ public class Bon3ServiceImpl {
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
 			headers.putAll(result.getHeaders());
-			return JSON.parseObject(result.getData(), StdCcaQueryServResponse.class) ;
+			return JSON.parseObject(result.getData(), StdCcrQueryServRes.class) ;
 		}else{
-			return new StdCcaQueryServResponse();
+			return new StdCcrQueryServRes();
 		}
 	}
 	

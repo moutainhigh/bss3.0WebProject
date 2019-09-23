@@ -6,6 +6,7 @@ import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
 import com.asia.dao.OrclCommonDao;
+import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.openApi.*;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.domain.openApi.child.SvcObjectStruct;
@@ -16,7 +17,6 @@ import com.asia.internal.errcode.ErrorCodePublicEnum;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.orclmapper.IfUserMeterMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
-import com.asiainfo.account.model.domain.StdCcaQueryServ;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +109,7 @@ public class OpenAPIServiceImpl{
 	 */
 	public QryPaymentRes qryPayment(QryPaymentReq body,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryPayment, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryPayment(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -155,7 +155,7 @@ public class OpenAPIServiceImpl{
 	 */
 	public QryBillRes qryBill(QryBillReq body,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryBill, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryBill(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -202,7 +202,7 @@ public class OpenAPIServiceImpl{
 	 */
 	public QryBalanceRecordDetailRes qryBalanceRecordDetail(QryBalanceRecordDetailReq body,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryBalanceRecordDetail, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryReturnBalanceDetail(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -258,7 +258,7 @@ public class OpenAPIServiceImpl{
 			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
 		}//end
 
-		StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
 		SvcObjectStruct svcObjectStruct=body.getSvcObjectStruct();
 		//调账务服务查询用户信息
 		stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "", "",
@@ -302,7 +302,7 @@ public class OpenAPIServiceImpl{
 
 		}*/
 
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rechargeBalance, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRechargeBalance(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -342,7 +342,7 @@ public class OpenAPIServiceImpl{
 		String objType = body.getSvcObjectStruct().getObjType();
 		Map map = new HashMap();
 		//调用用户信息查询接口 begin
-		StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
 		stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNbr), "", objType, objAttr,headers);
 		if(stdCcaQueryServ!=null){
 			String state=stdCcaQueryServ.getServState();
@@ -389,7 +389,7 @@ public class OpenAPIServiceImpl{
 	 * */
 	public RollRechargeBalanceRes rollRechargeBalnce(RollRechargeBalanceReq body,Map<String,String> headers) throws IOException {
 		RollRechargeBalanceRes rechargeBalanceRes=new RollRechargeBalanceRes();
-		HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.rollRechargeBalnce, body.toString(), headers);
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRollRechargeBalance(), body.toString(), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();

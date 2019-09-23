@@ -1,10 +1,11 @@
 package com.asia.internal.common;
 
+import com.asia.domain.bon3.StdCcrQueryServRes;
+import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean;
+import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.service.impl.Bon3ServiceImpl;
-import com.asiainfo.account.model.domain.StdCcaQueryServ;
 import com.asiainfo.account.model.domain.StdCcrQueryServ;
 import com.asiainfo.account.model.request.StdCcrQueryServRequest;
-import com.asiainfo.account.model.response.StdCcaQueryServResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,13 @@ public class CommonUserInfo {
     @Autowired
     private Bon3ServiceImpl bon3Service;
 
-    public StdCcaQueryServ getUserInfo(String accNum, String areaCode, String QueryType, String valueType, Map<String, String> headers)
+    public StdCcaQueryServListBean getUserInfo(String accNum, String areaCode, String QueryType, String valueType, Map<String, String> headers)
             throws IOException {
         //调用用户信息查询接口 begin
-        StdCcaQueryServResponse info = new StdCcaQueryServResponse();
+        StdCcrQueryServRes info = new StdCcrQueryServRes();
         StdCcrQueryServRequest stdCcrQueryServRequest = new StdCcrQueryServRequest();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServResBean stdCcaQueryServResBean = new StdCcaQueryServResBean();
+        StdCcaQueryServListBean stdCcaQueryServListBean = new StdCcaQueryServListBean();
         StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
         stdCcrQueryServ.setAreaCode(accNum);
         stdCcrQueryServ.setQueryType(QueryType);
@@ -37,8 +39,9 @@ public class CommonUserInfo {
         stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
         //http调用账务查询用户信息服务
         info = bon3Service.searchServInfo(stdCcrQueryServRequest, headers);
-        stdCcaQueryServ = info.getStdCcaQueryServ();
-        return stdCcaQueryServ;
+        stdCcaQueryServResBean = info.getStdCcaQueryServRes();
+        stdCcaQueryServListBean = stdCcaQueryServResBean.getStdCcaQueryServList().get(0);
+        return stdCcaQueryServListBean;
     }
 
 }

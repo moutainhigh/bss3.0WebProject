@@ -19,5 +19,13 @@
     ACC_NBR = #{accNbr}
     and to_char(ALARM_DATE,'yyyymm') = #{alarmDate}
   </select>
-
+  <select id="selectInfoHighFeeByBeginDate" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from INFO_HIGH_FEE_QUE
+    where
+    ACC_NBR = #{accNbr}
+    and alarmDate > #{beginDate}
+    and alarmDate &lt; #{endDate}
+  </select>
 </mapper>

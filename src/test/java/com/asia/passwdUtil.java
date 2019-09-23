@@ -11,7 +11,7 @@ import com.alibaba.druid.filter.config.ConfigTools;
  */
 public class passwdUtil {public static void main(String[] args) throws Exception {
     //密码明文
-    String password = "b7y#PkZ!iJUX";
+    String password = "2019@Bill";
 
     System.out.println("密码[ "+password+" ]的加密信息如下：\n");
 

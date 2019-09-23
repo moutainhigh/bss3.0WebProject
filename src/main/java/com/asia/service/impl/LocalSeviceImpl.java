@@ -6,6 +6,7 @@ import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
 import com.asia.dao.OrclCommonDao;
+import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.localApi.*;
 import com.asia.domain.localApi.child.*;
 import com.asia.internal.common.CommonUserInfo;
@@ -13,7 +14,6 @@ import com.asia.internal.common.ResultInfo;
 import com.asia.mapper.orclmapper.*;
 import com.asia.service.IlocalService;
 import com.asia.vo.*;
-import com.asiainfo.account.model.domain.StdCcaQueryServ;
 import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
 import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -71,7 +71,7 @@ public class LocalSeviceImpl implements IlocalService {
         List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
         IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
 
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         long accNumb  = body.getQueryValue();
 
         //调账务服务查询用户信息
@@ -126,7 +126,7 @@ public class LocalSeviceImpl implements IlocalService {
         IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
 
         long accNumb  = body.getQueryValue();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "",headers);
         if(stdCcaQueryServ!=null){
@@ -146,7 +146,14 @@ public class LocalSeviceImpl implements IlocalService {
         String servId=stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
-        List<InfoHighFeeQue> info3mExeFeeList = infoHighFeeQueMapperDao.selectInfoHighFee(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoHighFeeQue> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoHighFeeQueMapperDao.selectInfoHighFeeByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoHighFeeQueMapperDao.selectInfoHighFee(accNumb, billMonth);
+        }
         if (info3mExeFeeList.size() > 0) {
             infoHighFeeQueMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -179,7 +186,7 @@ public class LocalSeviceImpl implements IlocalService {
         IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
 
         long accNumb  = body.getQueryValue();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "",headers);
@@ -233,7 +240,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         long accNumb  = body.getQueryValue();
 
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "",headers);
@@ -287,7 +294,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         long accNumb  = body.getQueryValue();
 
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "",headers);
@@ -342,7 +349,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         long accNumb  = body.getQueryValue();
 
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "",headers);
@@ -399,7 +406,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         long accNumb  = body.getQueryValue();
 
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "",headers);
@@ -461,7 +468,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         long accNumb  = body.getQueryValue();
 
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "",headers);
@@ -511,7 +518,7 @@ public class LocalSeviceImpl implements IlocalService {
  public MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers)
             throws ClientProtocolException, IOException {
         MeterPrintActionRes meterPrintActionRes = new MeterPrintActionRes();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
 
         String accNumb  = body.getAccNbr();
         //调账务服务查询用户信息
@@ -552,7 +559,7 @@ public class LocalSeviceImpl implements IlocalService {
     public  UserMeterOrderRes userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers)
             throws ClientProtocolException, IOException {
         UserMeterOrderRes userMeterOrderRes = new UserMeterOrderRes();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         String accNumb  = body.getQueryValue();
         String action = body.getAction();
         //调账务服务查询用户信息
@@ -593,7 +600,7 @@ public class LocalSeviceImpl implements IlocalService {
     @Override
    public QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body, Map<String, String> headers) throws ClientProtocolException, IOException {
         QueryAgreementConsumptionRes queryAgreementConsumptionRes = new QueryAgreementConsumptionRes();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         List<AgreementConsumeSetBean> agreementConsumeSetBeanList = new ArrayList<>();
         AgreementConsumeSetBean agreementConsumeSetBean = new AgreementConsumeSetBean();
         AgreementConsumeSetTypeBean agreementConsumeSetTypeBean = new AgreementConsumeSetTypeBean();
@@ -643,7 +650,7 @@ public class LocalSeviceImpl implements IlocalService {
     //是否为电信号段（查号头表）
     public MobileNumberQueryRes moBileNumberQuery(MobileNumberQueryReq mobileNumberQueryReq,Map<String, String> headers) throws IOException {
         MobileNumberQueryRes info=new MobileNumberQueryRes();
-        StdCcaQueryServ stdCcaQueryServ = new StdCcaQueryServ();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
                 "",headers);

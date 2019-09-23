@@ -6,6 +6,7 @@ import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
 import com.asia.domain.bon3.StdCcrQueryServReq;
+import com.asia.domain.bon3.StdCcrQueryServRes;
 import com.asia.service.impl.Bon3ServiceImpl;
 import com.asiainfo.account.model.domain.*;
 import com.asiainfo.account.model.request.*;
@@ -44,7 +45,7 @@ public class Bon3Controller{
 		//记录业务日志
 		LogUtil.opeLog("/bon3/searchServInfo","body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
 			+" header>>"+JSON.toJSONString(headers), this.getClass());
-		StdCcaQueryServResponse info=new StdCcaQueryServResponse();
+		StdCcrQueryServRes info=new StdCcrQueryServRes();
         StdCcrQueryServRequest queryServReq = new StdCcrQueryServRequest();
 		StdCcrQueryServ queryServ = new StdCcrQueryServ();
 		queryServReq.setStdCcrQueryServ(stdCcrQueryServ.getStdCcrQueryServ());
