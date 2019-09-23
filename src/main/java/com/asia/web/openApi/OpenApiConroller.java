@@ -441,6 +441,33 @@ public class OpenApiConroller{
         return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
     }
 
+
+    /**
+     * QryReturnBalanceInfoDetail:(话费返还记录明细查询). <br/>
+     * @author Chenjian
+     * @param body
+     * @param headers
+     * @param response
+     * @return
+     * @since V1.0.0
+     */
+    @PostMapping("/QryReturnBalanceInfoDetail")
+    public String QryReturnBalanceInfoDetail(@RequestBody QryReturnBalanceDetailInfoReq body,
+                                         @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/openApi/QryReturnBalanceInfoDetail","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+		QryReturnBalanceDetailInfoRes returnInfo=new QryReturnBalanceDetailInfoRes();
+        try {
+            // returnInfo.setItemInformationList(new ArrayList<>());
+            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+            returnInfo=openAPIServiceImpl.qryReturnBalanceInfoDetail(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryReturnBalanceInfoDetail服务调用失败", e, this.getClass());
+        }
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+    }
+
     /**
      * QryBalanceRecord:(余额变动汇总查询). <br/>
      * @author Chenjian

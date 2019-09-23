@@ -3,9 +3,10 @@ package com.asia.domain.openApi;
 import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 
-public class QryReturnBalanceDetailReq {
+public class QryReturnBalanceDetailInfoReq {
     private OperAttrStruct operAttrStruct;
     private SvcObjectStruct svcObjectStruct;
+    private String returnPlanId;
     private String queryFlag;
     private String queryItemType;
 
@@ -39,5 +40,13 @@ public class QryReturnBalanceDetailReq {
 
     public void setQueryItemType(String queryItemType) {
         this.queryItemType = queryItemType;
+    }
+
+    public String getReturnPlanId() {
+        return returnPlanId;
+    }
+
+    public void setReturnPlanId(String returnPlanId) {
+        this.returnPlanId = returnPlanId;
     }
 }

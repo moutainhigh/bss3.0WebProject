@@ -397,9 +397,9 @@ public class OpenAPIServiceImpl{
 			rechargeBalanceRes=JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
 			String reqServiceId=rechargeBalanceRes.getReqServiceId();
 			ResultInfo resultInfo =orclCommonDao.updateSerialnumber(body,0,reqServiceId);
-			if (!"0".equals(resultInfo.getCode())) {
+			/*if (!"0".equals(resultInfo.getCode())) {
 				return  JSON.parseObject(resultInfo.toString(),RollRechargeBalanceRes.class) ;
-			}
+			}*/
 			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class) ;
 		}else{
 			return new RollRechargeBalanceRes();
@@ -413,7 +413,7 @@ public class OpenAPIServiceImpl{
 	public QryReturnBalanceDetailRes qryReturnBalanceDetail(QryReturnBalanceDetailReq body,
                                                              Map<String,String> headers) throws IOException {
         QryReturnBalanceDetailRes rechargeBalanceRes=new QryReturnBalanceDetailRes();
-        HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryReturnBalanceDetail, body.toString(), headers);
+        HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryReturnBalanceDetail(), body.toString(), headers);
         //状态码为请求成功
         if(result.getCode() == HttpStatus.SC_OK){
             headers.clear();
@@ -433,7 +433,9 @@ public class OpenAPIServiceImpl{
     public QryBalanceRecordRes qryBalanceRecord(QryBalanceRecordReq body,
                                                             Map<String,String> headers) throws IOException {
         QryBalanceRecordRes qryBalanceRecordRes=new QryBalanceRecordRes();
-        HttpResult result = HttpUtil.doPostJson(Constant.OpenApi.qryBalanceRecord, body.toString(), headers);
+        System.out.println(Constant.OpenApi.qryBalanceRecord);
+        System.out.println(body.toString());
+        HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryBalanceRecord(), body.toString(), headers);
         //状态码为请求成功
         if(result.getCode() == HttpStatus.SC_OK){
             headers.clear();
@@ -444,4 +446,26 @@ public class OpenAPIServiceImpl{
         }
 
     }
+
+
+	/**
+	 * 话费返还记录明细查询
+	 *
+	 * */
+	public QryReturnBalanceDetailInfoRes qryReturnBalanceInfoDetail(QryReturnBalanceDetailInfoReq body,
+															Map<String,String> headers) throws IOException {
+		QryReturnBalanceDetailRes rechargeBalanceRes=new QryReturnBalanceDetailRes();
+		System.out.println(acctApiUrl.getQryReturnBalanceInfoDetail());
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryReturnBalanceInfoDetail(), body.toString(), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), QryReturnBalanceDetailInfoRes.class) ;
+		}else{
+			return new QryReturnBalanceDetailInfoRes();
+		}
+
+	}
+
 }

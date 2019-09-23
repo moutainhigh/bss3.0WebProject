@@ -12,6 +12,8 @@ public class QryBalanceRecordReq {
         3：用户账目组级 4：账户账目组级*/
     private String balanceTypeFlag;
 
+    private String systemId;
+
     public OperAttrStruct getOperAttrStruct() {
         return operAttrStruct;
     }
@@ -42,5 +44,13 @@ public class QryBalanceRecordReq {
 
     public void setBalanceTypeFlag(String balanceTypeFlag) {
         this.balanceTypeFlag = balanceTypeFlag;
+    }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 }
