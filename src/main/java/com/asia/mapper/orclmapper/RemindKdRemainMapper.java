@@ -10,4 +10,7 @@ public interface RemindKdRemainMapper {
     List<RemindKdRemain> selectRemindKdRemain(@Param("accNbr") Long accNbr,
                                               @Param("beginDate") String beginDate,
                                               @Param("endDate") String endDate);
+
+    List<RemindKdRemain> selectRemindKdRemainByMonth(@Param("accNbr") Long accNbr,
+                                                      @Param("alarmDate") String alarmDate);
 }

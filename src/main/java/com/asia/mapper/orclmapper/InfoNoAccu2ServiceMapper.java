@@ -9,4 +9,7 @@ import java.util.List;
 public interface InfoNoAccu2ServiceMapper {
     List<InfoNoAccu2Service> selectInfoNoAccu2Service(@Param("accNbr") Long accNbr,
                                                 @Param("alarmDate") String alarmDate);
+    List<InfoNoAccu2Service> selectInfoNoAccu2ServiceByBeginDate(@Param("accNbr") Long accNbr,
+                                                                 @Param("beginDate") String beginDate,
+                                                                 @Param("endDate") String endDate);
 }

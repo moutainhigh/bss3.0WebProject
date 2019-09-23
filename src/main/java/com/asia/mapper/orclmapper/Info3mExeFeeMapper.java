@@ -16,6 +16,9 @@ import java.util.Map;
  */
 @Repository
 public interface Info3mExeFeeMapper {
+    List<Info3mExeFee> selectInfoHighFeeByBeginDate(@Param("accNbr") Long accNbr,
+                                                    @Param("beginDate") String beginDate,
+                                                    @Param("endDate") String endDate);
     List<Info3mExeFee> selectInfo3MExeFee(@Param("accNbr") Long accNbr,
                                           @Param("alarmDate") String alarmDate);
     List<Map<String, Object>> selectInfo3MExeFeeTest(@Param("accNbr") String accNbr,

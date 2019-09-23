@@ -28,4 +28,13 @@
     ACC_NBR = #{accNbr}
     and to_char(ALARM_DATE,'yyyymm') = #{alarmDate}
   </select>
+  <select id="selectInfoHighFeeByBeginDate" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from INFO_3M_EXE_FEE
+    where
+    ACC_NBR = #{accNbr}
+    and ALARM_DATE &gt; to_date(#{beginDate},'YYYYMMDDHH24MISS')
+    and ALARM_DATE &lt; to_date(#{endDate},'YYYYMMDDHH24MISS')
+  </select>
 </mapper>

@@ -94,7 +94,13 @@ public class LocalSeviceImpl implements IlocalService {
         //访问数据库
 
         String billMonth = body.getQueryMonth();
-        List<Info3mExeFee> info3mExeFeeList = info3mExeFeeMapperDao.selectInfo3MExeFee(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<Info3mExeFee> info3mExeFeeList=new ArrayList<>();
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = info3mExeFeeMapperDao.selectInfoHighFeeByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = info3mExeFeeMapperDao.selectInfo3MExeFee(accNumb, billMonth);
+        }
         if (info3mExeFeeList.size() > 0) {
             info3mExeFeeMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -206,7 +212,15 @@ public class LocalSeviceImpl implements IlocalService {
         String accNbr=String.valueOf(accNumb);
         String servId=stdCcaQueryServ.getServId();
         String billMonth = body.getQueryMonth();
-        List<InfoAccu5gUser> info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoAccu5gUser> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUserByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
+        }
+        //List<InfoAccu5gUser> info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoAccu5gUserMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -261,7 +275,15 @@ public class LocalSeviceImpl implements IlocalService {
         String servId=stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
-        List<InfoAccu2Service> info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoAccu2Service> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
+        }
+        //List<InfoAccu2Service> info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoAccu2ServiceMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -315,7 +337,15 @@ public class LocalSeviceImpl implements IlocalService {
         String servId=stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
-        List<InfoNoAccu2Service> info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoNoAccu2Service> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
+        }
+        //List<InfoNoAccu2Service> info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoNoAccu2ServiceMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -429,7 +459,15 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String beginDate = body.getBeginDate();
         String endDate = body.getEndDate();
-        List<RemindKdRemain> info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, beginDate,endDate);
+        String queryTimeType = body.getQueryTimeType();
+        List<RemindKdRemain> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemainByMonth(accNumb, billMonth);
+        }
+        //List<RemindKdRemain> info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, beginDate,endDate);
         if (info3mExeFeeList.size() > 0) {
             remindKdRemainMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
