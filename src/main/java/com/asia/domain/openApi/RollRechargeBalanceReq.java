@@ -19,7 +19,7 @@ public class RollRechargeBalanceReq extends BaseDomain {
     //请求流水号
     private String reqServiceId ;
     //被充值用户标识
-    private Integer destinationAccount ;
+    private String destinationAccount ;
     //被充值用户的属性
     private Integer destinationAttr ;
     //系统ID
@@ -49,11 +49,11 @@ public class RollRechargeBalanceReq extends BaseDomain {
         this.reqServiceId = reqServiceId;
     }
 
-    public Integer getDestinationAccount() {
+    public String getDestinationAccount() {
         return destinationAccount;
     }
 
-    public void setDestinationAccount(Integer destinationAccount) {
+    public void setDestinationAccount(String destinationAccount) {
         this.destinationAccount = destinationAccount;
     }
 

@@ -59,7 +59,7 @@
         AMOUNT,
       </if>
       <if test="state != null">
-        `STATE`,
+        STATE,
       </if>
       <if test="soRegionCode != null">
         SO_REGION_CODE,
@@ -165,7 +165,7 @@
     </trim>
   </insert>
   <select id="getCntFromOtherPaymentId" parameterType="java.util.HashMap" resultType="java.lang.Long">
-    select count(PAYMENT_ID) from ACCT.VC_CHARGE_RECORD
+    select count(PAYMENT_ID) from ACCT.TERMINAL_CHARGE_RECORD
    where
    OTHER_PAYMENT_ID = #{otherPayMentId}
    and busi_code = #{busiCode}

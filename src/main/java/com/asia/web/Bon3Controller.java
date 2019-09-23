@@ -51,7 +51,7 @@ public class Bon3Controller{
 		//根据系统落日志表
 		String systemId = stdCcrQueryServ.getSystemId();
 		try {
-			info.setStdCcaQueryServ(new StdCcaQueryServ());
+			/*info.setStdCcaQueryServ(new StdCcaQueryServ());
 			info.getStdCcaQueryServ().setCustName("客户名称");
 			info.getStdCcaQueryServ().setServId("11123123");
 			info.getStdCcaQueryServ().setProductId("1121212");
@@ -60,7 +60,7 @@ public class Bon3Controller{
 			info.getStdCcaQueryServ().setServState("0");
 			info.getStdCcaQueryServ().setStateDate("20180903120101");
 			info.getStdCcaQueryServ().setPaymentFlag("1");
-			info.getStdCcaQueryServ().setHomeAreaCode("0531");
+			info.getStdCcaQueryServ().setHomeAreaCode("0531");*/
 			info = bon3ServiceImpl.searchServInfo(queryServReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {

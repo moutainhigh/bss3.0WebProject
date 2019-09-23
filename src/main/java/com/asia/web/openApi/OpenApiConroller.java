@@ -136,7 +136,7 @@ public class OpenApiConroller{
 			
 			returnInfo.getPaymentInfoList().add(paymentInfo);
 			
-//			returnInfo=openAPIServiceImpl.qryPayment(qryPaymentReq, headers);
+			returnInfo=openAPIServiceImpl.qryPayment(qryPaymentReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryPayment服务调用失败", e, this.getClass());
@@ -194,7 +194,7 @@ public class OpenApiConroller{
 			acctItemGroup.setAcctItemType(new ArrayList<>());
 			acctItemGroup.getAcctItemType().add(new AcctItemType());
 			feeBillingCycle.getAcctItemGroupList().add(acctItemGroup);
-//			returnInfo=openAPIServiceImpl.qryBill(body, headers);
+			returnInfo=openAPIServiceImpl.qryBill(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryBill服务调用失败", e, this.getClass());
@@ -247,9 +247,9 @@ public class OpenApiConroller{
 				+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		QryBalanceRecordDetailRes returnInfo=new QryBalanceRecordDetailRes();
 		try {
-			returnInfo.setBalanceChangeList(new ArrayList<>());
-			returnInfo.getBalanceChangeList().add(new BalanceChangeList());
-//			returnInfo=openAPIServiceImpl.qryBalanceRecordDetail(body, headers);
+			/*returnInfo.setBalanceChangeList(new ArrayList<>());
+			returnInfo.getBalanceChangeList().add(new BalanceChangeList());*/
+			returnInfo=openAPIServiceImpl.qryBalanceRecordDetail(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryBalanceRecordDetail服务调用失败", e, this.getClass());
@@ -351,9 +351,9 @@ public class OpenApiConroller{
 				+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RollRechargeBalanceRes returnInfo=new RollRechargeBalanceRes();
 		try {
-		    returnInfo.setReqServiceId("100001111101");
+		   /* returnInfo.setReqServiceId("100001111101");
             returnInfo.setResultCode("0");
-            returnInfo.setResultMsg("");
+            returnInfo.setResultMsg("");*/
             returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
 			//returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
@@ -413,4 +413,86 @@ public class OpenApiConroller{
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
+
+
+    /**
+     * QryReturnBalanceDetail:(话费返还记录查询). <br/>
+     * @author Chenjian
+     * @param body
+     * @param headers
+     * @param response
+     * @return
+     * @since V1.0.0
+     */
+    @PostMapping("/QryReturnBalanceDetail")
+    public String QryReturnBalanceDetail(@RequestBody QryReturnBalanceDetailReq body,
+                              @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/openApi/QryReturnBalanceDetail","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+        QryReturnBalanceDetailRes returnInfo=new QryReturnBalanceDetailRes();
+        try {
+           // returnInfo.setItemInformationList(new ArrayList<>());
+            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+			returnInfo=openAPIServiceImpl.qryReturnBalanceDetail(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryReturnBalanceDetail服务调用失败", e, this.getClass());
+        }
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+    }
+
+
+    /**
+     * QryReturnBalanceInfoDetail:(话费返还记录明细查询). <br/>
+     * @author Chenjian
+     * @param body
+     * @param headers
+     * @param response
+     * @return
+     * @since V1.0.0
+     */
+    @PostMapping("/QryReturnBalanceInfoDetail")
+    public String QryReturnBalanceInfoDetail(@RequestBody QryReturnBalanceDetailInfoReq body,
+                                         @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/openApi/QryReturnBalanceInfoDetail","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+		QryReturnBalanceDetailInfoRes returnInfo=new QryReturnBalanceDetailInfoRes();
+        try {
+            // returnInfo.setItemInformationList(new ArrayList<>());
+            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+            returnInfo=openAPIServiceImpl.qryReturnBalanceInfoDetail(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryReturnBalanceInfoDetail服务调用失败", e, this.getClass());
+        }
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+    }
+
+    /**
+     * QryBalanceRecord:(余额变动汇总查询). <br/>
+     * @author Chenjian
+     * @param body
+     * @param headers
+     * @param response
+     * @return
+     * @since V1.0.0
+     */
+    @PostMapping("/QryBalanceRecord")
+    public String QryBalanceRecord(@RequestBody QryBalanceRecordReq body,
+                                         @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.opeLog("/openApi/QryBalanceRecord","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+        QryBalanceRecordRes returnInfo=new QryBalanceRecordRes();
+        try {
+            // returnInfo.setItemInformationList(new ArrayList<>());
+            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+            returnInfo=openAPIServiceImpl.qryBalanceRecord(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryBalanceRecord服务调用失败", e, this.getClass());
+        }
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+    }
+
+
 }

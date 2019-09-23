@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 @Repository
 public interface CreditFeeRecordMapper {
-    long getCntFromOtherPaymentId(@Param("otherPaymentId") long ohterPaymentId,
+    long getCntFromOtherPaymentId(@Param("otherPayMentId") long otherPayMentId,
                                   @Param("busiCode") String busiCode);
     int insertCreditFeeRecord(CreditFeeRecord record);
     int updateCreditFeeRecord(CreditFeeRecord record);

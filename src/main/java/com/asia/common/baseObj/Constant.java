@@ -77,6 +77,17 @@ public class Constant{
 		 * 充值回退（冲正）
 		 * */
 		public static final String rollRechargeBalnce=Constant.BASE_URL_OPENAPI+"/RollRechargeBalance";
+
+		/**
+		 * 话费返还记录查询
+		 * */
+		public static final String qryReturnBalanceDetail=Constant.BASE_URL_OPENAPI+"/QryReturnBalanceDetail";
+
+		/**
+		 * 余额变动汇总查询
+		 * */
+		public static final String qryBalanceRecord=Constant.BASE_URL_OPENAPI+"/QryBalanceRecord";
+
 	}
 	
 	/**

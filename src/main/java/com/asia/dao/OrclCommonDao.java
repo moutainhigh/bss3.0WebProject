@@ -286,7 +286,7 @@ public class OrclCommonDao {
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
         //外围流水
-        String otherPaymentId = rechargeBalanceReq.getFlowId().toString();
+        String otherPaymentId = String.valueOf(rechargeBalanceReq.getFlowId());
         //号码
         String acctNbr = svcObjectStruct.getObjValue();
         //号码类型

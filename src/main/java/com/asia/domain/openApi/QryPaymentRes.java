@@ -22,7 +22,7 @@ public class QryPaymentRes extends BaseApiResDomain{
 	public static class PaymentInfo extends BaseDomain{
 		private static final long serialVersionUID = -5705473646149547302L;
 		//缴费流水号
-		public Integer paymentId;
+		public String  paymentId;
 		//付款方式 
 		public Integer paymentMethod;
 		//缴费渠道 
@@ -79,11 +79,11 @@ public class QryPaymentRes extends BaseApiResDomain{
 			}
 		}
 
-		public Integer getPaymentId() {
+		public String getPaymentId() {
 			return paymentId;
 		}
 
-		public void setPaymentId(Integer paymentId) {
+		public void setPaymentId(String paymentId) {
 			this.paymentId = paymentId;
 		}
 

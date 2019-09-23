@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 @Repository
 public interface VcChargeRecordMapper {
-    long getCntFromOtherPaymentId(@Param("otherPaymentId") long ohterPaymentId,
+    long getCntFromOtherPaymentId(@Param("otherPayMentId") long otherPayMentId,
                                   @Param("busiCode") String busiCode);
     int insertVcChargeRecord(VcChargeRecord record);
 
