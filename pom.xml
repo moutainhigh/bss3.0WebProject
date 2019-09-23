@@ -174,6 +174,18 @@
             <version>1.9.2</version>
         </dependency>
         <!--mybatis单元测试引入结束-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 数据库加密 -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 	</dependencies>
 
 	<build>

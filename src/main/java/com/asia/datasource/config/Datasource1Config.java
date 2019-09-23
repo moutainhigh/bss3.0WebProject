@@ -68,7 +68,7 @@ public class Datasource1Config {
     private boolean filterStatLogSlowSql;
     @Value("${ds1.datasource.druid.filter.stat.slow-sql-millis}")
     private long fileterStatSlowSqlMillis;
-
+    private String publicKey;
     @Bean(name = "ds1DataSource")
     @Primary
     public DataSource ds1DataSource() {

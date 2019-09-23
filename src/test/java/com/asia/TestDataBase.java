@@ -51,7 +51,6 @@ public class TestDataBase {
         List<Info3mExeFee> info3mExeFeeList= info3mExeFeeMapperDao.selectInfo3MExeFee(Long.parseLong(accNum),"201711");
         if (info3mExeFeeList.size() > 0) {
         }
-
     }
 
     @Test
