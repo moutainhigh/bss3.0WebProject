@@ -1,9 +1,10 @@
 package com.asia.domain.openApi;
 
+import com.asia.common.baseObj.BaseDomain;
 import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 
-public class QryReturnBalanceDetailInfoReq {
+public class QryReturnBalanceDetailInfoReq extends BaseDomain {
     private OperAttrStruct operAttrStruct;
     private SvcObjectStruct svcObjectStruct;
     private String returnPlanId;
