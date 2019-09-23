@@ -1,10 +1,11 @@
 package com.asia.domain.openApi;
 
 
+import com.asia.common.baseObj.BaseDomain;
 import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 
-public class QryBalanceRecordReq {
+public class QryBalanceRecordReq extends BaseDomain {
     private OperAttrStruct operAttrStruct;
     private SvcObjectStruct svcObjectStruct;
     private Integer billingCycleId;//账务周期标识

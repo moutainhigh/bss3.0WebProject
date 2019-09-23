@@ -32,10 +32,10 @@ public class CommonUserInfo {
         StdCcaQueryServResBean stdCcaQueryServResBean = new StdCcaQueryServResBean();
         StdCcaQueryServListBean stdCcaQueryServListBean = new StdCcaQueryServListBean();
         StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
-        stdCcrQueryServ.setAreaCode(accNum);
-        stdCcrQueryServ.setQueryType(QueryType);
+        stdCcrQueryServ.setAreaCode("0431");
+        stdCcrQueryServ.setQueryType("2");
         stdCcrQueryServ.setValue(accNum);
-        stdCcrQueryServ.setValueType(valueType);
+        stdCcrQueryServ.setValueType("1");
         stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
         //http调用账务查询用户信息服务
         info = bon3Service.searchServInfo(stdCcrQueryServRequest, headers);
