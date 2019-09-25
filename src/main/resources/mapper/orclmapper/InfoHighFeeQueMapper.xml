@@ -25,7 +25,7 @@
     from INFO_HIGH_FEE_QUE
     where
     ACC_NBR = #{accNbr}
-    and alarmDate > #{beginDate}
-    and alarmDate &lt; #{endDate}
+    and alarmDate > to_date(#{beginDate},'YYYYMMDDHH24MISS')
+    and alarmDate &lt; to_date(#{endDate},'YYYYMMDDHH24MISS')
   </select>
 </mapper>

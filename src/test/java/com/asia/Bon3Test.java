@@ -1,8 +1,8 @@
 package com.asia;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.domain.bon3.StdCcrQueryServ;
+
+import java.util.Calendar;
 
 public class Bon3Test{
 	/**
@@ -13,7 +13,13 @@ public class Bon3Test{
 	 */
 	public static void main(String[] args) {
 		StdCcrQueryServ a =new StdCcrQueryServ();
-		String str=JSON.toJSONString(a,SerializerFeature.WriteMapNullValue);
-		System.out.println(str);
+		/*String str=JSON.toJSONString(a,SerializerFeature.WriteMapNullValue);
+		System.out.println(str);*/
+		System.out.println(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+		Calendar calendar = Calendar.getInstance();
+		//calendar.setTime(new Date());
+		calendar.add(Calendar.MONTH, 1);//增加一个月
+		System.out.println("增加月份后的日期："+calendar.getTime());
+
 	}
 }
