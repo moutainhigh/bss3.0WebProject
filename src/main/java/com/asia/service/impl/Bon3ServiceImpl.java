@@ -52,7 +52,7 @@ public class Bon3ServiceImpl {
 			return new StdCcrQueryServRes();
 		}
 	}
-	
+
 	/**
 	 * getFcDeposit:(流量卡充值记录查询). <br/>
 	 * @author yinyanzhen

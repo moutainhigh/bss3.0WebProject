@@ -30,17 +30,17 @@ public interface IlocalService {
      * userMeterOrderService  详单禁查
      * printRecordService 详单打印记录
      */
-    QryMonthHighFeeRes qryMonthHighFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qryRealHighFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qryDataHighFlow(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qryAccuOverFlow(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qryUserFlowFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qrySendMsgUser(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qryWlanRemain(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
+    QryMonthHighFeeRes qryMonthHighFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qryRealHighFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qryDataHighFlow(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qryAccuOverFlow(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qryUserFlowFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qrySendMsgUser(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qryWlanRemain(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
     UserMeterOrderRes  userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
-    MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
+    MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
+    QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
     StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException;
 
 }

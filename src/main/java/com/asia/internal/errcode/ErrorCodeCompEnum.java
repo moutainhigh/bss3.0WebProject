@@ -1173,7 +1173,14 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     STAFF_ROLE_ID_ERROR("未定义", "未定义"),
     GET_CHECK_FLAG_ERROR("未定义", "未定义"),
     CREATE_SCAN_PAYMENT_ID_FAIL("未定义", "未定义"),
-    CASH_BILL_STAFF_ID_EMPTY("69604032","CashBill中工号为空");
+    CASH_BILL_STAFF_ID_EMPTY("69604032","CashBill中工号为空"),
+    QUERY_NO_DATE("100002","数据为空"),
+    QUERY_BILL_Err("100003","查询欠费失败"),
+    ACROSS_CITIES_ERR("100004","该业务渠道不允许跨地市缴费"),
+    INSERT_CHARGE_BALANCE_ERR("100005","插入充值信息失败"),
+    INSERT_ROLL_CHARGE_BALANCE_ERR("100006","插入充值信息失败"),
+    QUERY_BALANCE_Err("100001","查询余额失败");
+
     /**
      * 状态码
      */

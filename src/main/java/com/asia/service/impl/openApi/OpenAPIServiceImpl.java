@@ -13,6 +13,7 @@ import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.internal.common.BillException;
 import com.asia.internal.common.CommonUserInfo;
 import com.asia.internal.common.ResultInfo;
+import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.internal.errcode.ErrorCodePublicEnum;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.orclmapper.IfUserMeterMapper;
@@ -247,15 +248,16 @@ public class OpenAPIServiceImpl{
 	 * @since V1.0.0
 	 */
 	public RechargeBalanceRes rechargeBalance(RechargeBalanceReq body,Map<String,String> headers) 
-			throws ClientProtocolException, IOException{
+			throws ClientProtocolException, IOException,BillException{
 		// TODO: 2019/9/3 判断计费流水是否重复
 		ResultInfo resultInfo = new ResultInfo();
 		resultInfo = orclCommonDao.checkSerialnumberExist(body);
 		RechargeBalanceRes rechargeBalanceRes = new RechargeBalanceRes();
 		if (!"0".equals(resultInfo.getCode())) {
-			rechargeBalanceRes.setResultCode(resultInfo.getCode());
+			throw new BillException(ErrorCodePublicEnum.PAY_SERIALNUMBER_IS_EXIST);
+			/*rechargeBalanceRes.setResultCode(resultInfo.getCode());
 			rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
-			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
+			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;*/
 		}//end
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
@@ -266,14 +268,16 @@ public class OpenAPIServiceImpl{
 		if(stdCcaQueryServ!=null){
 			String state=stdCcaQueryServ.getServState();
 			if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
-				rechargeBalanceRes.setResultCode("256");
+				throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+				/*rechargeBalanceRes.setResultCode("256");
 				rechargeBalanceRes.setResultMsg("用户信息不存在");
-				return rechargeBalanceRes;
+				return rechargeBalanceRes;*/
 			}
 		}else{
-			rechargeBalanceRes.setResultCode("256");
+			throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+			/*rechargeBalanceRes.setResultCode("256");
 			rechargeBalanceRes.setResultMsg("用户信息不存在");
-			return rechargeBalanceRes;
+			return rechargeBalanceRes;*/
 		}
 		String localNet=stdCcaQueryServ.getHomeAreaCode();
 
@@ -282,11 +286,12 @@ public class OpenAPIServiceImpl{
 		{
 			if (!"433".equals(localNet))
 			{
+				throw new BillException(ErrorCodeCompEnum.ACROSS_CITIES_ERR);
 				//BE_SERV_REJECT_ERROR
-				String errinfo = "该业务渠道不允许跨地市缴费！";
+				/*String errinfo = "该业务渠道不允许跨地市缴费！";
 				rechargeBalanceRes.setResultCode("256");
 				rechargeBalanceRes.setResultMsg(errinfo);
-				return rechargeBalanceRes;
+				return rechargeBalanceRes;*/
 			}
 		}
 
@@ -313,14 +318,15 @@ public class OpenAPIServiceImpl{
             if ("0".equals(rechargeBalanceRes.getResultCode())) {
 				resultInfo = orclCommonDao.insertSerialnumber(body,paymentId,localNet);
 				if (!"0".equals(resultInfo.getCode())) {
+					throw new BillException(ErrorCodeCompEnum.INSERT_CHARGE_BALANCE_ERR);
 					/*rechargeBalanceRes.setResultCode(resultInfo.getCode());
 					rechargeBalanceRes.setResultMsg(resultInfo.getMessage());*/
-					return  JSON.parseObject(result.getData(),RechargeBalanceRes.class) ;
+					//return  JSON.parseObject(result.getData(),RechargeBalanceRes.class) ;
 				}
             }
 			return JSON.parseObject(result.getData(), RechargeBalanceRes.class) ;
 		}else{
-			return new RechargeBalanceRes();
+			return JSON.parseObject(result.getData(), RechargeBalanceRes.class) ;
 		}
 	}
 	
@@ -379,7 +385,7 @@ public class OpenAPIServiceImpl{
 			}
 			return JSON.parseObject(result.getData(), RtBillItemRes.class) ;
 		}else{
-			return new RtBillItemRes();
+			return JSON.parseObject(result.getData(), RtBillItemRes.class);
 		}
 	}
 
@@ -387,7 +393,8 @@ public class OpenAPIServiceImpl{
 	 * 充值回退（冲正）
 	 *
 	 * */
-	public RollRechargeBalanceRes rollRechargeBalnce(RollRechargeBalanceReq body,Map<String,String> headers) throws IOException {
+	public RollRechargeBalanceRes rollRechargeBalnce(RollRechargeBalanceReq body,
+													 Map<String,String> headers) throws IOException,BillException {
 		RollRechargeBalanceRes rechargeBalanceRes=new RollRechargeBalanceRes();
 		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRollRechargeBalance(), body.toString(), headers);
 		//状态码为请求成功
@@ -397,12 +404,13 @@ public class OpenAPIServiceImpl{
 			rechargeBalanceRes=JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
 			String reqServiceId=rechargeBalanceRes.getReqServiceId();
 			ResultInfo resultInfo =orclCommonDao.updateSerialnumber(body,0,reqServiceId);
-			/*if (!"0".equals(resultInfo.getCode())) {
-				return  JSON.parseObject(resultInfo.toString(),RollRechargeBalanceRes.class) ;
-			}*/
+			if (!"0".equals(resultInfo.getCode())) {
+				throw new BillException(ErrorCodeCompEnum.INSERT_ROLL_CHARGE_BALANCE_ERR);
+				/*return  JSON.parseObject(resultInfo.toString(),RollRechargeBalanceRes.class) ;*/
+			}
 			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class) ;
 		}else{
-			return new RollRechargeBalanceRes();
+			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
 		}
 	}
 

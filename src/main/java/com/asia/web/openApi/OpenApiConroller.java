@@ -301,8 +301,12 @@ public class OpenApiConroller{
 		try {
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
+		} catch (BillException err){
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+		}catch (Exception e) {
 			LogUtil.error("/openApi/rechargeBalance服务调用失败", e, this.getClass());
+			returnInfo.setResultMsg(e.getMessage());
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -357,7 +361,10 @@ public class OpenApiConroller{
             returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
 			//returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
+		} catch (BillException err){
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+		}catch (Exception e) {
 			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", e, this.getClass());
 		}
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
@@ -393,14 +400,14 @@ public class OpenApiConroller{
 				+" header>>"+JSON.toJSONString(headers), this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
 		try {
-			returnInfo.setSmsBillItems(new ArrayList<>());
+			/*returnInfo.setSmsBillItems(new ArrayList<>());
 			returnInfo.getSmsBillItems().add(new SmsBillItem());
 			returnInfo.setVoiceBillItems(new ArrayList<>());
 			returnInfo.getVoiceBillItems().add(new VoiceBillItem());
 			returnInfo.setIncrBillItems(new ArrayList<>());
 			returnInfo.getIncrBillItems().add(new IncrBillItem());
 			returnInfo.setDataBillItems(new ArrayList<>());
-			returnInfo.getDataBillItems().add(new DataBillItem());
+			returnInfo.getDataBillItems().add(new DataBillItem());*/
 			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,false);
 			headers.forEach(response::setHeader);
 		} catch (BillException err) {

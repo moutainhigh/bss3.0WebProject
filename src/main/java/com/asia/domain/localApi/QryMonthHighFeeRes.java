@@ -10,7 +10,7 @@ import com.asia.domain.localApi.child.IntfCommServiceListTypeBean;
  * @date 2019/8/611:14
  * @Version 1.0
  */
-public class QryMonthHighFeeRes  extends BaseBonResDomain {
+public class QryMonthHighFeeRes   {
 
 
     /**
