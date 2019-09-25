@@ -6,7 +6,7 @@ import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
-import com.asia.domain.bon3.StdCcrQueryServRes;
+import com.asia.domain.bon3.*;
 import com.asiainfo.account.model.request.*;
 import com.asiainfo.account.model.response.*;
 import org.apache.commons.httpclient.HttpStatus;
@@ -113,7 +113,7 @@ public class Bon3ServiceImpl {
 	 */
 	public StdCcaQueryBalanceResponse qryBalance(StdCcrQueryBalanceRequest stdCcrQueryBalance,Map<String,String> headers) 
 			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.qryBalance, 
+		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getQryBalance(),
 				JSON.toJSONString(stdCcrQueryBalance,SerializerFeature.WriteMapNullValue), headers);
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
@@ -183,7 +183,7 @@ public class Bon3ServiceImpl {
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
-	public StdCcaUserResourceQueryDetailResponse d(StdCcrUserResourceQueryDetailRequest stdCcrUserResourceQueryDetail,Map<String,String> headers)
+	public StdCcaUserResourceQueryDetailResponse getUnitedAccuDetail(StdCcrUserResourceQueryDetailRequest stdCcrUserResourceQueryDetail,Map<String,String> headers)
 			throws ClientProtocolException, IOException{
 		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getUnitedAccuDetail, 
 				JSON.toJSONString(stdCcrUserResourceQueryDetail,SerializerFeature.WriteMapNullValue), headers);
@@ -214,6 +214,92 @@ public class Bon3ServiceImpl {
 			return JSON.parseObject(result.getData(), StdCcaRealTimeBillQueryResponse.class) ;
 		}else{
 			return new StdCcaRealTimeBillQueryResponse();
+		}
+	}
+
+
+	/**
+	 * @Author Chenjian
+	 * @Description 用户信用查询
+	 * @Date 11:08 2019/9/24
+	 * @Param [GetCreditInfoReq, headers]
+	 */
+	public GetCreditInfoRes getCreditInfo(GetCreditInfoReq stdCcrRealTimeBillQueryRequest, Map<String,String> headers)
+			throws ClientProtocolException, IOException{
+		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getCreditInfo,
+				JSON.toJSONString(stdCcrRealTimeBillQueryRequest,SerializerFeature.WriteMapNullValue), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), GetCreditInfoRes.class) ;
+		}else{
+			return new GetCreditInfoRes();
+		}
+	}
+
+	/**
+	 * @Author Chenjian
+	 * @Description 实时账单查询
+	 * @Date 11:08 2019/9/24
+	 * @Param [GetOweListReq, headers]
+	 * @return com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse
+	 */
+	public GetOweListRes getBon3OweListBy(GetOweListReq getOweListReq, Map<String,String> headers)
+			throws ClientProtocolException, IOException{
+		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getOweList,
+				JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), GetOweListRes.class) ;
+		}else{
+			return new GetOweListRes();
+		}
+	}
+
+
+	/**
+	 * @Author Chenjian
+	 * @Description 实时费用查询
+	 * @Date 11:08 2019/9/24
+	 * @Param [GetRealTimeBillReq, headers]
+	 * @return com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse
+	 */
+	public GetRealTimeBillRes getRealTimeBill(GetRealTimeBillReq getRealTimeBillReq, Map<String,String> headers)
+			throws ClientProtocolException, IOException{
+		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getRealTimeBill,
+				JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), GetRealTimeBillRes.class) ;
+		}else{
+			return new GetRealTimeBillRes();
+		}
+	}
+
+
+	/**
+	 * @Author Chenjian
+	 * @Description 帐户信息查询
+	 * @Date 11:08 2019/9/24
+	 * @Param [SearchAcctInfoReq, headers]
+	 * @return com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse
+	 */
+	public SearchAcctInfoRes searchAcctInfo(SearchAcctInfoReq searchAcctInfoReq, Map<String,String> headers)
+			throws ClientProtocolException, IOException{
+		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.searchAcctInfo,
+				JSON.toJSONString(searchAcctInfoReq,SerializerFeature.WriteMapNullValue), headers);
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), SearchAcctInfoRes.class) ;
+		}else{
+			return new SearchAcctInfoRes();
 		}
 	}
 }

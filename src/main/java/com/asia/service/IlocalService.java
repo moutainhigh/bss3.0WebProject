@@ -1,6 +1,7 @@
 package com.asia.service;
 
 import com.asia.domain.localApi.*;
+import com.asia.internal.common.BillException;
 import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
 import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -37,7 +38,7 @@ public interface IlocalService {
     QryMonthHighFeeRes qrySendMsgUser(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     QryMonthHighFeeRes qryWlanRemain(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
-    UserMeterOrderRes  userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
+    UserMeterOrderRes  userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers) throws ClientProtocolException, IOException, BillException;
     MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body, Map<String, String> headers) throws ClientProtocolException, IOException;
     StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException;

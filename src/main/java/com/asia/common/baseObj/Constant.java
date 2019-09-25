@@ -18,7 +18,7 @@ public class Constant{
 		public static final String ERROR="0500";
 	}
 	
-	public static final String BASE_URL_BON3="http://136.160.161.82:8026/";
+	public static final String BASE_URL_BON3="http://136.160.161.100:8091";
 	//"http://XX.XX.XX.XX:xx/";
 	//public static final String BASE_URL_OPENAPI="http://136.160.161.82:8026//billsrv/openApi/";
 	public static final String BASE_URL_OPENAPI="http://136.160.161.100:8083/billing/acct";
@@ -151,6 +151,24 @@ public class Constant{
 		 * 账单查询
 		 */
 		public static final String getOweList=Constant.BASE_URL_BON3+"/billing/acct/std/getOweList";
+
+		/**
+		 * 用户信用查询
+		 */
+		public static final String getCreditInfo=Constant.BASE_URL_BON3+"/billing/acct/std/getCreditInfo";
+
+		/**
+		 * 实时费用查询
+		 */
+		public static final String getRealTimeBill=Constant.BASE_URL_BON3+"/billing/acct/std/getRealTimeBill";
+
+
+		/**
+		 * 帐户信息查询
+		 */
+		public static final String searchAcctInfo=Constant.BASE_URL_BON3+"/billing/acct/std/searchAcctInfo";
+
+
 		private Bon3(){}
 	}
 	

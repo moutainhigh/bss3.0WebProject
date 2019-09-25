@@ -267,7 +267,7 @@ public class OrclCommonDao {
      * @Param [rechargeBalanceReq]
      * @return com.asia.internal.common.ResultInfo
     */
-    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId) {
+    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId,String lanId) {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
@@ -307,6 +307,8 @@ public class OrclCommonDao {
             vcChargeRecord.setState(Short.parseShort("0"));
             vcChargeRecord.setAmount(BigDecimal.valueOf(amount));
             vcChargeRecord.setPaymentId(paymentId);
+            vcChargeRecord.setSoRegionCode("431");
+            vcChargeRecord.setIsRegionCode(lanId);
             cnt = vcChargeRecordMapperDao.insertVcChargeRecord(vcChargeRecord);
         } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setAccNbr(acctNbr);
@@ -318,6 +320,7 @@ public class OrclCommonDao {
             terminalChargeRecord.setCreatedDate(new Date());
             terminalChargeRecord.setState(Short.parseShort("0"));
             terminalChargeRecord.setPaymentId(paymentId);
+            terminalChargeRecord.setIsRegionCode(lanId);
             cnt = terminalChargeRecordMapperDao.insertTerminalChargeRecord(terminalChargeRecord);
         } else if ("9".equals(channelId)) {//crm credit_fee_record
             creditFeeRecord.setAccNbr(acctNbr);
@@ -329,7 +332,6 @@ public class OrclCommonDao {
             creditFeeRecord.setCreatedDate(new Date());
             creditFeeRecord.setState(Short.parseShort("0"));
             creditFeeRecord.setPaymentId(paymentId);
-
             cnt = creditFeeRecordMapperDao.insertCreditFeeRecord(creditFeeRecord);
         } else {//bussihall_charge_record
             bussihallChargeRecord.setAccNbr(acctNbr);
@@ -341,6 +343,7 @@ public class OrclCommonDao {
             bussihallChargeRecord.setCreatedDate(new Date());
             bussihallChargeRecord.setState(Short.parseShort("0"));
             bussihallChargeRecord.setPaymentId(paymentId);
+            bussihallChargeRecord.setIsRegionCode(lanId);
             cnt = bussihallChargeRecordMapperDao.insertBussihallChargeRecord(bussihallChargeRecord);
         }
         if (cnt < 0) {

@@ -267,20 +267,20 @@ public class OpenAPIServiceImpl{
 			String state=stdCcaQueryServ.getServState();
 			if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
 				rechargeBalanceRes.setResultCode("256");
-				rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
+				rechargeBalanceRes.setResultMsg("用户信息不存在");
 				return rechargeBalanceRes;
 			}
 		}else{
 			rechargeBalanceRes.setResultCode("256");
-			rechargeBalanceRes.setResultMsg("用户信息为空");
+			rechargeBalanceRes.setResultMsg("用户信息不存在");
 			return rechargeBalanceRes;
 		}
-		String local_net=stdCcaQueryServ.getHomeAreaCode();
+		String localNet=stdCcaQueryServ.getHomeAreaCode();
 
 		//特殊业务组的跨地市缴费限制
 		if("3003".equals(body.getSystemId()))
 		{
-			if (!"433".equals(local_net))
+			if (!"433".equals(localNet))
 			{
 				//BE_SERV_REJECT_ERROR
 				String errinfo = "该业务渠道不允许跨地市缴费！";
@@ -311,7 +311,7 @@ public class OpenAPIServiceImpl{
             rechargeBalanceRes = JSON.parseObject(result.getData(), RechargeBalanceRes.class);
             long paymentId = 0;
             if ("0".equals(rechargeBalanceRes.getResultCode())) {
-				resultInfo = orclCommonDao.insertSerialnumber(body,paymentId);
+				resultInfo = orclCommonDao.insertSerialnumber(body,paymentId,localNet);
 				if (!"0".equals(resultInfo.getCode())) {
 					/*rechargeBalanceRes.setResultCode(resultInfo.getCode());
 					rechargeBalanceRes.setResultMsg(resultInfo.getMessage());*/

@@ -9,8 +9,10 @@ import com.asia.dao.OrclCommonDao;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.localApi.*;
 import com.asia.domain.localApi.child.*;
+import com.asia.internal.common.BillException;
 import com.asia.internal.common.CommonUserInfo;
 import com.asia.internal.common.ResultInfo;
+import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.mapper.orclmapper.*;
 import com.asia.service.IlocalService;
 import com.asia.vo.*;
@@ -94,7 +96,13 @@ public class LocalSeviceImpl implements IlocalService {
         //访问数据库
 
         String billMonth = body.getQueryMonth();
-        List<Info3mExeFee> info3mExeFeeList = info3mExeFeeMapperDao.selectInfo3MExeFee(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<Info3mExeFee> info3mExeFeeList=new ArrayList<>();
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = info3mExeFeeMapperDao.selectInfoHighFeeByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = info3mExeFeeMapperDao.selectInfo3MExeFee(accNumb, billMonth);
+        }
         if (info3mExeFeeList.size() > 0) {
             info3mExeFeeMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -206,7 +214,15 @@ public class LocalSeviceImpl implements IlocalService {
         String accNbr=String.valueOf(accNumb);
         String servId=stdCcaQueryServ.getServId();
         String billMonth = body.getQueryMonth();
-        List<InfoAccu5gUser> info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoAccu5gUser> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUserByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
+        }
+        //List<InfoAccu5gUser> info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoAccu5gUserMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -261,7 +277,15 @@ public class LocalSeviceImpl implements IlocalService {
         String servId=stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
-        List<InfoAccu2Service> info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoAccu2Service> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
+        }
+        //List<InfoAccu2Service> info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoAccu2ServiceMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -315,7 +339,15 @@ public class LocalSeviceImpl implements IlocalService {
         String servId=stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
-        List<InfoNoAccu2Service> info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
+        String queryTimeType = body.getQueryTimeType();
+        List<InfoNoAccu2Service> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
+        }
+        //List<InfoNoAccu2Service> info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoNoAccu2ServiceMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -429,7 +461,15 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String beginDate = body.getBeginDate();
         String endDate = body.getEndDate();
-        List<RemindKdRemain> info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, beginDate,endDate);
+        String queryTimeType = body.getQueryTimeType();
+        List<RemindKdRemain> info3mExeFeeList = new ArrayList<>();
+        //按起止时间查询
+        if ("1".equals(queryTimeType)) {
+            info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, body.getBeginDate(), body.getEndDate());
+        } else {//按月查询
+            info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemainByMonth(accNumb, billMonth);
+        }
+        //List<RemindKdRemain> info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, beginDate,endDate);
         if (info3mExeFeeList.size() > 0) {
             remindKdRemainMap = info3mExeFeeList.get(0);
             qryMonthHighFeeRes.setResult("0");
@@ -557,7 +597,7 @@ public class LocalSeviceImpl implements IlocalService {
     //详单禁查
     @Override
     public  UserMeterOrderRes userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers)
-            throws ClientProtocolException, IOException {
+            throws ClientProtocolException, IOException, BillException {
         UserMeterOrderRes userMeterOrderRes = new UserMeterOrderRes();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         String accNumb  = body.getQueryValue();
@@ -567,14 +607,10 @@ public class LocalSeviceImpl implements IlocalService {
         if(stdCcaQueryServ!=null){
             String state=stdCcaQueryServ.getServState();
             if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
-                userMeterOrderRes.setCode(Constant.ResultCode.ERROR);
-                userMeterOrderRes.setMsg("用户信息为空");
-                return userMeterOrderRes;
+                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
             }
         }else{
-            userMeterOrderRes.setCode(Constant.ResultCode.ERROR);
-            userMeterOrderRes.setMsg("用户信息为空");
-            return userMeterOrderRes;
+            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }
         String servId = stdCcaQueryServ.getServId();
 

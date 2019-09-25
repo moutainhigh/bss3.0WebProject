@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
 import com.asia.domain.localApi.*;
+import com.asia.internal.common.BillException;
 import com.asia.service.impl.Bon3ServiceImpl;
 import com.asia.service.impl.LocalSeviceImpl;
 import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
@@ -201,8 +202,12 @@ public class LocalController {
                 +" header>>"+JSON.toJSONString(headers), this.getClass());
         UserMeterOrderRes userMeterOrderRes=new UserMeterOrderRes();
         try {
-            userMeterOrderRes = localSevice.userMeterOrderService(userMeterOrderReq,headers);
-            headers.forEach((key,val)->{response.setHeader(key, val);});
+            userMeterOrderRes = localSevice.userMeterOrderService(userMeterOrderReq, headers);
+            headers.forEach((key, val) -> { response.setHeader(key, val);});
+        } catch (BillException err) {
+            userMeterOrderRes.setCode(err.getErrCode());
+            userMeterOrderRes.setMsg(err.getErrMsg());
+            return JSON.toJSONString(userMeterOrderRes, SerializerFeature.WriteMapNullValue);
         } catch (Exception e) {
             LogUtil.error("/local/userMeterOrderService服务调用失败", e, this.getClass());
             userMeterOrderRes.setCode(Constant.ResultCode.ERROR);

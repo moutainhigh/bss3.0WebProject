@@ -9,4 +9,7 @@ import java.util.List;
 public interface InfoAccu5gUserMapper {
     List<InfoAccu5gUser> selectInfoAccu5gUser(@Param("accNbr") Long accNbr,
                                               @Param("alarmDate") String alarmDate);
+    List<InfoAccu5gUser> selectInfoAccu5gUserByBeginDate(@Param("accNbr") Long accNbr,
+                                              @Param("beginDate") String beginDate,
+                                                         @Param("endDate") String endDate);
 }

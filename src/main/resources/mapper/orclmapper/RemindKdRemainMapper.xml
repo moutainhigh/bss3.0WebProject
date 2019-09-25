@@ -26,6 +26,14 @@
     from REMIND_KD_REMAIN
     where
     ACC_NBR = #{accNbr}
-    and STATE_DATE between to_date(#{beginDate},'yyyymmdd') and to_date(#{endDate},'yyyymmdd')
+    and STATE_DATE between to_date(#{beginDate},'yyyy/mm/dd hh24:mi:ss') and to_date(#{endDate},'yyyy/mm/dd hh24:mi:ss')
+  </select>
+  <select id="selectRemindKdRemainByMonth" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from REMIND_KD_REMAIN
+    where
+    ACC_NBR = #{accNbr}
+    and to_char(STATE_DATE,'yyyymm') = #{alarmDate}
   </select>
 </mapper>

@@ -46,6 +46,9 @@ public class AcctApiUrl {
     private String qryReturnBalanceInfoDetail;
     @Value("${api.RtBillItem}")
     private String rtBillItem;
+    @Value("${bon3.qryBalance}")
+    private String qryBalance;
+
     public String getSearchServInfo() {
         return searchServInfo;
     }
@@ -172,5 +175,13 @@ public class AcctApiUrl {
 
     public void setQryReturnBalanceInfoDetail(String qryReturnBalanceInfoDetail) {
         this.qryReturnBalanceInfoDetail = qryReturnBalanceInfoDetail;
+    }
+
+    public String getQryBalance() {
+        return qryBalance;
+    }
+
+    public void setQryBalance(String qryBalance) {
+        this.qryBalance = qryBalance;
     }
 }
