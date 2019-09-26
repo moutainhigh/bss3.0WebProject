@@ -32,6 +32,8 @@ public class RtBillItemReq extends BaseDomain{
 	private Integer startDate;
 	//查询结束时间
 	private Integer endDate;
+	//系统gid
+	private String systemId;
 
 	public OperAttrStruct getOperAttrStruct() {
 		return operAttrStruct;
@@ -119,5 +121,13 @@ public class RtBillItemReq extends BaseDomain{
 
 	public void setEndDate(Integer endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

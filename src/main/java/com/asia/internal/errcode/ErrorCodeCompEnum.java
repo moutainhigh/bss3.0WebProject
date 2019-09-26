@@ -388,7 +388,6 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     HSS_SEARCH_SERV_LOCATION_NOT_FOUND("56375505", "从SERV_LOCATION表找不到组织结构信息"),
     HSS_SEARCH_PRODUCT_NOT_FOUND("56375506", "从PRODUCT表找不到产品信息"),
     HSS_SEARCH_HEAD_INFO_MAP_EMPTY("56375507", "表头信息MAP为空"),
-    HSS_SEARCH_SERV_INFO_NOT_EXIST("56375508", "用户信息不存在"),
     HSS_SEARCH_BALANCE_ERROR("56375509", "查询余额出错"),
     HSS_SEARCH_AREA_CODE_ERROR("56375510", "查区号出错"),
     HSS_SEARCH_ACCT_ID_ERROR("56375511", "查ACCT_ID出错"),
@@ -1174,12 +1173,22 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     GET_CHECK_FLAG_ERROR("未定义", "未定义"),
     CREATE_SCAN_PAYMENT_ID_FAIL("未定义", "未定义"),
     CASH_BILL_STAFF_ID_EMPTY("69604032","CashBill中工号为空"),
-    QUERY_NO_DATE("100002","数据为空"),
+    QUERY_NO_DATA("100002","远端数据为空"),
     QUERY_BILL_Err("100003","查询欠费失败"),
     ACROSS_CITIES_ERR("100004","该业务渠道不允许跨地市缴费"),
     INSERT_CHARGE_BALANCE_ERR("100005","插入充值信息失败"),
     INSERT_ROLL_CHARGE_BALANCE_ERR("100006","插入充值信息失败"),
-    QUERY_BALANCE_Err("100001","查询余额失败");
+    QUERY_BALANCE_Err("100001","查询余额失败"),
+    USER_METER_OPEN_ERR("100005","开通失败"),
+    USER_METER_CANCEL_ERR("100006","取消失败"),
+    BILLING_CYCYLE_ERR("100007", "账期为空"),
+    HSS_SEARCH_SERV_INFO_NOT_EXIST("56375508", "用户信息不存在"),
+    PROD_REGION_ERR("100008", "区域编号为空"),
+    SYSTEM_ID_ERROR("100009", "系统id为空"),
+    RREMOTE_ACCESS_FAILE_EXCEPTION("100010", "系统内部调用远程服务异常"),
+    STAFF_ID_IS_EMPTY("100011", "工号为空");
+
+
 
     /**
      * 状态码

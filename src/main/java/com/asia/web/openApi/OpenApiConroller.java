@@ -4,21 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
+import com.asia.common.utils.StringUtil;
 import com.asia.domain.openApi.*;
-import com.asia.domain.openApi.QryBalanceRecordDetailRes.BalanceChangeList;
 import com.asia.domain.openApi.QryBillRes.FeeBillingCycle;
 import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup;
 import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup.AcctItemType;
 import com.asia.domain.openApi.QryInstantFeeListRes.ItemInformation;
 import com.asia.domain.openApi.QryPaymentRes.PaymentInfo;
 import com.asia.domain.openApi.QryPaymentRes.PaymentInfo.AccNbrDetail;
-import com.asia.domain.openApi.QueryBalanceRes.BalanceQuery;
-import com.asia.domain.openApi.RtBillItemRes.DataBillItem;
-import com.asia.domain.openApi.RtBillItemRes.IncrBillItem;
-import com.asia.domain.openApi.RtBillItemRes.SmsBillItem;
-import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.internal.common.BillException;
+import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.ordmapper.ProdInstRouteMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
@@ -295,19 +291,28 @@ public class OpenApiConroller{
 	public String rechargeBalance(@RequestBody RechargeBalanceReq body,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/openApi/rechargeBalance","body>>"
-				+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [RechargeBalance] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/rechargeBalance" + " body>>"
+				+body.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RechargeBalanceRes returnInfo=new RechargeBalanceRes();
 		try {
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){
+			LogUtil.error("/openApi/rechargeBalance服务调用失败", err, this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
 			LogUtil.error("/openApi/rechargeBalance服务调用失败", e, this.getClass());
 			returnInfo.setResultMsg(e.getMessage());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.info("END [RechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -324,13 +329,19 @@ public class OpenApiConroller{
 	public String rtBillItem(@RequestBody RtBillItemReq body,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
 		//记录业务日志
-		LogUtil.opeLog("/openApi/rtBillItem","body>>"+body.toString()
-			+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [RtBillItem] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/rtBillItem" + " body>>"+body.toString()
+			+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
 		try {
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,true);
 			headers.forEach(response::setHeader);
 		} catch (BillException err) {
+			LogUtil.error("/openApi/rtBillItem服务调用失败", err, this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
 		} catch (Exception e) {
@@ -338,6 +349,7 @@ public class OpenApiConroller{
 			returnInfo.setResultCode("-1");
 			returnInfo.setResultMsg(e.getMessage());
 		}
+		LogUtil.info("END [RtBillItem] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	/**
@@ -351,38 +363,29 @@ public class OpenApiConroller{
 	public String rollRechargeBalnce(@RequestBody RollRechargeBalanceReq body,
 									 @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/openApi/rollRechargeBalnce","body>>"+body.toString()
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [RollRechargeBalance] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/RollRechargeBalance" + " body>>"+body.toString()
+				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RollRechargeBalanceRes returnInfo=new RollRechargeBalanceRes();
 		try {
-		   /* returnInfo.setReqServiceId("100001111101");
-            returnInfo.setResultCode("0");
-            returnInfo.setResultMsg("");*/
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
             returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
-			//returnInfo=openAPIServiceImpl.rtBillItem(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){
+			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", err, this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
 			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", e, this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
-		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
-	}
-	@PostMapping("/test")
-	public String qryInstantFeeTest(@RequestBody QryInstantFeeReq qryInstantFeeReq,
-								@RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
-		//记录业务日志
-		LogUtil.opeLog("/openApi/QryInstantFee", "body>>"+qryInstantFeeReq.toString()
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
-		QryInstantFeeRes returnInfo = new QryInstantFeeRes();
-		try {
-			returnInfo.setResultCode(Constant.ResultCode.OPENAPI_OK);
-			returnInfo=openAPIServiceImpl.qryInstantFee(qryInstantFeeReq, headers);
-			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
-			LogUtil.error("/openApi/QryInstantFee服务调用失败", e, this.getClass());
-		}
+		LogUtil.info("END [RollRechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	/**
@@ -396,18 +399,11 @@ public class OpenApiConroller{
 	public String RtBillItemNoSms(@RequestBody RtBillItemReq body,
 							 @RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
 		//记录业务日志
-		LogUtil.opeLog("/openApi/rtBillItem","body>>"+body.toString()
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [RtBillItemNoSms] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/RtBillItemNoSms" +" body>>"+body.toString()
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
 		try {
-			/*returnInfo.setSmsBillItems(new ArrayList<>());
-			returnInfo.getSmsBillItems().add(new SmsBillItem());
-			returnInfo.setVoiceBillItems(new ArrayList<>());
-			returnInfo.getVoiceBillItems().add(new VoiceBillItem());
-			returnInfo.setIncrBillItems(new ArrayList<>());
-			returnInfo.getIncrBillItems().add(new IncrBillItem());
-			returnInfo.setDataBillItems(new ArrayList<>());
-			returnInfo.getDataBillItems().add(new DataBillItem());*/
 			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,false);
 			headers.forEach(response::setHeader);
 		} catch (BillException err) {
@@ -418,6 +414,7 @@ public class OpenApiConroller{
 			returnInfo.setResultCode("-1");
 			returnInfo.setResultMsg(e.getMessage());
 		}
+		LogUtil.info("END [RtBillItemNoSms] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 

@@ -2,9 +2,10 @@ package com.asia.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.asia.common.baseObj.Constant;
+import com.asia.common.AcctApiUrl;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
+import com.asia.common.utils.LogUtil;
 import com.asia.dao.OrclCommonDao;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.localApi.*;
@@ -62,44 +63,43 @@ public class LocalSeviceImpl implements IlocalService {
     InfoHdUserFeeMapper infoHdUserFeeMapperDao;
     @Autowired
     Bon3ServiceImpl bon3Service;
+    @Autowired
+    AcctApiUrl acctApiUrl;
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     //月账话费高额
     @Override
-    public QryMonthHighFeeRes qryMonthHighFee(QryMonthHighFeeReq body, Map<String,String> headers)
-			throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qryMonthHighFee(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         Info3mExeFee info3mExeFeeMap = new Info3mExeFee();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
 
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-                /*qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+
+
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
         //访问数据库
 
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
-        List<Info3mExeFee> info3mExeFeeList=new ArrayList<>();
+        List<Info3mExeFee> info3mExeFeeList = new ArrayList<>();
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = info3mExeFeeMapperDao.selectInfoHighFeeByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
@@ -119,45 +119,37 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
-	}
+    }
+
     //实时话费高额
     @Override
-    public QryMonthHighFeeRes qryRealHighFee(QryMonthHighFeeReq body, Map<String,String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qryRealHighFee(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         InfoHighFeeQue infoHighFeeQueMap = new InfoHighFeeQue();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-               /* qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-           /* qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
@@ -183,46 +175,38 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-           /* qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
     }
+
     //日流量告警
     @Override
-    public QryMonthHighFeeRes qryDataHighFlow(QryMonthHighFeeReq body, Map<String,String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qryDataHighFlow(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         InfoAccu5gUser infoAccu5gUserMap = new InfoAccu5gUser();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-               /* qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
         List<InfoAccu5gUser> info3mExeFeeList = new ArrayList<>();
@@ -248,47 +232,39 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
     }
+
     //累积量超出提醒
     @Override
-    public QryMonthHighFeeRes qryAccuOverFlow(QryMonthHighFeeReq body, Map<String,String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qryAccuOverFlow(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         InfoAccu2Service infoAccu2ServiceMap = new InfoAccu2Service();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-                /*qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
@@ -314,47 +290,39 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
     }
+
     //月账话费高额
     @Override
-    public QryMonthHighFeeRes qryUserFlowFee(QryMonthHighFeeReq body, Map<String,String> headers)
+    public QryMonthHighFeeRes qryUserFlowFee(QryMonthHighFeeReq body, Map<String, String> headers)
             throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         InfoNoAccu2Service infoNoAccu2ServiceMap = new InfoNoAccu2Service();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-               /* qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
@@ -382,52 +350,44 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
     }
+
     //发送日志
     @Override
-    public QryMonthHighFeeRes qrySendMsgUser(QryMonthHighFeeReq body, Map<String,String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qrySendMsgUser(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         UmpSmsInfo umpSmsInfoMap = new UmpSmsInfo();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-                /*qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         String beginDate = body.getBeginDate();
         String endDate = body.getEndDate();
-        List<UmpSmsInfo> info3mExeFeeList = umpSmsInfoMapperDao.selectUmpSmsInfo(accNumb, beginDate,endDate);
+        List<UmpSmsInfo> info3mExeFeeList = umpSmsInfoMapperDao.selectUmpSmsInfo(accNumb, beginDate, endDate);
         if (info3mExeFeeList.size() > 0) {
             umpSmsInfoMap = info3mExeFeeList.get(0);
             //qryMonthHighFeeRes.setResult("0");
@@ -444,47 +404,39 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
     }
+
     //宽带到期提醒
     @Override
-    public QryMonthHighFeeRes qryWlanRemain(QryMonthHighFeeReq body, Map<String,String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qryWlanRemain(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         RemindKdRemain remindKdRemainMap = new RemindKdRemain();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-               /* qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         String beginDate = body.getBeginDate();
@@ -519,51 +471,46 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else{
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("数据为空");
-            return qryMonthHighFeeRes;*/
+        } else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
 
     }
+
     //累积量超出量查询
     @Override
-    public QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String,String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         Info3mExeFee info3mExeFeeMap = new Info3mExeFee();
         IntfCommServiceListTypeBean intfCommServiceListTypeBean = new IntfCommServiceListTypeBean();
-        List<IntfCommServiceListBean>  intfCommServiceList = new ArrayList<>();
-        IntfCommServiceListBean  intfCommServiceListBean = new IntfCommServiceListBean();
+        List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
+        IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb  = body.getQueryValue();
+        long accNumb = body.getQueryValue();
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-                /*qryMonthHighFeeRes.setResult("1");
-                qryMonthHighFeeRes.setMsg("用户信息为空");
-                return qryMonthHighFeeRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
             /*qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setMsg("用户信息为空");
             return qryMonthHighFeeRes;*/
         }
-        String custName=stdCcaQueryServ.getCustName();
-        String accNbr=String.valueOf(accNumb);
-        String servId=stdCcaQueryServ.getServId();
+        String custName = stdCcaQueryServ.getCustName();
+        String accNbr = String.valueOf(accNumb);
+        String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         Map map = new HashMap();
-        resultInfo = orclCommonDao.overAccuData(accNumb, billMonth,map);
+        resultInfo = orclCommonDao.overAccuData(accNumb, billMonth, map);
         if ("0".equals(resultInfo.getCode())) {
             //qryMonthHighFeeRes.setResult("0");
             intfCommServiceListBean.setAccNbr(accNbr);
@@ -577,41 +524,31 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setResult("0");
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
-        }else if("1".equals(resultInfo.getCode())){
-            qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg(resultInfo.getMessage());
-            return qryMonthHighFeeRes;
-        }else {
-            //throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
+        } else {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setMsg(resultInfo.getMessage());
             return qryMonthHighFeeRes;
         }
     }
+
     //详单打印记录
     @Override
- public MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers)
-            throws ClientProtocolException, IOException,BillException {
+    public MeterPrintActionRes printRecordService(MeterPrintActionReq body, Map<String, String> headers)
+            throws ClientProtocolException, IOException, BillException {
         MeterPrintActionRes meterPrintActionRes = new MeterPrintActionRes();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
 
-        String accNumb  = body.getAccNbr();
+        String accNumb = body.getAccNbr();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-                /*meterPrintActionRes.setCode(Constant.ResultCode.ERROR);
-                meterPrintActionRes.setMsg("用户信息为空");
-                return  meterPrintActionRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*meterPrintActionRes.setCode(Constant.ResultCode.ERROR);
-            meterPrintActionRes.setMsg("用户信息为空");
-            return  meterPrintActionRes;*/
         }
 
         //访问数据库
@@ -621,85 +558,81 @@ public class LocalSeviceImpl implements IlocalService {
             meterPrintActionRes.setCode("0");
             meterPrintActionRes.setMsg(resultInfo.getMessage());
             return meterPrintActionRes;
-        }else if("1".equals(resultInfo.getCode())){
+        } else if ("1".equals(resultInfo.getCode())) {
             meterPrintActionRes.setResult("1");
             meterPrintActionRes.setMsg(resultInfo.getMessage());
             return meterPrintActionRes;
-        }else {
+        } else {
             meterPrintActionRes.setResult("2");
             meterPrintActionRes.setMsg(resultInfo.getMessage());
             return meterPrintActionRes;
         }
     }
+
     //详单禁查
     @Override
-    public  UserMeterOrderRes userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers)
+    public UserMeterOrderRes userMeterOrderService(UserMeterOrderReq body, Map<String, String> headers)
             throws ClientProtocolException, IOException, BillException {
         UserMeterOrderRes userMeterOrderRes = new UserMeterOrderRes();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
-        String accNumb  = body.getQueryValue();
+        String accNumb = body.getQueryValue();
         String action = body.getAction();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }
         String servId = stdCcaQueryServ.getServId();
 
         String areaCode = stdCcaQueryServ.getHomeAreaCode();
         //访问数据库
-        resultInfo = orclCommonDao.userMeterOrder(servId, action,areaCode);
+        resultInfo = orclCommonDao.userMeterOrder(servId, action, areaCode);
         if ("0".equals(resultInfo.getCode())) {
             userMeterOrderRes.setResult("0");
             userMeterOrderRes.setCode("0");
             userMeterOrderRes.setMsg(resultInfo.getMessage());
             return userMeterOrderRes;
-        }else if("1".equals(resultInfo.getCode())){
+        } else if ("1".equals(resultInfo.getCode())) {
             userMeterOrderRes.setResult("1");
             userMeterOrderRes.setMsg(resultInfo.getMessage());
             return userMeterOrderRes;
-        }else {
+        } else {
             userMeterOrderRes.setResult("1");
 
             // qryMonthHighFeeRes.setMsg(resultInfo.getM);
             return userMeterOrderRes;
         }
     }
+
     @Override
-   public QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body,
-                                                                 Map<String, String> headers) throws ClientProtocolException, IOException,BillException {
+    public QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body,
+                                                                  Map<String, String> headers) throws ClientProtocolException, IOException, BillException {
         QueryAgreementConsumptionRes queryAgreementConsumptionRes = new QueryAgreementConsumptionRes();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         List<AgreementConsumeSetBean> agreementConsumeSetBeanList = new ArrayList<>();
         AgreementConsumeSetBean agreementConsumeSetBean = new AgreementConsumeSetBean();
         AgreementConsumeSetTypeBean agreementConsumeSetTypeBean = new AgreementConsumeSetTypeBean();
-        String accNumb  = body.getValue();
+        String accNumb = body.getValue();
         String userType = body.getUserType();
         String valueType = body.getValueType();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-                /*queryAgreementConsumptionRes.setResult(Constant.ResultCode.ERROR);
-                queryAgreementConsumptionRes.setMsg("用户信息为空");
-                return queryAgreementConsumptionRes;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*queryAgreementConsumptionRes.setResult(Constant.ResultCode.ERROR);
-            queryAgreementConsumptionRes.setMsg("用户信息为空");
-            return queryAgreementConsumptionRes;*/
         }
-        String servId=stdCcaQueryServ.getServId();
+        String servId = stdCcaQueryServ.getServId();
         queryAgreementConsumptionRes.setResult("0");
-        List<InfoHdUserFee>  infoHdUserFeeList=  infoHdUserFeeMapperDao.selectInfoHdUserFee(servId);
+        List<InfoHdUserFee> infoHdUserFeeList = infoHdUserFeeMapperDao.selectInfoHdUserFee(servId);
         if (infoHdUserFeeList.size() > 0) {
             for (InfoHdUserFee hdUserFee : infoHdUserFeeList) {
                 agreementConsumeSetBean.setOfferInstId(hdUserFee.getOfferId().toString());
@@ -712,54 +645,49 @@ public class LocalSeviceImpl implements IlocalService {
             }
             queryAgreementConsumptionRes.setAgreementConsumeSet(agreementConsumeSetTypeBean);
         } else {
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
             //queryAgreementConsumptionRes.setMsg("数据为空");
         }
-        return  queryAgreementConsumptionRes;
+        return queryAgreementConsumptionRes;
     }
+
     @Override
-   public StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException {
+    public StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException {
         StdCcaRealTimeBillQueryResponse stdCcaRealTimeBillQueryResponse = new StdCcaRealTimeBillQueryResponse();
 
         return new StdCcaRealTimeBillQueryResponse();
     }
 
     //是否为电信号段（查号头表）
-    public MobileNumberQueryRes moBileNumberQuery(MobileNumberQueryReq mobileNumberQueryReq,Map<String, String> headers) throws IOException,BillException {
-        MobileNumberQueryRes info=new MobileNumberQueryRes();
+    public MobileNumberQueryRes moBileNumberQuery(MobileNumberQueryReq mobileNumberQueryReq, Map<String, String> headers) throws IOException, BillException {
+        MobileNumberQueryRes info = new MobileNumberQueryRes();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
-                "",headers);
-        if(stdCcaQueryServ!=null){
-            String state=stdCcaQueryServ.getServState();
-            if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
+                "", headers);
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-               /* info.setErrorCode(Constant.ResultCode.ERROR);
-                info.setErrorMsg("用户信息为空");
-                return info;*/
             }
-        }else{
+        } else {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*info.setErrorCode(Constant.ResultCode.ERROR);
-            info.setErrorMsg("用户信息为空");
-            return info;*/
         }
-        return orclCommonDao.moBileNumberQuery(mobileNumberQueryReq,headers);
+        return orclCommonDao.moBileNumberQuery(mobileNumberQueryReq, headers);
     }
 
     //查询余额信息，返回违约金、专用账目组、专用账目组
-    public AccountBalanceCpcpQueryRes accountBalanceCpcpQuery(AccountBalanceCpcpQueryReq accountBalanceCpcpQueryReq,Map<String, String> headers) throws IOException,BillException {
-        AccountBalanceCpcpQueryRes result=new AccountBalanceCpcpQueryRes();
+    public AccountBalanceCpcpQueryRes accountBalanceCpcpQuery(AccountBalanceCpcpQueryReq accountBalanceCpcpQueryReq, Map<String, String> headers) throws IOException, BillException {
+        AccountBalanceCpcpQueryRes result = new AccountBalanceCpcpQueryRes();
         HashMap<String, Object> operAttrStructMap = new HashMap<String, Object>();//操作人属性
-        String staffId=accountBalanceCpcpQueryReq.getStaffId();
-        String systemId=accountBalanceCpcpQueryReq.getSystemId();
-        String accNum=accountBalanceCpcpQueryReq.getAccNum();
-        String accNumType=accountBalanceCpcpQueryReq.getAccNumType();
-        String areaId=accountBalanceCpcpQueryReq.getAccNumAreaCode();
-        String operOrgId="0";
-        if(systemId=="1"){//随便写的业务逻辑
-            operOrgId="2";
+        String staffId = accountBalanceCpcpQueryReq.getStaffId();
+        String systemId = accountBalanceCpcpQueryReq.getSystemId();
+        String accNum = accountBalanceCpcpQueryReq.getAccNum();
+        String accNumType = accountBalanceCpcpQueryReq.getAccNumType();
+        String areaId = accountBalanceCpcpQueryReq.getAccNumAreaCode();
+        String operOrgId = "0";
+        if (systemId == "1") {//随便写的业务逻辑
+            operOrgId = "2";
         }
         operAttrStructMap.put("staffId", staffId);
         operAttrStructMap.put("operOrgId", operOrgId);
@@ -781,140 +709,147 @@ public class LocalSeviceImpl implements IlocalService {
         obj.put("queryItemType", "0");
         obj.put("areacode", areaId);
         obj.put("systemId", systemId);
-        String query = obj.toString();
+        String balanceQuery = obj.toString();
 
         Map<String, String> object = new HashMap<String, String>();
         object.put("appID", "1111111");
 
-        HttpResult result2 = HttpUtil.doPostJson("http://136.160.161.81:8026/billsrv/openApi/QueryBalance", query, object);
-        if(result2.getData()==null){
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
-           /* result.setIsSucess("0");
-            result.setMsg("查询余额失败");
-            return result;*/
+        HttpResult balanceResult = null;
+        LogUtil.debug("[开始调用远程服务 余额查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+        LogUtil.debug("输入参数[balanceQuery]="+balanceQuery.toString(),null, this.getClass());
+        try {
+            balanceResult = HttpUtil.doPostJson(acctApiUrl.getQueryBalance(), balanceQuery, object);
+        } catch (ClientProtocolException e) {
+            LogUtil.error("连接错误", e, this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        } catch (IOException e) {
+            LogUtil.error("IO流错误", e, this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
-      /*  String array="{\"areaCode\":null," +
-                "\"balanceQuery\":[{" +
-                "\"accNbr\":null," +
-                "\"acctBalanceId\":null," +
-                "\"acctId\":null," +
-                "\"available\":null," +
-                "\"balance\":null," +
-                "\"balanceTypeFlag\":null," +
-                "\"cycleType\":null," +
-                "\"cycleUpper\":null," +
-                "\"desc\":null," +
-                "\"effDate\":null," +
-                "\"expDate\":null," +
-                "\"prodInstId\":null," +
-                "\"reserveBalance\":null," +
-                "\"shareRuleFlag\":null," +
-                "\"state\":null,\"used\":null" +
-                "}]," +
-                "\"paymentFlag\":null," +
-                "\"queryFlag\":null," +
-                "\"queryItemType\":null," +
-                "\"realBalance\":null," +
-                "\"resultCode\":null," +
-                "\"resultMsg\":null";*/
+        if (balanceResult.getData() == null) {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
+        }
+        if(balanceResult.getCode() != 200){
+            String errorMsg=getHttpErrorInfo(acctApiUrl.getQryBill(),balanceResult);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }
+        LogUtil.debug("[调用远程服务 余额查询]"+acctApiUrl.getQueryBalance()+"输出结果[result]="
+                +balanceResult.toString(),null,this.getClass());
 
-            JSONObject json = JSON.parseObject(result2.getData());
-            List<Map<String,Object>> list=(List<Map<String, Object>>) json.get("balanceQuery");
-            String realBalance = json.get("realBalance").toString();
-            List<BalanceInfosListBean> infosList=new ArrayList<BalanceInfosListBean>();
-            List<BalanceItemsListBean> itemsList=new ArrayList<BalanceItemsListBean>();
-            int num1=0;
-            int num2=0;
-            int num3=0;
-            int num4=0;
-            int num5=0;
-            for (int i=0;i<list.size();i++){
+        JSONObject json = JSON.parseObject(balanceResult.getData());
+        List<Map<String, Object>> list = (List<Map<String, Object>>) json.get("balanceQuery");
+        String realBalance = json.get("realBalance").toString();
+        List<BalanceInfosListBean> infosList = new ArrayList<BalanceInfosListBean>();
+        List<BalanceItemsListBean> itemsList = new ArrayList<BalanceItemsListBean>();
+        int tyBalance = 0;
+        int zyBalance = 0;
+        int userLevelBalance = 0;
+        int userAcctBalance = 0;
+        int acctLevelBalance = 0;
+        for (int i = 0; i < list.size(); i++) {
 
-                String balance=list.get(i).get("balance").toString();
-                String balanceTypeFlag=list.get(i).get("balanceTypeFlag").toString();
-                String available=list.get(i).get("available").toString();
-                String desc=list.get(i).get("desc").toString();
-                String effDate=list.get(i).get("effDate").toString();
-                String expDate=list.get(i).get("expDate").toString();
-                if(balanceTypeFlag.equals("0")){
-                    num1+=Integer.parseInt(balance);
-                }else if(balanceTypeFlag.equals("1")){
-                    num2+=Integer.parseInt(balance);
-                }else if(balanceTypeFlag.equals("2")){
-                    num3+=Integer.parseInt(balance);
-                }else if(balanceTypeFlag.equals("3")){
-                    num4+=Integer.parseInt(balance);
-                }else if(balanceTypeFlag.equals("4")){
-                    num5+=Integer.parseInt(balance);
-                }
-
-
-
-                BalanceItemsListBean balanceItemsListBean=new BalanceItemsListBean();
-                balanceItemsListBean.setAcctNbr(accNum);
-                balanceItemsListBean.setBalance(available);
-                balanceItemsListBean.setBalanceType(desc);
-                balanceItemsListBean.setEffDate(effDate);
-                balanceItemsListBean.setExpDate(expDate);
-                balanceItemsListBean.setItem_group_name("");
-                balanceItemsListBean.setLevel("帐户级别");
-
-
-                itemsList.add(balanceItemsListBean);
+            String balance = list.get(i).get("balance").toString();
+            String balanceTypeFlag = list.get(i).get("balanceTypeFlag").toString();
+            String available = list.get(i).get("available").toString();
+            String desc = list.get(i).get("desc").toString();
+            String effDate = list.get(i).get("effDate").toString();
+            String expDate = list.get(i).get("expDate").toString();
+            if (balanceTypeFlag.equals("0")) {
+                tyBalance += Integer.parseInt(balance);
+            } else if (balanceTypeFlag.equals("1")) {
+                zyBalance += Integer.parseInt(balance);
+            } else if (balanceTypeFlag.equals("2")) {
+                userLevelBalance += Integer.parseInt(balance);
+            } else if (balanceTypeFlag.equals("3")) {
+                userAcctBalance += Integer.parseInt(balance);
+            } else if (balanceTypeFlag.equals("4")) {
+                acctLevelBalance += Integer.parseInt(balance);
             }
-            BalanceInfosListBean balanceInfosListBean=new BalanceInfosListBean();
-            balanceInfosListBean.setAocBalance(String.valueOf(num1));
-            balanceInfosListBean.setAocUnitName("通用余额");
-            infosList.add(balanceInfosListBean);
-            balanceInfosListBean.setAocBalance(String.valueOf(num2));
-            balanceInfosListBean.setAocUnitName("专用余额");
-            infosList.add(balanceInfosListBean);
-            balanceInfosListBean.setAocBalance(String.valueOf(num3));
-            balanceInfosListBean.setAocUnitName("用户级");
-            infosList.add(balanceInfosListBean);
-            balanceInfosListBean.setAocBalance(String.valueOf(num4));
-            balanceInfosListBean.setAocUnitName("用户账目组级");
-            infosList.add(balanceInfosListBean);
-            balanceInfosListBean.setAocBalance(String.valueOf(num5));
-            balanceInfosListBean.setAocUnitName("账户账目组级");
-            infosList.add(balanceInfosListBean);
 
-            result.setBalanceInfos(infosList);
-            result.setBalanceItems(itemsList);
-            //判断是否欠费
-            if(Integer.parseInt(realBalance)>0){
-                result.setBalanceAvl(realBalance);
-                result.setDueCharge("0");
-            }else{
-                JSONObject obj2 = new JSONObject();
-                obj.put("billQueryType", "2");
-                obj.put("destinationAccount", accNumType+accNum);
-                obj.put("destinationAttr", accNumType);
-                obj.put("queryFla", "1");
-                obj.put("feeQueryFlag", "0");
-                obj.put("operAttrStruct", operAttrStructMap);
-                String query2 = obj2.toString();
 
-                Map<String, String> object2 = new HashMap<String, String>();
-                object2.put("appID", "1111111");
-                HttpResult result3 = HttpUtil.doPostJson("http://136.160.161.81:8026/billsrv/openApi/QryBill", query2, object2);
-                if(result3.getData()==null){
-                    throw new BillException(ErrorCodeCompEnum.QUERY_BILL_Err);
-                    /*result.setIsSucess("0");
-                    result.setMsg("查询欠费失败");
-                    return result;*/
-                }
-                JSONObject json2 = JSON.parseObject(result3.getData());
-                result.setBalanceAvl("0");
-                result.setDueCharge(json2.get("due").toString());
+            BalanceItemsListBean balanceItemsListBean = new BalanceItemsListBean();
+            balanceItemsListBean.setAcctNbr(accNum);
+            balanceItemsListBean.setBalance(available);
+            balanceItemsListBean.setBalanceType(desc);
+            balanceItemsListBean.setEffDate(effDate);
+            balanceItemsListBean.setExpDate(expDate);
+            balanceItemsListBean.setItem_group_name("");
+            balanceItemsListBean.setLevel("帐户级别");
+
+
+            itemsList.add(balanceItemsListBean);
+        }
+        BalanceInfosListBean balanceInfosListBean = new BalanceInfosListBean();
+        balanceInfosListBean.setAocBalance(String.valueOf(tyBalance));
+        balanceInfosListBean.setAocUnitName("通用余额");
+        infosList.add(balanceInfosListBean);
+        balanceInfosListBean.setAocBalance(String.valueOf(zyBalance));
+        balanceInfosListBean.setAocUnitName("专用余额");
+        infosList.add(balanceInfosListBean);
+        balanceInfosListBean.setAocBalance(String.valueOf(userLevelBalance));
+        balanceInfosListBean.setAocUnitName("用户级");
+        infosList.add(balanceInfosListBean);
+        balanceInfosListBean.setAocBalance(String.valueOf(userAcctBalance));
+        balanceInfosListBean.setAocUnitName("用户账目组级");
+        infosList.add(balanceInfosListBean);
+        balanceInfosListBean.setAocBalance(String.valueOf(acctLevelBalance));
+        balanceInfosListBean.setAocUnitName("账户账目组级");
+        infosList.add(balanceInfosListBean);
+
+        result.setBalanceInfos(infosList);
+        result.setBalanceItems(itemsList);
+        //判断是否欠费
+        if (Integer.parseInt(realBalance) > 0) {
+            result.setBalanceAvl(realBalance);
+            result.setDueCharge("0");
+        } else {
+            JSONObject obj2 = new JSONObject();
+            obj.put("billQueryType", "2");
+            obj.put("destinationAccount", accNumType + accNum);
+            obj.put("destinationAttr", accNumType);
+            obj.put("queryFla", "1");
+            obj.put("feeQueryFlag", "0");
+            obj.put("operAttrStruct", operAttrStructMap);
+            String oweQry = obj2.toString();
+
+            Map<String, String> object2 = new HashMap<String, String>();
+            object2.put("appID", "1111111");
+
+            LogUtil.debug("[开始调用远程服务 欠费查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+            LogUtil.debug("输入参数[oweQry]="+oweQry.toString(),null, this.getClass());
+            HttpResult oweResult = null;
+            try {
+                oweResult = HttpUtil.doPostJson(acctApiUrl.getQryBill(), oweQry, object2);
+            } catch (ClientProtocolException e) {
+                LogUtil.error("连接错误", e, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+            } catch (IOException e) {
+                LogUtil.error("IO流错误", e, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
             }
-            result.setIsBalanceInfoSucess("1");
-            result.setIsBalanceItemSucess("1");
-            result.setIsOweInfoSucess("1");
-            result.setIsSucess("1");
-            result.setMsg("成功");
-            result.setOweCharge("0");
-            result.setOweInfoMsg("成功");
+            if(oweResult.getCode() != 200){
+                String errorMsg=getHttpErrorInfo(acctApiUrl.getQryBill(),oweResult);
+                LogUtil.error(errorMsg,null,this.getClass());
+                throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+            }
+            if (oweResult.getData() == null) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_BILL_Err);
+            }
+            LogUtil.debug("[调用远程服务 欠费查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
+                    +oweResult.toString(),null,this.getClass());
+
+            JSONObject oweJson = JSON.parseObject(oweResult.getData());
+            result.setBalanceAvl("0");
+            result.setDueCharge(oweJson.get("due").toString());
+        }
+        result.setIsBalanceInfoSucess("1");
+        result.setIsBalanceItemSucess("1");
+        result.setIsOweInfoSucess("1");
+        result.setIsSucess("1");
+        result.setMsg("成功");
+        result.setOweCharge("0");
+        result.setOweInfoMsg("成功");
 
 
         return result;
@@ -922,34 +857,55 @@ public class LocalSeviceImpl implements IlocalService {
 
     //查询用户的增值账单，（三级账单递归展示）
     public QueryAddValueFeeRes queryAddValueFee(QueryAddValueFeeReq queryAddValueFeeReq,
-                                                Map<String,String> heads) throws Exception,BillException {
-        QueryAddValueFeeRes result=new QueryAddValueFeeRes();
-        QueryAddValueFeeResBean queryAddValueFeeResBean=new QueryAddValueFeeResBean();
-        QueryAddValueFeeResListBean bean=new QueryAddValueFeeResListBean();
-        String query=queryAddValueFeeReq.toString();
-        List<QueryAddValueFeeResListBean> list=new ArrayList<QueryAddValueFeeResListBean>();
+                                                Map<String, String> heads) throws Exception, BillException {
+        QueryAddValueFeeRes queryAddValueFeeRes = new QueryAddValueFeeRes();
+        QueryAddValueFeeResBean queryAddValueFeeResBean = new QueryAddValueFeeResBean();
+        QueryAddValueFeeResListBean bean = new QueryAddValueFeeResListBean();
+        String query = queryAddValueFeeReq.toString();
+        List<QueryAddValueFeeResListBean> list = new ArrayList<QueryAddValueFeeResListBean>();
 
         Map<String, String> object = new HashMap<String, String>();
         object.put("appID", "1111111");
-        HttpResult result2 = HttpUtil.doPostJson("http://136.160.161.81:8026/billing/acct/std/getOweList", query, object);
-        if(result2.getData()==null){
-            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATE);
+
+        LogUtil.debug("[开始调用远程服务 账单查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+        LogUtil.debug("输入参数[queryAddValueFeeReq]="+queryAddValueFeeReq.toString(),null, this.getClass());
+        HttpResult resultOweList = null;
+        try {
+            resultOweList = HttpUtil.doPostJson(acctApiUrl.getGetOweList(), query, object);
+        } catch (ClientProtocolException e) {
+            LogUtil.error("连接错误", e, this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        } catch (IOException e) {
+            LogUtil.error("IO流错误", e, this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
-        JSONObject json = JSON.parseObject(result2.getData());
-        Map<String,Object> map=(Map)json.get("stdCcaCustomizeBillQueryBill");
-        String acctName=map.get("acctName").toString();
-        List<Map<String,Object>> itemList=(List)map.get("itemInformation");
-        int sumCharge=0;
-        for(int i=0;i<itemList.size();i++){
-            String showlevel=itemList.get(i).get("showlevel").toString();
-            String classId=itemList.get(i).get("classId").toString();
-            String parentClassId=itemList.get(i).get("parentClassId").toString();
-            String charge=itemList.get(i).get("charge").toString();
-            String accNbrDetail=itemList.get(i).get("accNbrDetail").toString();
-            String chargeTypeName=itemList.get(i).get("chargeTypeName").toString();
-            String productOffName=itemList.get(i).get("productOffName").toString();
-            if(classId.equals("2005")||classId.equals("2006")){
-                sumCharge +=Integer.parseInt(charge);
+        //状态码为请求成功
+        if(resultOweList.getCode() != 200){
+            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetOweList(),resultOweList);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }
+        if (resultOweList.getData() == null) {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
+        }
+        LogUtil.debug("[调用远程服务 账单查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
+                +resultOweList.toString(),null,this.getClass());
+
+        JSONObject json = JSON.parseObject(resultOweList.getData());
+        Map<String, Object> map = (Map) json.get("stdCcaCustomizeBillQueryBill");
+        String acctName = map.get("acctName").toString();
+        List<Map<String, Object>> itemList = (List) map.get("itemInformation");
+        int sumCharge = 0;
+        for (int i = 0; i < itemList.size(); i++) {
+            String showlevel = itemList.get(i).get("showlevel").toString();
+            String classId = itemList.get(i).get("classId").toString();
+            String parentClassId = itemList.get(i).get("parentClassId").toString();
+            String charge = itemList.get(i).get("charge").toString();
+            String accNbrDetail = itemList.get(i).get("accNbrDetail").toString();
+            String chargeTypeName = itemList.get(i).get("chargeTypeName").toString();
+            String productOffName = itemList.get(i).get("productOffName").toString();
+            if (classId.equals("2005") || classId.equals("2006")) {
+                sumCharge += Integer.parseInt(charge);
                 bean.setShowlevel(showlevel);
                 bean.setClassId(classId);
                 bean.setParentClassId(parentClassId);
@@ -958,15 +914,15 @@ public class LocalSeviceImpl implements IlocalService {
                 bean.setChargeTypeName(chargeTypeName);
                 bean.setProductOffName(productOffName);
                 list.add(bean);
-                for(int m=0;m<itemList.size();m++){
-                    String showlevel2=itemList.get(m).get("showlevel").toString();
-                    String classId2=itemList.get(m).get("classId").toString();
-                    String parentClassId2=itemList.get(m).get("parentClassId").toString();
-                    String charge2=itemList.get(m).get("charge").toString();
-                    String accNbrDetail2=itemList.get(m).get("accNbrDetail").toString();
-                    String chargeTypeName2=itemList.get(m).get("chargeTypeName").toString();
-                    String productOffName2=itemList.get(m).get("productOffName").toString();
-                    if(classId2.equals(parentClassId)&&classId.equals("2005")){//2005与2006 同一个父类，取一个
+                for (int m = 0; m < itemList.size(); m++) {
+                    String showlevel2 = itemList.get(m).get("showlevel").toString();
+                    String classId2 = itemList.get(m).get("classId").toString();
+                    String parentClassId2 = itemList.get(m).get("parentClassId").toString();
+                    String charge2 = itemList.get(m).get("charge").toString();
+                    String accNbrDetail2 = itemList.get(m).get("accNbrDetail").toString();
+                    String chargeTypeName2 = itemList.get(m).get("chargeTypeName").toString();
+                    String productOffName2 = itemList.get(m).get("productOffName").toString();
+                    if (classId2.equals(parentClassId) && classId.equals("2005")) {//2005与2006 同一个父类，取一个
                         bean.setShowlevel(showlevel2);
                         bean.setClassId(classId2);
                         bean.setParentClassId(parentClassId2);
@@ -976,7 +932,7 @@ public class LocalSeviceImpl implements IlocalService {
                         bean.setProductOffName(productOffName2);
                         list.add(bean);
                     }
-                    if(parentClassId2.equals(classId)){//取其子类
+                    if (parentClassId2.equals(classId)) {//取其子类
                         bean.setShowlevel(showlevel2);
                         bean.setClassId(classId2);
                         bean.setParentClassId(parentClassId2);
@@ -995,9 +951,18 @@ public class LocalSeviceImpl implements IlocalService {
         queryAddValueFeeResBean.setItemInformation(list);
         queryAddValueFeeResBean.setSumCharge(String.valueOf(sumCharge));
         queryAddValueFeeResBean.setAcctName(acctName);
-        result.setStdCcaCustomizeBillQueryBill(queryAddValueFeeResBean);
-        return  result;
+        queryAddValueFeeRes.setStdCcaCustomizeBillQueryBill(queryAddValueFeeResBean);
+        return queryAddValueFeeRes;
 
     }
-
+    private String getHttpErrorInfo(String url,HttpResult result) throws BillException {
+        String errMsg="";
+        try{
+            errMsg= "调用远程服务："+url+"异常，HTTP状态码："+result.getCode()+"，响应内容："+result.getData();
+        }catch(NullPointerException e){
+            LogUtil.error("远程服务无响应",e,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }
+        return errMsg;
+    }
 }
