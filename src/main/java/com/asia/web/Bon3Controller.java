@@ -73,9 +73,9 @@ public class Bon3Controller{
 	}
 	
 	/**
-	 * searchServInfo:(流量卡充值记录查询). <br/>
+	 * getFcDeposit:(流量卡充值记录查询). <br/>
 	 * @author yinyanzhen
-	 * @param getFcDeposit
+	 * @param stdCcrFlowCardRecQry
 	 * @param headers
 	 * @param response
 	 * @return
