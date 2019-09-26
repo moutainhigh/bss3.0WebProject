@@ -2,14 +2,15 @@ package com.asia.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
+import com.asia.common.utils.StringUtil;
 import com.asia.domain.bon3.*;
+import com.asia.internal.common.BillException;
+import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.service.impl.Bon3ServiceImpl;
-import com.asiainfo.account.model.domain.*;
+import com.asiainfo.account.model.domain.StdBalanceItemDetail;
 import com.asiainfo.account.model.domain.StdCcaQueryBalance;
-import com.asiainfo.account.model.domain.StdCcrQueryServ;
 import com.asiainfo.account.model.request.*;
 import com.asiainfo.account.model.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,32 +45,31 @@ public class Bon3Controller{
 	public String searchServInfo(@RequestBody StdCcrQueryServReq stdCcrQueryServ,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/searchServInfo","body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
-			+" header>>"+JSON.toJSONString(headers), this.getClass());
+        LogUtil.debug("START [searchServInfo] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/searchServInfo"+ "body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
+			+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcrQueryServRes info=new StdCcrQueryServRes();
-        StdCcrQueryServRequest queryServReq = new StdCcrQueryServRequest();
-		StdCcrQueryServ queryServ = new StdCcrQueryServ();
-		queryServReq.setStdCcrQueryServ(stdCcrQueryServ.getStdCcrQueryServ());
-		//根据系统落日志表
-		String systemId = stdCcrQueryServ.getSystemId();
 		try {
-			/*info.setStdCcaQueryServ(new StdCcaQueryServ());
-			info.getStdCcaQueryServ().setCustName("客户名称");
-			info.getStdCcaQueryServ().setServId("11123123");
-			info.getStdCcaQueryServ().setProductId("1121212");
-			info.getStdCcaQueryServ().setProductName("产品名称");
-			info.getStdCcaQueryServ().setGroupUser("1");
-			info.getStdCcaQueryServ().setServState("0");
-			info.getStdCcaQueryServ().setStateDate("20180903120101");
-			info.getStdCcaQueryServ().setPaymentFlag("1");
-			info.getStdCcaQueryServ().setHomeAreaCode("0531");*/
-			info = bon3ServiceImpl.searchServInfo(queryServReq, headers);
+            String systemId = stdCcrQueryServ.getSystemId();
+            if (StringUtil.isEmpty(systemId)) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+			info = bon3ServiceImpl.searchServInfo(stdCcrQueryServ, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
+		} catch (BillException err) {
+			LogUtil.error("/bon3/searchServInfo服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+		}catch (Exception e) {
 			LogUtil.error("/bon3/searchServInfo服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 		}
-		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
+        LogUtil.debug("END [searchServInfo] SERVICE...", null, this.getClass());
+        return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 	
 	/**
@@ -230,33 +230,35 @@ public class Bon3Controller{
 	 * @since V1.0.0
 	 */
 	@PostMapping("/getUnitedAccu") 
-	public String getUnitedAccu(@RequestBody StdCcrUserResourceQueryRequest stdCcrUserResourceQuery,
+	public String getUnitedAccu(@RequestBody StdCcrUserResourceQuery stdCcrUserResourceQuery,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/getUnitedBalance", "body>>"+stdCcrUserResourceQuery.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.debug("START [getUnitedAccu] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/getUnitedAccu"+ " body>>"+stdCcrUserResourceQuery.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaUserResourceQueryResponse info=new StdCcaUserResourceQueryResponse();
 		try {
-			/*info.setStdCcaUserResourceQuery(new StdCcaUserResourceQuery());
-			info.getStdCcaUserResourceQuery().setProductOffInfo(new ArrayList<>());
-			
-			StdProductOffInfo temp = new StdProductOffInfo();
-			temp.setProductOfferId("1");
-			temp.setProdOfferInstanceId("1");
-			temp.setOfferType("22");
-			temp.setProductOffName("99元套餐");
-			temp.setRespondRatableQuery(new ArrayList<>());
-			temp.setServGroupQuery(new ArrayList<>());
-			StdServGroupQuery serv =new StdServGroupQuery();
-			temp.getServGroupQuery().add(serv);
-			StdRespondRatableQuery ratable = new StdRespondRatableQuery();
-			temp.getRespondRatableQuery().add(ratable);
-			info.getStdCcaUserResourceQuery().getProductOffInfo().add(temp);*/
+			//校验系统id
+			String systemId = stdCcrUserResourceQuery.getStdCcrUserResourceQuery().getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+
 			info = bon3ServiceImpl.getUnitedAccu(stdCcrUserResourceQuery, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
-			LogUtil.error("/bon3/getUnitedBalance服务调用失败", e, this.getClass());
-			info.setErrorCode(Constant.ResultCode.ERROR);
+		}catch (BillException err) {
+			LogUtil.error("/bon3/getUnitedAccu服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrUserResourceQuery,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+		catch (Exception e) {
+			LogUtil.error("/bon3/getUnitedAccu服务调用失败", e, this.getClass());
+			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+		}
+        LogUtil.debug("END [getUnitedAccu] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -270,26 +272,32 @@ public class Bon3Controller{
 	 * @since V1.0.0
 	 */
 	@PostMapping("/getUnitedAccuDetail")
-	public String getUnitedAccuDetail(@RequestBody StdCcrUserResourceQueryDetailRequest stdCcrUserResourceQueryDetail,
+	public String getUnitedAccuDetail(@RequestBody StdCcrUserResourceQueryDetail stdCcrUserResourceQueryDetail,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/getUnitedAccuDetail", "body>>"+stdCcrUserResourceQueryDetail.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+        LogUtil.debug("START [getUnitedAccuDetail] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/getUnitedAccuDetail"+ " body>>"+stdCcrUserResourceQueryDetail.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaUserResourceQueryDetailResponse info=new StdCcaUserResourceQueryDetailResponse();
 		try {
-			/*info.setStdCcaUserResourceQueryDetail(new StdCcaUserResourceQueryDetail());
-			info.getStdCcaUserResourceQueryDetail().setProductOffInfo(new ArrayList());
-			StdProductOffInfo pro= new StdProductOffInfo();
-			pro.setRespondRatableQuery(new ArrayList<>());
-			pro.getRespondRatableQuery().add(new StdRespondRatableQuery());
-			pro.setServGroupQuery(new ArrayList<>());
-			pro.getServGroupQuery().add(new StdServGroupQuery());
-			info.getStdCcaUserResourceQueryDetail().getProductOffInfo().add(pro);*/
+			String systemId = stdCcrUserResourceQueryDetail.getStdCcrUserResourceQueryDetail().getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			info = bon3ServiceImpl.getUnitedAccuDetail(stdCcrUserResourceQueryDetail, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
+		} catch (BillException err) {
+			LogUtil.error("/bon3/getUnitedAccuDetail服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrUserResourceQueryDetail,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+		}catch (Exception e) {
 			LogUtil.error("/bon3/getUnitedAccuDetail服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.debug("END [getUnitedAccuDetail] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -307,16 +315,30 @@ public class Bon3Controller{
 	public String getCreditInfo(@RequestBody GetCreditInfoReq getCreditInfoReq,
 									  @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/getCreditInfo","body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
+        LogUtil.debug("START [getCreditInfo] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/getCreditInfo"+ " body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		GetCreditInfoRes info=new GetCreditInfoRes();
 		try {
+			String systemId = getCreditInfoReq.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			info = bon3ServiceImpl.getCreditInfo(getCreditInfoReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
+		} catch (BillException err) {
+			LogUtil.error("/bon3/getCreditInfo服务调用失败"+ "body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+		}catch (Exception e) {
 			LogUtil.error("/bon3/getCreditInfo服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.debug("END [getCreditInfo] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -333,16 +355,27 @@ public class Bon3Controller{
 	public String getOweList(@RequestBody GetOweListReq getOweListReq,
 								@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/getOweList","body>>"+JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue)
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
+        LogUtil.debug("START [getOweList] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/getOweList" + " body>>"+JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
 		GetOweListRes info=new GetOweListRes();
 		try {
+			String systemId = getOweListReq.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			info = bon3ServiceImpl.getBon3OweListBy(getOweListReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
+		} catch (BillException err) {
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+		}catch (Exception e) {
 			LogUtil.error("/bon3/getOweList服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.debug("END [getOweList] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -360,16 +393,32 @@ public class Bon3Controller{
 	public String getRealTimeBill(@RequestBody GetRealTimeBillReq getRealTimeBillReq,
 							 @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/getRealTimeBill","body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
+        LogUtil.debug("START [getRealTimeBill] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/getRealTimeBill" + " body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		GetRealTimeBillRes info=new GetRealTimeBillRes();
 		try {
+			String systemId = getRealTimeBillReq.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			info = bon3ServiceImpl.getRealTimeBill(getRealTimeBillReq, headers);
-			headers.forEach((key,val)->{response.setHeader(key, val);});
+			headers.forEach((key, val) -> {
+				response.setHeader(key, val);
+			});
+		} catch (BillException err) {
+			LogUtil.error("/bon3/getRealTimeBill服务调用失败" + " body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
 			LogUtil.error("/bon3/getRealTimeBill服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.debug("END [getRealTimeBill] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -387,8 +436,9 @@ public class Bon3Controller{
 	public String searchAcctInfo(@RequestBody SearchAcctInfoReq searchAcctInfoReq,
 								  @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/searchAcctInfo","body>>"+JSON.toJSONString(searchAcctInfoReq,SerializerFeature.WriteMapNullValue)
-				+" header>>"+JSON.toJSONString(headers), this.getClass());
+        LogUtil.debug("START [searchAcctInfo] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/searchAcctInfo" + " body>>"+JSON.toJSONString(searchAcctInfoReq,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		SearchAcctInfoRes info=new SearchAcctInfoRes();
 		try {
 			info = bon3ServiceImpl.searchAcctInfo(searchAcctInfoReq, headers);
@@ -397,6 +447,7 @@ public class Bon3Controller{
 			LogUtil.error("/bon3/searchAcctInfo服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 		}
+        LogUtil.debug("END [searchAcctInfo] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 

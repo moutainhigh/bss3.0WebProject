@@ -11,6 +11,16 @@ import com.asia.common.baseObj.BaseDomain;
  */
 public class GetOweListReq extends BaseDomain {
     private StdCcrCustomizeBillQueryBill stdCcrCustomizeBillQueryBill;
+    private String systemId;
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
+
     public static class StdCcrCustomizeBillQueryBill{
         private String queryFlag;
         private String billingCycle;

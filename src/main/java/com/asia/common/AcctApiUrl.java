@@ -24,6 +24,12 @@ public class AcctApiUrl {
     private String getUnitedAccuDetail;
     @Value("${bon3.getOweList}")
     private String getOweList;
+    @Value("${bon3.searchAcctInfo}")
+    private String searchAcctInfo;
+    @Value("${bon3.getRealTimeBill}")
+    private String getRealTimeBill;
+    @Value("${bon3.getCreditInfo}")
+    private String getCreditInfo;
     @Value("${api.QueryBalance}")
     private String queryBalance;
     @Value("${api.RechargeBalance}")
@@ -180,7 +186,15 @@ public class AcctApiUrl {
     public String getQryBalance() {
         return qryBalance;
     }
-
+    public String getRealTimeBill() {
+        return getRealTimeBill;
+    }
+    public String getCreditInfo() {
+        return getCreditInfo;
+    }
+    public String searchAcctInfo() {
+        return searchAcctInfo;
+    }
     public void setQryBalance(String qryBalance) {
         this.qryBalance = qryBalance;
     }

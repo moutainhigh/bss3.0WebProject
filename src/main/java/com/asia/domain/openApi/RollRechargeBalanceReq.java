@@ -23,7 +23,7 @@ public class RollRechargeBalanceReq extends BaseDomain {
     //被充值用户的属性
     private Integer destinationAttr ;
     //系统ID
-    private Integer systemId ;
+    private String systemId ;
 
     public OperAttrStruct getOperAttrStruct() {
         return operAttrStruct;
@@ -65,11 +65,11 @@ public class RollRechargeBalanceReq extends BaseDomain {
         this.destinationAttr = destinationAttr;
     }
 
-    public Integer getSystemId() {
+    public String getSystemId() {
         return systemId;
     }
 
-    public void setSystemId(Integer systemId) {
+    public void setSystemId(String systemId) {
         this.systemId = systemId;
     }
 }

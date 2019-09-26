@@ -13,22 +13,18 @@ import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.internal.common.BillException;
 import com.asia.internal.common.ResultInfo;
+import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.internal.errcode.ErrorCodePublicEnum;
 import com.asia.mapper.orclmapper.*;
-import com.asia.mapper.orclmapper.MobileNumberQueryMapper;
 import com.asia.vo.*;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 
@@ -66,20 +62,20 @@ public class OrclCommonDao {
         try {
             List<BillingCycle> billingCycleList = infoOverAccuFeeMapperDao.selectBillingCyle(queryMoth);
             if (billingCycleList.size() == 0) {
-                throw new BillException("1","账期为空");
+                throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
             }
             BillingCycle billingCycle = new BillingCycle();
             billingCycle = billingCycleList.get(0);
             long billingCycleId = billingCycle.getBillingCycleId();
             List<ProdInst> prodInstList = infoOverAccuFeeMapperDao.selectProdInst(accNum);
             if (prodInstList.size() == 0) {
-                throw new BillException("1","用户不存在或已拆机");
+                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
             }
             ProdInst prodInst = prodInstList.get(0);
             long prodInstId = prodInst.getProdInstId();
             List<ProdInstRegion> prodInstRegionList = infoOverAccuFeeMapperDao.selectProdInstRegion(prodInstId);
             if (prodInstRegionList.size() == 0) {
-                throw new BillException("1","用户区域不存在");
+                throw new BillException(ErrorCodeCompEnum.PROD_REGION_ERR);
             }
 
             ProdInstRegion prodInstRegion = prodInstRegionList.get(0);
@@ -109,13 +105,13 @@ public class OrclCommonDao {
             if ("0".equals(action)) {
                 if (cnt == 0) {
                     if (ifUserMeterMapperDao.insertIfUserMeter(ifUserMeter) < 0) {
-                        throw new BillException("1", "开通失败");
+                        throw new BillException(ErrorCodeCompEnum.USER_METER_OPEN_ERR);
                     }
                 }
             } else {
                 if (cnt > 0) {
                     if (ifUserMeterMapperDao.deleteIfUserMeter(servId) < 0) {
-                        throw new BillException("1", "取消失败");
+                        throw new BillException(ErrorCodeCompEnum.USER_METER_CANCEL_ERR);
                     }
                 }
             }

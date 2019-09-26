@@ -5,6 +5,7 @@ import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
+import com.asia.common.utils.LogUtil;
 import com.asia.dao.OrclCommonDao;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.openApi.*;
@@ -255,9 +256,6 @@ public class OpenAPIServiceImpl{
 		RechargeBalanceRes rechargeBalanceRes = new RechargeBalanceRes();
 		if (!"0".equals(resultInfo.getCode())) {
 			throw new BillException(ErrorCodePublicEnum.PAY_SERIALNUMBER_IS_EXIST);
-			/*rechargeBalanceRes.setResultCode(resultInfo.getCode());
-			rechargeBalanceRes.setResultMsg(resultInfo.getMessage());
-			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;*/
 		}//end
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
@@ -269,15 +267,9 @@ public class OpenAPIServiceImpl{
 			String state=stdCcaQueryServ.getServState();
 			if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
 				throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-				/*rechargeBalanceRes.setResultCode("256");
-				rechargeBalanceRes.setResultMsg("用户信息不存在");
-				return rechargeBalanceRes;*/
 			}
 		}else{
 			throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-			/*rechargeBalanceRes.setResultCode("256");
-			rechargeBalanceRes.setResultMsg("用户信息不存在");
-			return rechargeBalanceRes;*/
 		}
 		String localNet=stdCcaQueryServ.getHomeAreaCode();
 
@@ -287,27 +279,20 @@ public class OpenAPIServiceImpl{
 			if (!"433".equals(localNet))
 			{
 				throw new BillException(ErrorCodeCompEnum.ACROSS_CITIES_ERR);
-				//BE_SERV_REJECT_ERROR
-				/*String errinfo = "该业务渠道不允许跨地市缴费！";
-				rechargeBalanceRes.setResultCode("256");
-				rechargeBalanceRes.setResultMsg(errinfo);
-				return rechargeBalanceRes;*/
 			}
 		}
-
-
-		// 取工号配置
-		/*int staffId = -1;
+		LogUtil.info("[开始调用远程服务 余额充值]"+ acctApiUrl.getRechargeBalance(),null, this.getClass());
+		LogUtil.info("输入参数[RechargeBalanceReq]="+body.toString(),null, this.getClass());
+		HttpResult result = null;
 		try {
-			staffId = Integer.parseInt("1");
-		} catch(Exception e) {
-			rechargeBalanceRes.setResultCode("-20");
-			rechargeBalanceRes.setResultMsg("工号格式不对");
-			return  JSON.parseObject(rechargeBalanceRes.toString(),RechargeBalanceRes.class) ;
-
-		}*/
-
-		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRechargeBalance(), body.toString(), headers);
+			result = HttpUtil.doPostJson(acctApiUrl.getRechargeBalance(), body.toString(), headers);
+		} catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -319,14 +304,13 @@ public class OpenAPIServiceImpl{
 				resultInfo = orclCommonDao.insertSerialnumber(body,paymentId,localNet);
 				if (!"0".equals(resultInfo.getCode())) {
 					throw new BillException(ErrorCodeCompEnum.INSERT_CHARGE_BALANCE_ERR);
-					/*rechargeBalanceRes.setResultCode(resultInfo.getCode());
-					rechargeBalanceRes.setResultMsg(resultInfo.getMessage());*/
-					//return  JSON.parseObject(result.getData(),RechargeBalanceRes.class) ;
 				}
             }
 			return JSON.parseObject(result.getData(), RechargeBalanceRes.class) ;
 		}else{
-			return JSON.parseObject(result.getData(), RechargeBalanceRes.class) ;
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getRechargeBalance(),result);
+			LogUtil.error(errorMsg,null,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 	}
 	
@@ -341,7 +325,7 @@ public class OpenAPIServiceImpl{
 	 * @since V1.0.0
 	 */
 	public RtBillItemRes rtBillItem(RtBillItemReq body,Map<String,String> headers,boolean isSms)
-			throws Exception{
+			throws BillException, IOException {
 		// TODO: 2019/7/30 过户增加判断
 		String accNbr = body.getSvcObjectStruct().getObjValue();
 		String objAttr = body.getSvcObjectStruct().getObjAttr();
@@ -373,8 +357,18 @@ public class OpenAPIServiceImpl{
 			Integer effDate = Integer.parseInt(owenCustMap.get("changeDate").toString());
 			body.setStartDate(effDate);
 		}
-
-		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRtBillItem(), body.toString(), headers);
+		LogUtil.info("[开始调用远程服务 详单信息查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+		LogUtil.info("输入参数[RtBillItemReq]="+body.toString(),null, this.getClass());
+		HttpResult result = null;
+		try {
+			result = HttpUtil.doPostJson(acctApiUrl.getRtBillItem(), body.toString(), headers);
+		} catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -385,7 +379,9 @@ public class OpenAPIServiceImpl{
 			}
 			return JSON.parseObject(result.getData(), RtBillItemRes.class) ;
 		}else{
-			return JSON.parseObject(result.getData(), RtBillItemRes.class);
+            String errorMsg=getHttpErrorInfo(acctApiUrl.getSearchServInfo(),result);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 	}
 
@@ -396,8 +392,19 @@ public class OpenAPIServiceImpl{
 	public RollRechargeBalanceRes rollRechargeBalnce(RollRechargeBalanceReq body,
 													 Map<String,String> headers) throws IOException,BillException {
 		RollRechargeBalanceRes rechargeBalanceRes=new RollRechargeBalanceRes();
-		HttpResult result = HttpUtil.doPostJson(acctApiUrl.getRollRechargeBalance(), body.toString(), headers);
-		//状态码为请求成功
+        HttpResult result = null;
+		LogUtil.info("[开始调用远程服务 余额冲正]"+ acctApiUrl.getRollRechargeBalance(),null, this.getClass());
+		LogUtil.info("输入参数[RollRechargeBalanceReq]="+body.toString(),null, this.getClass());
+        try {
+            result = HttpUtil.doPostJson(acctApiUrl.getRollRechargeBalance(), body.toString(), headers);
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+        //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
 			headers.putAll(result.getHeaders());
@@ -406,11 +413,12 @@ public class OpenAPIServiceImpl{
 			ResultInfo resultInfo =orclCommonDao.updateSerialnumber(body,0,reqServiceId);
 			if (!"0".equals(resultInfo.getCode())) {
 				throw new BillException(ErrorCodeCompEnum.INSERT_ROLL_CHARGE_BALANCE_ERR);
-				/*return  JSON.parseObject(resultInfo.toString(),RollRechargeBalanceRes.class) ;*/
 			}
 			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class) ;
 		}else{
-			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getRollRechargeBalance(),result);
+			LogUtil.error(errorMsg,null,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 	}
 
@@ -474,6 +482,22 @@ public class OpenAPIServiceImpl{
 			return new QryReturnBalanceDetailInfoRes();
 		}
 
+	}
+	/**
+	 * 获取调用远程HTTP接口状态码不为200时的错误信息
+	 * @param url
+	 * @param result
+	 * @return
+	 */
+	private String getHttpErrorInfo(String url,HttpResult result) throws BillException {
+		String errMsg="";
+		try{
+			errMsg= "调用远程服务："+url+"异常，HTTP状态码："+result.getCode()+"，响应内容："+result.getData();
+		}catch(NullPointerException e){
+			LogUtil.error("远程服务无响应",e,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+		return errMsg;
 	}
 
 }
