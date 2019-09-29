@@ -82,14 +82,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
 
 
         String custName = stdCcaQueryServ.getCustName();
@@ -100,11 +94,13 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
         List<Info3mExeFee> info3mExeFeeList = new ArrayList<>();
+        LogUtil.debug("[Begin 数据库查询月账话费高额]-------------------",null,this.getClass());
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = info3mExeFeeMapperDao.selectInfoHighFeeByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
             info3mExeFeeList = info3mExeFeeMapperDao.selectInfo3MExeFee(accNumb, billMonth);
         }
+        LogUtil.debug("[数据库查询月账话费高额] " + info3mExeFeeList.toString(),null,this.getClass());
         if (info3mExeFeeList.size() > 0) {
             info3mExeFeeMap = info3mExeFeeList.get(0);
             intfCommServiceListBean.setAccNbr(accNbr);
@@ -139,34 +135,51 @@ public class LocalSeviceImpl implements IlocalService {
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "", "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
 
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
+        String itemGroupName = "";
         List<InfoHighFeeQue> info3mExeFeeList = new ArrayList<>();
+        LogUtil.debug("[Begin 数据库查询实时话费高额]-------------------",null,this.getClass());
         //按起止时间查询
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = infoHighFeeQueMapperDao.selectInfoHighFeeByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
             info3mExeFeeList = infoHighFeeQueMapperDao.selectInfoHighFee(accNumb, billMonth);
         }
+        LogUtil.debug("[数据库查询实时话费高额] " + info3mExeFeeList.toString(),null,this.getClass());
         if (info3mExeFeeList.size() > 0) {
             infoHighFeeQueMap = info3mExeFeeList.get(0);
             intfCommServiceListBean.setAccNbr(accNbr);
             intfCommServiceListBean.setCustName(custName);
             intfCommServiceListBean.setServId(servId);
+            switch (infoHighFeeQueMap.getItemGroupId()){
+                case 1 :
+                    itemGroupName = "国内语音";break;
+                case 2:
+                    itemGroupName = "国际语音";break;
+                case 3:
+                    itemGroupName = "国内数据";break;
+                case 4:
+                    itemGroupName = "国际数据";break;
+                case 5:
+                    itemGroupName = "增值业务";break;
+                case 6:
+                    itemGroupName = "国际数据漫出";break;
+                case 7:
+                    itemGroupName = "国际短信漫出";break;
+                case 8:
+                    itemGroupName = "国际语音漫出";break;
+                    default:
+                        break;
+            }
             intfCommServiceListBean.setRetCol1(infoHighFeeQueMap.getItemGroupId().toString());
-            intfCommServiceListBean.setRetCol2(infoHighFeeQueMap.getItemGroupId().toString());
+            intfCommServiceListBean.setRetCol2(itemGroupName);
             intfCommServiceListBean.setRetCol3(infoHighFeeQueMap.getCharge().toString());
             intfCommServiceListBean.setRetCol4(infoHighFeeQueMap.getAlarmDate());
             intfCommServiceList.add(intfCommServiceListBean);
@@ -196,26 +209,22 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
         List<InfoAccu5gUser> info3mExeFeeList = new ArrayList<>();
+        LogUtil.debug("[Begin 数据库查询日流量告警]-------------------",null,this.getClass());
         //按起止时间查询
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUserByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
             info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
         }
+        LogUtil.debug("[数据库查询日流量告警] " + info3mExeFeeList.toString(),null,this.getClass());
         //List<InfoAccu5gUser> info3mExeFeeList = infoAccu5gUserMapperDao.selectInfoAccu5gUser(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoAccu5gUserMap = info3mExeFeeList.get(0);
@@ -254,14 +263,8 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -269,12 +272,14 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
         List<InfoAccu2Service> info3mExeFeeList = new ArrayList<>();
+        LogUtil.debug("[Begin 数据库查询累积量超出提醒]-------------------",null,this.getClass());
         //按起止时间查询
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
             info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
         }
+        LogUtil.debug("[数据库查询累积量超出提醒] " + info3mExeFeeList.toString(),null,this.getClass());
         //List<InfoAccu2Service> info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoAccu2ServiceMap = info3mExeFeeList.get(0);
@@ -312,14 +317,8 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -327,12 +326,14 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String queryTimeType = body.getQueryTimeType();
         List<InfoNoAccu2Service> info3mExeFeeList = new ArrayList<>();
+        LogUtil.debug("[Begin 数据库查询月账话费高额]-------------------",null,this.getClass());
         //按起止时间查询
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
             info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
         }
+        LogUtil.debug("[数据库查询月账话费高额] " + info3mExeFeeList.toString(),null,this.getClass());
         //List<InfoNoAccu2Service> info3mExeFeeList = infoNoAccu2ServiceMapperDao.selectInfoNoAccu2Service(accNumb, billMonth);
         if (info3mExeFeeList.size() > 0) {
             infoNoAccu2ServiceMap = info3mExeFeeList.get(0);
@@ -372,14 +373,8 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -426,14 +421,8 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -443,12 +432,14 @@ public class LocalSeviceImpl implements IlocalService {
         String endDate = body.getEndDate();
         String queryTimeType = body.getQueryTimeType();
         List<RemindKdRemain> info3mExeFeeList = new ArrayList<>();
+        LogUtil.debug("[Begin 数据库查询宽带到期提醒]-------------------",null,this.getClass());
         //按起止时间查询
         if ("1".equals(queryTimeType)) {
             info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
             info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemainByMonth(accNumb, billMonth);
         }
+        LogUtil.debug("[数据库查询宽带到期提醒]-------------------",null,this.getClass());
         //List<RemindKdRemain> info3mExeFeeList = remindKdRemainMapperDao.selectRemindKdRemain(accNumb, beginDate,endDate);
         if (info3mExeFeeList.size() > 0) {
             remindKdRemainMap = info3mExeFeeList.get(0);
@@ -477,6 +468,8 @@ public class LocalSeviceImpl implements IlocalService {
 
     }
 
+
+
     //累积量超出量查询
     @Override
     public QryMonthHighFeeRes qryOverAccuFee(QryMonthHighFeeReq body, Map<String, String> headers)
@@ -493,17 +486,8 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            /*qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg("用户信息为空");
-            return qryMonthHighFeeRes;*/
-        }
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -525,9 +509,7 @@ public class LocalSeviceImpl implements IlocalService {
             qryMonthHighFeeRes.setMsg("SUCCESS");
             return qryMonthHighFeeRes;
         } else {
-            qryMonthHighFeeRes.setResult("1");
-            qryMonthHighFeeRes.setMsg(resultInfo.getMessage());
-            return qryMonthHighFeeRes;
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
     }
 
@@ -542,15 +524,8 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
-
+        //查询用户是否存在
+        checkServExist(stdCcaQueryServ);
         //访问数据库
         resultInfo = orclCommonDao.preserveMeterPrintLog(body);
         if ("0".equals(resultInfo.getCode())) {
@@ -558,12 +533,8 @@ public class LocalSeviceImpl implements IlocalService {
             meterPrintActionRes.setCode("0");
             meterPrintActionRes.setMsg(resultInfo.getMessage());
             return meterPrintActionRes;
-        } else if ("1".equals(resultInfo.getCode())) {
-            meterPrintActionRes.setResult("1");
-            meterPrintActionRes.setMsg(resultInfo.getMessage());
-            return meterPrintActionRes;
         } else {
-            meterPrintActionRes.setResult("2");
+            meterPrintActionRes.setResult("1");
             meterPrintActionRes.setMsg(resultInfo.getMessage());
             return meterPrintActionRes;
         }
@@ -579,14 +550,8 @@ public class LocalSeviceImpl implements IlocalService {
         String action = body.getAction();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //查询用户
+        checkServExist(stdCcaQueryServ);
         String servId = stdCcaQueryServ.getServId();
 
         String areaCode = stdCcaQueryServ.getHomeAreaCode();
@@ -597,14 +562,10 @@ public class LocalSeviceImpl implements IlocalService {
             userMeterOrderRes.setCode("0");
             userMeterOrderRes.setMsg(resultInfo.getMessage());
             return userMeterOrderRes;
-        } else if ("1".equals(resultInfo.getCode())) {
-            userMeterOrderRes.setResult("1");
-            userMeterOrderRes.setMsg(resultInfo.getMessage());
-            return userMeterOrderRes;
         } else {
             userMeterOrderRes.setResult("1");
-
-            // qryMonthHighFeeRes.setMsg(resultInfo.getM);
+            userMeterOrderRes.setCode(resultInfo.getCode());
+            userMeterOrderRes.setMsg(resultInfo.getMessage());
             return userMeterOrderRes;
         }
     }
@@ -622,14 +583,8 @@ public class LocalSeviceImpl implements IlocalService {
         String valueType = body.getValueType();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        //用户信息查询
+        checkServExist(stdCcaQueryServ);
         String servId = stdCcaQueryServ.getServId();
         queryAgreementConsumptionRes.setResult("0");
         List<InfoHdUserFee> infoHdUserFeeList = infoHdUserFeeMapperDao.selectInfoHdUserFee(servId);
@@ -665,14 +620,7 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
                 "", headers);
-        if (stdCcaQueryServ != null) {
-            String state = stdCcaQueryServ.getServState();
-            if (state.equals("2HN") || state.equals("2HX") || state.equals("2HF")) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-        } else {
-            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-        }
+        checkServExist(stdCcaQueryServ);
         return orclCommonDao.moBileNumberQuery(mobileNumberQueryReq, headers);
     }
 
@@ -850,8 +798,6 @@ public class LocalSeviceImpl implements IlocalService {
         result.setMsg("成功");
         result.setOweCharge("0");
         result.setOweInfoMsg("成功");
-
-
         return result;
     }
 
@@ -955,6 +901,13 @@ public class LocalSeviceImpl implements IlocalService {
         return queryAddValueFeeRes;
 
     }
+    /**
+     * @Author WangBaoQiang
+     * @Description //调用账务能力失败信息
+     * @Date 19:42 2019/9/29
+     * @Param [url, result]
+     * @return java.lang.String
+    */
     private String getHttpErrorInfo(String url,HttpResult result) throws BillException {
         String errMsg="";
         try{
@@ -964,5 +917,26 @@ public class LocalSeviceImpl implements IlocalService {
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
         return errMsg;
+    }
+    /**
+     * @Author WangBaoQiang
+     * @Description //查询用户是否存在
+     * @Date 19:42 2019/9/29
+     * @Param [stdCcaQueryServ]
+     * @return void
+    */
+    private void checkServExist(StdCcaQueryServListBean stdCcaQueryServ) throws BillException {
+        if (stdCcaQueryServ != null) {
+            String state = stdCcaQueryServ.getServState();
+            if ("2HN".equals(state) || "2HX".equals(state) || "2HF".equals(state)) {
+                String errorMsg = "找不到用户或帐户档案";
+                LogUtil.error(errorMsg,null,this.getClass());
+                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+            }
+        } else {
+            String errorMsg = "找不到用户或帐户档案";
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+        }
     }
 }

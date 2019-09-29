@@ -244,7 +244,7 @@ public class Bon3ServiceImpl {
 	 * @Param [stdCcrRealTimeBillQueryRequest, headers]
 	 * @return com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse
 	*/
-	public StdCcaRealTimeBillQueryResponse getOweList(StdCcrRealTimeBillQueryRequest stdCcrRealTimeBillQueryRequest, Map<String,String> headers)
+	public StdCcaRealTimeBillQueryResponse getOweList(GetOweListReq stdCcrRealTimeBillQueryRequest, Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
         HttpResult result = null;
         LogUtil.debug("[开始调用远程服务 实时账单查询]"+ acctApiUrl.getGetOweList(),null, this.getClass());

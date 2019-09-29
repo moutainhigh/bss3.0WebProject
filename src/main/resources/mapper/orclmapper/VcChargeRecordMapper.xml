@@ -189,8 +189,13 @@
     update  ACCT.VC_CHARGE_RECORD t set
       t.state = -1,t.UNPAY_PAYMENT_ID=#{unpayPaymentId},
       t.UNPAY_OTHER_PAYMENT_ID=#{unpayOtherPaymentId}
-    where
-        PAYMENT_ID = #{paymentId} and  OTHER_PAYMENT_ID= #{otherPaymentId}
+    where 1 = 1
+    <if test = "paymentId != null">
+      and PAYMENT_ID = #{paymentId}
+    </if>
+    <if test = "otherPaymentId != null">
+     and  OTHER_PAYMENT_ID = #{OTHER_PAYMENT_ID}
+    </if>
   </update>
 
 </mapper>
