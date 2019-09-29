@@ -13,6 +13,8 @@ import com.asia.domain.openApi.QryInstantFeeListRes.ItemInformation;
 import com.asia.domain.openApi.QryPaymentRes.PaymentInfo;
 import com.asia.domain.openApi.QryPaymentRes.PaymentInfo.AccNbrDetail;
 import com.asia.domain.openApi.child.BillingCycle;
+import com.asia.domain.openApi.child.OperAttrStruct;
+import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.internal.common.BillException;
 import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
@@ -30,6 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -296,8 +300,68 @@ public class OpenApiConroller{
 				+body.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RechargeBalanceRes returnInfo=new RechargeBalanceRes();
 		try {
+		    //验证操作人属性
+            OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+            String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+            if (!isOperAttrStruct[0].equals("0")) {
+                String errinfo = isOperAttrStruct[1];
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+            }
+            // 验证操作对象属性
+            SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+            String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+            if (!isSvcObjectStruct[0].equals("0")) {
+                String errinfo = isSvcObjectStruct[1];
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+            }
+            //充值请求流水
+            String flowId = body.getFlowId();
+            if (StringUtil.isEmpty(flowId)) {
+                String errinfo = "充值请求流水[flowId]字段不能为空，请重新输入！";
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_IS_EMPTY);
+            }
+            if (flowId.length() > 50) {
+                String errinfo = "充值请求流水[flowId=" + flowId + "]不能超过50位，请重新输入！";
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_IS_OUTRANGE);
+            }
+            //充值量验证
+            Integer rechargeAmount = body.getRechargeAmount();
+            if (StringUtil.isEmpty(rechargeAmount)) {
+                String errinfo = "充值量[rechargeAmount]字段不能为空，请重新输入！";
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_CHARGE_IS_EMPTY);
+            }
+            if (rechargeAmount <= 0) {
+                String errinfo = "缴费金额[rechargeAmount=" + rechargeAmount + "]不能小于等于0";
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_CHARGE_IS_NEG);
+            }
+            //充值量单位验证 0– 分（金额） 1– 分钟（时长） 2– 次数 3– 流量（KB)
+            String rechargeUnit = body.getRechargeUnit();
+            if (rechargeUnit != null && !"".equals(rechargeUnit)) {
+                if (!("0".equals(rechargeUnit) || "1".equals(rechargeUnit) || "2".equals(rechargeUnit)
+                        || "3".equals(rechargeUnit))) {
+                    String errinfo = "充值量单位类型[rechargeUnit=" + rechargeUnit + "]错误，请重新输入";
+                    LogUtil.error(errinfo, null, this.getClass());
+                    throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_UNIT_WRONG);
+                }
+            }
+            //充值请求来源
+            String rechargeSource = body.getRechargeSource();
+            if (rechargeSource == null || "".equals(rechargeSource)) {
+                String errinfo = "充值请求来源[rechargeSource]不能为空，请重新输入";
+                LogUtil.error(errinfo, null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_CHARGE_RESOURCE);
+            }
+            //验证系统id
 			String systemId = body.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
+                String errinfo = "充值系统标识[systemId]不能为空，请重新输入！";
+                LogUtil.error(errinfo, null, this.getClass());
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
@@ -312,6 +376,7 @@ public class OpenApiConroller{
 			returnInfo.setResultMsg(e.getMessage());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.info("[输出参数] rechargeBalanceRes=" + returnInfo.toString(),null, this.getClass());
 		LogUtil.info("END [RechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -344,11 +409,14 @@ public class OpenApiConroller{
 			LogUtil.error("/openApi/rtBillItem服务调用失败", err, this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+            return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
 			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
-			returnInfo.setResultCode("-1");
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
+            return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.info("[输出参数] rtBillItemRes=" + returnInfo.toString(),null, this.getClass());
 		LogUtil.info("END [RtBillItem] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -367,9 +435,48 @@ public class OpenApiConroller{
 		LogUtil.info("/openApi/RollRechargeBalance" + " body>>"+body.toString()
 				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RollRechargeBalanceRes returnInfo=new RollRechargeBalanceRes();
+        String errinfo = "";
 		try {
+            //验证操作人属性
+            OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+            String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+            if (!isOperAttrStruct[0].equals("0")) {
+                errinfo = isOperAttrStruct[1];
+                LogUtil.error(errinfo+ "---请求参数[rollRechargeBalanceRequest]=" + body.toString(), null, this.getClass());
+                throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+            }
+            // 验证原充值请求流水号
+            if (StringUtil.isEmpty(body.getSrcServiceId())) {
+                errinfo = "原充值请求流水号[SrcServiceId]不能为空";
+                LogUtil.error(errinfo + "---请求参数[rollRechargeBalanceRequest]=" + body.toString(), null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_IS_EMPTY);
+            }
+            // 验证余额充值回退请求流水号
+            if (StringUtil.isEmpty(body.getReqServiceId())) {
+                errinfo = "余额充值回退请求流水号[ReqServiceId]不能为空";
+                LogUtil.error(errinfo + "---请求参数[rollRechargeBalanceRequest]=" + body.toString(), null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_IS_EMPTY);
+            }
+            //判断号码是否异常
+            String destinationAccount = body.getDestinationAccount();
+            if(StringUtil.isEmpty(destinationAccount)){
+                errinfo = "被充值用户的标识[destinationAccount]不能为空";
+                LogUtil.error(errinfo+"---请求参数[rollRechargeBalanceRequest]="+ body.toString(), null, this.getClass());
+                throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_ATTR_EMPTY);
+            }
+            Integer destinationAttr = body.getDestinationAttr();
+            if(destinationAttr==0){
+                String substring = destinationAccount.substring(0, 1);
+                if(!"0".equals(substring)){
+                    errinfo = "被充值用户的标识[destinationAccount]固话号码异常";
+                    LogUtil.error(errinfo+"---请求参数[rollRechargeBalanceRequest]="+ body.toString(), null, this.getClass());
+                    throw new BillException(ErrorCodeCompEnum.OHTER_PAYMENT_ATTR_ILLEGAL);
+                }
+            }
 			String systemId = body.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
+				errinfo = "系统来源ID[SystemId]字段不能为空";
+				LogUtil.error(errinfo+"---请求参数[rollRechargeBalanceRequest]="+ body.toString(), null, this.getClass());
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
             returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
@@ -385,6 +492,7 @@ public class OpenApiConroller{
 			returnInfo.setResultMsg(e.getMessage());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.info("[输出参数] rollRechargeBalanceRes=" + returnInfo.toString(),null, this.getClass());
 		LogUtil.info("END [RollRechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -414,6 +522,7 @@ public class OpenApiConroller{
 			returnInfo.setResultCode("-1");
 			returnInfo.setResultMsg(e.getMessage());
 		}
+        LogUtil.info("[输出参数] rtBillItemRes=" + returnInfo.toString(),null, this.getClass());
 		LogUtil.info("END [RtBillItemNoSms] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -497,6 +606,127 @@ public class OpenApiConroller{
         }
         return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
     }
+    /**
+     * 判断操作人属性是否符合规则
+     * @param operAttrStruct
+     * @return
+     */
+    public String[] isOperAttrStruct(OperAttrStruct operAttrStruct){
+        String[] result=new String[2];
+        if(operAttrStruct==null){
+            result[0]="";
+            result[1]="操作人属性[operAttrStruct]不能为空，请重新输入";
+            return result;
+        }
 
+        //操作工号标识
+        Integer staffId =operAttrStruct.getStaffId();
+        if(staffId==null){
+            result[0]="1002";
+            result[1]="操作工号标识[staffId]字段不能为空，请重新输入";
+            return result;
+        }
+        //操作组织标识
+//		Integer operOrgId=operAttrStruct.getOperOrgId();
+//		if(operOrgId==null){
+//			result[0]="1002";
+//			result[1]="操作组织标识[operOrgId]字段不能为空，请重新输入";
+//			return result;
+//		}
+        result[0]="0";
+        result[1]="";
+        return result;
+    }
+    /**
+     * 判断服务条件对象是否符合规则
+     * @param svcObjectStruct
+     * @return
+     * 		result[0] 错误码
+     * 		result[1] 错误信息
+     */
+    public String[] isSvcObjectStruct(SvcObjectStruct svcObjectStruct){
+        String[] result=new String[2];
 
+        if(svcObjectStruct==null){
+            result[0]="";
+            result[1]="服务条件对象[svcObjectStruct]不能为空，请重新输入";
+            return result;
+        }
+
+        //对象类型 1-帐户标识 2-用户标识 3-用户号码 4-客户标识 5-销售品实例
+        String objType=svcObjectStruct.getObjType();
+        if(objType==null||"".equals(objType)){
+            result[0]="1002";
+            result[1]="对象类型[objType]字段不能为空，请重新输入";
+            return result;
+        }else if(!("1".equals(objType)||"2".equals(objType)||"3".equals(objType)||"4".equals(objType)||"5".equals(objType))){
+            result[0]="1000";
+            result[1]="对象类型[objType]输入有误，请重新输入";
+            return result;
+        }
+
+        //对象值 如果是用户号码且用户号码属性为固话、宽带时，此值要求带区号，含0
+        String objValue=svcObjectStruct.getObjValue();
+        if(objValue==null||"".equals(objValue)){
+            result[0]="1002";
+            result[1]="对象值[objValue]字段不能为空，请重新输入";
+            return result;
+        }
+
+        //用户号码属性,仅当对象类型为3时，有效   0-固话 1-小灵通 2-移动 3-宽带 4-智能公话 5-互联星空 6-天翼高清 99-未知
+        String objAttr=svcObjectStruct.getObjAttr();
+        if("3".equals(objType)){
+            if(objAttr==null||"".equals(objAttr)){
+                result[0]="1002";
+                result[1]="用户号码属性[objAttr]字段不能为空，请重新输入";
+                return result;
+            }else if(!("0".equals(objType)||"1".equals(objType)||"2".equals(objType)||"3".equals(objType)||"4".equals(objType)
+                    ||"5".equals(objType)||"6".equals(objType)||"99".equals(objType))){
+                result[0]="1000";
+                result[1]="用户号码属性[objAttr]输入有误，请重新输入";
+                return result;
+            }
+        }
+        /*if("2".equals(objAttr)&&!numberPhone(objValue)){
+            result[0]="1011";
+            result[1]="号码[objType]字段不符合规则，请重新输入";
+            return result;
+        }*/
+        //数据范围 1-按帐户范围 2-按用户范围 3-按客户范围 4-按销售品范围
+        String dataArea=svcObjectStruct.getDataArea();
+        if(!(dataArea==null||"".equals(dataArea))){
+            if(!("1".equals(dataArea)||"2".equals(dataArea)||"3".equals(dataArea)||"4".equals(dataArea))){
+                result[0]="1000";
+                result[1]="数据范围[dataArea]输入有误，请重新输入";
+                return result;
+            }
+        }
+
+        result[0]="0";
+        result[1]="";
+        return result;
+    }
+    /**
+     * 判断手机号是否符合规则
+     *
+     * @param nbr
+     *            手机号
+     * @return boolean
+     */
+    public static boolean numberPhone(String nbr) {
+        String phone = nbr;
+        String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9])|(19[0,5-9]))\\d{8}$";
+        if (phone.length() != 11) {
+            return false;
+        } else {
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(phone);
+            boolean isMatch = m.matches();
+            if (isMatch) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }

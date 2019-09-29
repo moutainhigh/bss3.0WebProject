@@ -1173,7 +1173,7 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     GET_CHECK_FLAG_ERROR("未定义", "未定义"),
     CREATE_SCAN_PAYMENT_ID_FAIL("未定义", "未定义"),
     CASH_BILL_STAFF_ID_EMPTY("69604032","CashBill中工号为空"),
-    QUERY_NO_DATA("100002","远端数据为空"),
+    QUERY_NO_DATA("100002","记录为空"),
     QUERY_BILL_Err("100003","查询欠费失败"),
     ACROSS_CITIES_ERR("100004","该业务渠道不允许跨地市缴费"),
     INSERT_CHARGE_BALANCE_ERR("100005","插入充值信息失败"),
@@ -1186,7 +1186,23 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     PROD_REGION_ERR("100008", "区域编号为空"),
     SYSTEM_ID_ERROR("100009", "系统id为空"),
     RREMOTE_ACCESS_FAILE_EXCEPTION("100010", "系统内部调用远程服务异常"),
-    STAFF_ID_IS_EMPTY("100011", "工号为空");
+    STAFF_ID_IS_EMPTY("100011", "工号为空"),
+    OHTER_PAYMENT_IS_EMPTY("100012","缴费流水为空"),
+    OHTER_PAYMENT_IS_OUTRANGE("100013","缴费流水超长"),
+    OHTER_PAYMENT_CHARGE_IS_EMPTY("100014","充值金额为空"),
+    OHTER_PAYMENT_CHARGE_IS_NEG("100015", "充值金额为负"),
+    OHTER_PAYMENT_UNIT_WRONG("100016", "充值单位不合法"),
+    OHTER_PAYMENT_CHARGE_RESOURCE("100017", "充值来源为空"),
+    OHTER_PAYMENT_ACCOUNT_EMPTY("100018", "充值用户的标识为空"),
+    OHTER_PAYMENT_ATTR_EMPTY("100019", "充值用户属性为空"),
+    OHTER_PAYMENT_ATTR_ILLEGAL("100019", "充值用户的标识不合法"),
+    REQUEST_BODY_IS_EMPTY("100020", "请求报文为空"),
+    QUERY_FLAG_IS_EMPTY("100021", "查询类型为空"),
+    QUERY_ATTR_IS_EMPTY("100022", "查询值类型为空"),
+    QUERY_VALUE_IS_EMPTY("100023", "查询值为空"),
+    QUERY_TIME_IS_EMPTY("100024", "查询时间为空"),
+    QUERY_TIME_IS_ILLEGAL("100025", "查询时间不合法"),
+    ACTION_TYPE_IS_EMPTY("100026", "动作为空");
 
 
 

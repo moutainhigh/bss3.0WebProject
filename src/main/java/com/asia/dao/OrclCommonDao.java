@@ -1,5 +1,7 @@
 package com.asia.dao;
 
+import com.asia.common.baseObj.Constant;
+import com.asia.common.utils.LogUtil;
 import com.asia.common.utils.StringUtil;
 import com.asia.common.utils.UUID;
 import com.asia.domain.localApi.MeterPrintActionReq;
@@ -56,6 +58,13 @@ public class OrclCommonDao {
     CreditFeeRecordMapper creditFeeRecordMapperDao;
     @Autowired
     BussihallChargeRecordMapper bussihallChargeRecordMapperDao;
+    /**
+     * @Author WangBaoQiang
+     * @Description //
+     * @Date 20:51 2019/9/29
+     * @Param [accNum, queryMoth, map]
+     * @return com.asia.internal.common.ResultInfo
+    */
     public ResultInfo overAccuData(long accNum, String queryMoth, Map map) {
         String paramName = "";
         Map returnMap = new HashMap();
@@ -90,10 +99,17 @@ public class OrclCommonDao {
             logger.error("", err);
         }catch (Exception e) {
             logger.error("", e);
-            resultInfo.setResultInfo(new BillException("2",e));
+            resultInfo.setResultInfo(new BillException("1",e));
         }
         return resultInfo;
     }
+    /**
+     * @Author WangBaoQiang
+     * @Description //详单禁查
+     * @Date 21:49 2019/9/29
+     * @Param [servId, action, areaCode]
+     * @return com.asia.internal.common.ResultInfo
+    */
     public ResultInfo userMeterOrder(String servId, String action, String areaCode) {
         ResultInfo resultInfo = new ResultInfo();
        long cnt =  ifUserMeterMapperDao.selectcountUserMeter(servId);
@@ -120,49 +136,23 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(err);
         } catch (Exception e) {
             logger.error("", e);
-            resultInfo.setResultInfo(new BillException("2",e));
+            resultInfo.setResultInfo(new BillException(Constant.ResultCode.ERROR,e));
         }
         return  resultInfo;
     }
-
+    /**
+     * @Author WangBaoQiang
+     * @Description //详单打印日志记录
+     * @Date 21:49 2019/9/29
+     * @Param [meterPrintActionReq]
+     * @return com.asia.internal.common.ResultInfo
+    */
     public ResultInfo preserveMeterPrintLog(MeterPrintActionReq meterPrintActionReq) {
         ResultInfo resultInfo = new ResultInfo();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         EChannlMeterPrintLog eChannlMeterPrintLog = new EChannlMeterPrintLog();
         try {
-            if (StringUtil.isEmpty(meterPrintActionReq.getAccNbr())) {
-                throw  new BillException("1","AccNbr节点元素不符合规范, AccNbr节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getSystemId())) {
-                throw  new BillException("1","systemId节点元素不符合规范, systemId节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getActionType())) {
-                throw new BillException("1","actionType节点元素不符合规范, actionType节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getAreaCode())) {
-                throw new BillException("1", "areaCode节点元素不符合规范, areaCode节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getPrintMonth())) {
-                throw new BillException("1", "printMonth节点元素不符合规范, printMonth节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getTerminalId())) {
-                throw new BillException("1", "terminalId节点元素不符合规范, terminalId节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getStaffId())) {
-                throw new BillException("1", "staffId节点元素不符合规范, staffId节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getSerialId())) {
-                throw new BillException("1", "serialId节点元素不符合规范, serialId节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getPrintDate())) {
-                throw new BillException("1", "printDate节点元素不符合规范, printDate节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getValidDate())) {
-                throw new BillException("1", "validDate节点元素不符合规范, validDate节点元素值不能null");
-            }
-            if (StringUtil.isEmpty(meterPrintActionReq.getExpirDate())) {
-                throw new BillException("1", "expirDate节点元素不符合规范, expirDate节点元素值不能null");
-            }
+
             eChannlMeterPrintLog.setActionDate(sdf.parse(meterPrintActionReq.getPrintDate()));
             eChannlMeterPrintLog.setExpirDate(sdf.parse(meterPrintActionReq.getExpirDate()));
             eChannlMeterPrintLog.setPrintMonth(meterPrintActionReq.getPrintMonth());
@@ -209,6 +199,8 @@ public class OrclCommonDao {
                         remark = type + "  未知类型清单打印";
             }
             eChannlMeterPrintLog.setActionRemark(remark);
+            LogUtil.debug("[Begin 插入详单打印记录]----------------",null, this.getClass());
+            LogUtil.debug("[详单打印记录]：" + eChannlMeterPrintLog.toString(),null, this.getClass());
             int ret = eChannlMeterPrintLogMapperDao.insertEChannlMeterPrintLog(eChannlMeterPrintLog);
             if (ret < 0) {
                 throw new BillException("1","详单打印记录失败");
@@ -217,8 +209,9 @@ public class OrclCommonDao {
         } catch (BillException err) {
             resultInfo.setResultInfo(err);
         } catch (Exception e) {
-            resultInfo.setResultInfo(new BillException("2",e));
+            resultInfo.setResultInfo(new BillException("1",e));
         }
+        LogUtil.debug("[end 插入详单打印记录]----------------",null, this.getClass());
         return  resultInfo;
     }
     /**
@@ -239,7 +232,7 @@ public class OrclCommonDao {
         String channelId = operAttrStruct.getOperOrgId().toString();
         String tableName = "";
         long cnt=0;
-        long flowId = rechargeBalanceReq.getFlowId();
+        long flowId = Long.parseLong(rechargeBalanceReq.getFlowId());
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             cnt = vcChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
         } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
@@ -288,11 +281,12 @@ public class OrclCommonDao {
         //号码类型
         String valueType = svcObjectStruct.getObjAttr();
         //缴费流水
-        long flowId = rechargeBalanceReq.getFlowId();
+        long flowId = Long.parseLong(rechargeBalanceReq.getFlowId());
         //充值金额
         long amount = rechargeBalanceReq.getRechargeAmount();
         String tableName = "";
         long cnt=0;
+        LogUtil.info("[开始插入缴费流水]----------------",null, this.getClass());
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             vcChargeRecord.setAccNbr(acctNbr);
             vcChargeRecord.setBusiCode(channelId);
@@ -305,6 +299,7 @@ public class OrclCommonDao {
             vcChargeRecord.setPaymentId(paymentId);
             vcChargeRecord.setSoRegionCode("431");
             vcChargeRecord.setIsRegionCode(lanId);
+            LogUtil.info("[VC入库信息]" + vcChargeRecord.toString(),null, this.getClass());
             cnt = vcChargeRecordMapperDao.insertVcChargeRecord(vcChargeRecord);
         } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setAccNbr(acctNbr);
@@ -317,6 +312,7 @@ public class OrclCommonDao {
             terminalChargeRecord.setState(Short.parseShort("0"));
             terminalChargeRecord.setPaymentId(paymentId);
             terminalChargeRecord.setIsRegionCode(lanId);
+            LogUtil.info("[自助终端入库信息]" + terminalChargeRecord.toString(),null, this.getClass());
             cnt = terminalChargeRecordMapperDao.insertTerminalChargeRecord(terminalChargeRecord);
         } else if ("9".equals(channelId)) {//crm credit_fee_record
             creditFeeRecord.setAccNbr(acctNbr);
@@ -328,6 +324,7 @@ public class OrclCommonDao {
             creditFeeRecord.setCreatedDate(new Date());
             creditFeeRecord.setState(Short.parseShort("0"));
             creditFeeRecord.setPaymentId(paymentId);
+            LogUtil.info("[CRM入库信息]" + creditFeeRecord.toString(),null, this.getClass());
             cnt = creditFeeRecordMapperDao.insertCreditFeeRecord(creditFeeRecord);
         } else {//bussihall_charge_record
             bussihallChargeRecord.setAccNbr(acctNbr);
@@ -340,12 +337,16 @@ public class OrclCommonDao {
             bussihallChargeRecord.setState(Short.parseShort("0"));
             bussihallChargeRecord.setPaymentId(paymentId);
             bussihallChargeRecord.setIsRegionCode(lanId);
+            LogUtil.info("[其他渠道入库信息]" + bussihallChargeRecord.toString(),null, this.getClass());
             cnt = bussihallChargeRecordMapperDao.insertBussihallChargeRecord(bussihallChargeRecord);
         }
         if (cnt < 0) {
+            LogUtil.error("[缴费信息入库失败]" + " 外围缴费流水：" + otherPaymentId + " 渠道：" + channelId,
+                    null, this.getClass());
             resultInfo.setResultInfo(ErrorCodePublicEnum.DB_INSERT_ERROR);
             return resultInfo;
         }
+        LogUtil.info("[插入缴费流水结束]----------------",null, this.getClass());
         resultInfo.setResultInfo(ErrorCodePublicEnum.SUCCESS);
         return resultInfo;
     }
@@ -371,27 +372,28 @@ public class OrclCommonDao {
         String channelId = operAttrStruct.getOperOrgId().toString();
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
-        //外围流水
+        //源外围流水
         String otherPaymentId = rechargeBalanceReq.getSrcServiceId().toString();
         //号码
         String acctNbr = svcObjectStruct.getObjValue();
         //号码类型
         String valueType = svcObjectStruct.getObjAttr();
         //缴费流水
-        long flowId = Long.parseLong(rechargeBalanceReq.getSrcServiceId());
+        long flowId = Long.parseLong(rechargeBalanceReq.getReqServiceId());
         //充值金额
         //long amount = rechargeBalanceReq.getRechargeAmount();
         String tableName = "";
         long cnt=0;
+        LogUtil.info("[修改冲正流水记录]----------------",null, this.getClass());
+        LogUtil.info("源流水号：" + otherPaymentId + "请求流水号" + reqServiceId
+                + "",null, this.getClass());
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
-            vcChargeRecord.setPaymentId(paymentId);
             vcChargeRecord.setOtherPaymentId(otherPaymentId);
             vcChargeRecord.setUnpayOtherPaymentId(reqServiceId);
             vcChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
             cnt = vcChargeRecordMapperDao.updateVcChargeRecord(vcChargeRecord);
-        } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
+        } /*else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setOtherPaymentId(otherPaymentId);
-            terminalChargeRecord.setPaymentId(paymentId);
             terminalChargeRecord.setUnpayOtherPaymentId(reqServiceId);
             terminalChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
             cnt = terminalChargeRecordMapperDao.updateTerminalChargeRecord(terminalChargeRecord);
@@ -405,11 +407,13 @@ public class OrclCommonDao {
             bussihallChargeRecord.setUnpayOtherPaymentId(reqServiceId);
             bussihallChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
             cnt = bussihallChargeRecordMapperDao.updateBussihallChargeRecord(bussihallChargeRecord);
-        }
+        }*/
         if (cnt < 0) {
             resultInfo.setResultInfo(ErrorCodePublicEnum.DB_INSERT_ERROR);
             return resultInfo;
         }
+        LogUtil.info("[修改冲正流水记录结束]----------------",null, this.getClass());
+        LogUtil.info(flowId + "冲正成功",null, this.getClass());
         resultInfo.setResultInfo(ErrorCodePublicEnum.SUCCESS);
         return resultInfo;
     }

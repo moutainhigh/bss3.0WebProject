@@ -33,6 +33,7 @@ public class QryMonthHighFeeReq extends BaseDomain {
     private long queryValue;
     private String queryValueType;
     private String userType;
+    private String systemId;
 
     public String getBeginDate() {
         return beginDate;
@@ -104,5 +105,13 @@ public class QryMonthHighFeeReq extends BaseDomain {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 }

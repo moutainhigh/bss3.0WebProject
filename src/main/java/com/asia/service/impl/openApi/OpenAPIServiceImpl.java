@@ -263,14 +263,8 @@ public class OpenAPIServiceImpl{
 		//调账务服务查询用户信息
 		stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "", "",
 				"",headers);
-		if(stdCcaQueryServ!=null){
-			String state=stdCcaQueryServ.getServState();
-			if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
-				throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-			}
-		}else{
-			throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-		}
+		//用户校验
+		checkServExist(stdCcaQueryServ);
 		String localNet=stdCcaQueryServ.getHomeAreaCode();
 
 		//特殊业务组的跨地市缴费限制
@@ -334,29 +328,27 @@ public class OpenAPIServiceImpl{
 		//调用用户信息查询接口 begin
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
 		stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNbr), "", objType, objAttr,headers);
-		if(stdCcaQueryServ!=null){
-			String state=stdCcaQueryServ.getServState();
-			if(state.equals("2HN")||state.equals("2HX")||state.equals("2HF")){
-				throw new BillException(ErrorCodePublicEnum.SERV_OR_ACCT_NOT_FOUND);
-			}
-		}else{
-			throw new BillException(ErrorCodePublicEnum.SERV_OR_ACCT_NOT_FOUND);
-		}
+		//用户校验
+		checkServExist(stdCcaQueryServ);
 		String servId = stdCcaQueryServ.getServId();
 		//增加详单禁查功能
 		long iCount = ifUserMeterMapperDao.selectcountUserMeter(servId);
 		if (iCount > 0) {
+            String errorMsg = "用户" + accNbr + "已开通详单禁查功能";
+            LogUtil.error(errorMsg,null,this.getClass());
 			throw new BillException("2004","用户" + accNbr + "已开通详单禁查功能");
 		}
 
 		map.put("servId", servId);
 		//读取过户表,取过户时间为开始时间
+        LogUtil.info("[读取用户的过户信息]",null, this.getClass());
 		List<Map<String, Object>> owenCustList = intfServCustChangeContrastDao.selectIntfServCustChangeContrast(map);
 		if (owenCustList.size() > 1) {
 			Map owenCustMap = owenCustList.get(0);
 			Integer effDate = Integer.parseInt(owenCustMap.get("changeDate").toString());
 			body.setStartDate(effDate);
 		}
+        LogUtil.info("[用户的过户信息]" + owenCustList.toString(), null, this.getClass());
 		LogUtil.info("[开始调用远程服务 详单信息查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
 		LogUtil.info("输入参数[RtBillItemReq]="+body.toString(),null, this.getClass());
 		HttpResult result = null;
@@ -409,10 +401,16 @@ public class OpenAPIServiceImpl{
 			headers.clear();
 			headers.putAll(result.getHeaders());
 			rechargeBalanceRes=JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
-			String reqServiceId=rechargeBalanceRes.getReqServiceId();
-			ResultInfo resultInfo =orclCommonDao.updateSerialnumber(body,0,reqServiceId);
-			if (!"0".equals(resultInfo.getCode())) {
-				throw new BillException(ErrorCodeCompEnum.INSERT_ROLL_CHARGE_BALANCE_ERR);
+			ResultInfo resultInfo = null;
+			//VC更新缴费历史表记录
+			if ("4012".equals(body.getOperAttrStruct().getOperOrgId())) {
+				String reqServiceId=rechargeBalanceRes.getReqServiceId();
+				resultInfo = orclCommonDao.updateSerialnumber(body,0,reqServiceId);
+				if (!"0".equals(resultInfo.getCode())) {
+					String errorMsg = "更新缴费记录表，记录冲正信息异常";
+					LogUtil.error(errorMsg,null,this.getClass());
+					throw new BillException(ErrorCodeCompEnum.INSERT_ROLL_CHARGE_BALANCE_ERR);
+				}
 			}
 			return JSON.parseObject(result.getData(), RollRechargeBalanceRes.class) ;
 		}else{
@@ -499,5 +497,25 @@ public class OpenAPIServiceImpl{
 		}
 		return errMsg;
 	}
-
+	/**
+	 * @Author WangBaoQiang
+	 * @Description //查询用户是否存在
+	 * @Date 19:42 2019/9/29
+	 * @Param [stdCcaQueryServ]
+	 * @return void
+	 */
+	private void checkServExist(StdCcaQueryServListBean stdCcaQueryServ) throws BillException {
+		if (stdCcaQueryServ != null) {
+			String state = stdCcaQueryServ.getServState();
+			if ("2HN".equals(state) || "2HX".equals(state) || "2HF".equals(state)) {
+				String errorMsg = "找不到用户或帐户档案";
+				LogUtil.error(errorMsg,null,this.getClass());
+				throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+			}
+		} else {
+			String errorMsg = "找不到用户或帐户档案";
+			LogUtil.error(errorMsg,null,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+		}
+	}
 }

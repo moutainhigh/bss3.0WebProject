@@ -202,15 +202,6 @@ public class Bon3Controller{
 		LogUtil.opeLog("/bon3/getUnitedBalance", "body>>"+stdCcrQueryUnitedBalance.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		StdCcaQueryBalanceBalanceResponse info=new StdCcaQueryBalanceBalanceResponse();
 		try {
-			/*info.setStdCcaQueryBalanceBalance(new StdCcaQueryBalanceBalance());
-			info.getStdCcaQueryBalanceBalance().setPaymentFlag("1");
-			info.getStdCcaQueryBalanceBalance().setTotalBalanceAvailable("10000");
-			info.getStdCcaQueryBalanceBalance().setBalanceInformation(new ArrayList<>());
-			
-			StdBalanceInformation temp = new StdBalanceInformation();
-			temp.setBalanceAvailable("10000");
-			temp.setBalanceTypeFlag("0");
-			info.getStdCcaQueryBalanceBalance().getBalanceInformation().add(temp);*/
 			info = bon3ServiceImpl.getUnitedBalance(stdCcrQueryUnitedBalance, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
@@ -237,6 +228,18 @@ public class Bon3Controller{
 		LogUtil.debug("/bon3/getUnitedAccu"+ " body>>"+stdCcrUserResourceQuery.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaUserResourceQueryResponse info=new StdCcaUserResourceQueryResponse();
 		try {
+            //查询类型
+            if (StringUtil.isEmpty(stdCcrUserResourceQuery.getStdCcrUserResourceQuery().getResourceInformation().getQueryFlag())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+            }
+            //查询值类型
+            if (StringUtil.isEmpty(stdCcrUserResourceQuery.getStdCcrUserResourceQuery().getResourceInformation().getDestinationAttr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            //查询值
+            if (StringUtil.isEmpty(stdCcrUserResourceQuery.getStdCcrUserResourceQuery().getResourceInformation().getAccNbr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
 			//校验系统id
 			String systemId = stdCcrUserResourceQuery.getStdCcrUserResourceQuery().getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
@@ -250,14 +253,17 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
+            LogUtil.error("输出参数 getUnitedAccuResponse=" + info.toString(), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
 		catch (Exception e) {
 			LogUtil.error("/bon3/getUnitedAccu服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
+            LogUtil.error("输出参数 getUnitedAccuResponse=" + info.toString(), e, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.debug("输出参数 getUnitedAccuResponse=" + info.toString(), null, this.getClass());
         LogUtil.debug("END [getUnitedAccu] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -279,10 +285,23 @@ public class Bon3Controller{
 		LogUtil.debug("/bon3/getUnitedAccuDetail"+ " body>>"+stdCcrUserResourceQueryDetail.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaUserResourceQueryDetailResponse info=new StdCcaUserResourceQueryDetailResponse();
 		try {
+		    //系统id
 			String systemId = stdCcrUserResourceQueryDetail.getStdCcrUserResourceQueryDetail().getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
+            //查询类型
+            if (StringUtil.isEmpty(stdCcrUserResourceQueryDetail.getStdCcrUserResourceQueryDetail().getResourceInformation().getQueryFlag())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+            }
+            //查询值类型
+            if (StringUtil.isEmpty(stdCcrUserResourceQueryDetail.getStdCcrUserResourceQueryDetail().getResourceInformation().getDestinationAttr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            //查询值
+            if (StringUtil.isEmpty(stdCcrUserResourceQueryDetail.getStdCcrUserResourceQueryDetail().getResourceInformation().getAccNbr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
 			info = bon3ServiceImpl.getUnitedAccuDetail(stdCcrUserResourceQueryDetail, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err) {
@@ -290,13 +309,16 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
+            LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + info.toString(), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
 			LogUtil.error("/bon3/getUnitedAccuDetail服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
+            LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + info.toString(), e, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + info.toString(), null, this.getClass());
         LogUtil.debug("END [getUnitedAccuDetail] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -324,6 +346,22 @@ public class Bon3Controller{
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
+            //查询类型
+            if (StringUtil.isEmpty(getCreditInfoReq.getStdCcrQueryCredit().getQueryFlag())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+            }
+            //账期
+            if (StringUtil.isEmpty(getCreditInfoReq.getStdCcrQueryCredit().getBillingCycle())) {
+                throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+            }
+            //查询值类型
+            if (StringUtil.isEmpty(getCreditInfoReq.getStdCcrQueryCredit().getDestinationAttr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            //查询值
+            if (StringUtil.isEmpty(getCreditInfoReq.getStdCcrQueryCredit().getDestinationId())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
 			info = bon3ServiceImpl.getCreditInfo(getCreditInfoReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err) {
@@ -331,13 +369,17 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
+            LogUtil.error("输出参数[getCreditInfoRes]=" + info.toString(), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
-			LogUtil.error("/bon3/getCreditInfo服务调用失败", e, this.getClass());
+            LogUtil.error("/bon3/getCreditInfo服务调用失败"+ "body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
+            LogUtil.error("输出参数[getCreditInfoRes]=" + info.toString(), e, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+        LogUtil.debug("输出参数[getCreditInfoRes]=" + info.toString(), null, this.getClass());
         LogUtil.debug("END [getCreditInfo] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -360,21 +402,48 @@ public class Bon3Controller{
 				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
 		GetOweListRes info=new GetOweListRes();
 		try {
+			if (getOweListReq == null) {
+				throw new BillException(ErrorCodeCompEnum.REQUEST_BODY_IS_EMPTY);
+			}
+			//系统标示
 			String systemId = getOweListReq.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
+			//查询类型
+			if (StringUtil.isEmpty(getOweListReq.getStdCcrCustomizeBillQueryBill().getQueryFlag())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+            //账期
+            if (StringUtil.isEmpty(getOweListReq.getStdCcrCustomizeBillQueryBill().getBillingCycle())) {
+                throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+            }
+            //查询值类型
+            if (StringUtil.isEmpty(getOweListReq.getStdCcrCustomizeBillQueryBill().getDestinationAttr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            //查询值
+            if (StringUtil.isEmpty(getOweListReq.getStdCcrCustomizeBillQueryBill().getAccNbr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
 			info = bon3ServiceImpl.getBon3OweListBy(getOweListReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err) {
+			LogUtil.error("输入参数[getOweListReq]=" + JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue),
+                    err, this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
+			LogUtil.error("输出参数[getOweListRes]=" + info.toString(), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
-			LogUtil.error("/bon3/getOweList服务调用失败", e, this.getClass());
+			LogUtil.error("输入参数[getOweListReq]=" + JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue),
+                    e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			LogUtil.error("输出参数[getOweListRes]=" + info.toString(), e, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.debug("输出参数 getOweListReq=" + getOweListReq.toString(), null, this.getClass());
         LogUtil.debug("END [getOweList] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -398,6 +467,22 @@ public class Bon3Controller{
 				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		GetRealTimeBillRes info=new GetRealTimeBillRes();
 		try {
+            if (getRealTimeBillReq == null) {
+                throw new BillException(ErrorCodeCompEnum.REQUEST_BODY_IS_EMPTY);
+            }
+			//查询类型
+			if (StringUtil.isEmpty(getRealTimeBillReq.getStdCcrRealTimeBillQuery().getQueryFlag())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+			//查询值类型
+			if (StringUtil.isEmpty(getRealTimeBillReq.getStdCcrRealTimeBillQuery().getDestinationAttr())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+			}
+			//查询值
+			if (StringUtil.isEmpty(getRealTimeBillReq.getStdCcrRealTimeBillQuery().getAccNbr())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+			}
+			//系统id
 			String systemId = getRealTimeBillReq.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
@@ -411,14 +496,18 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
+            LogUtil.error("输出参数[GetRealTimeBillRes]=" + info.toString(), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
-			LogUtil.error("/bon3/getRealTimeBill服务调用失败", e, this.getClass());
+            LogUtil.error("/bon3/getRealTimeBill服务调用失败" + " body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
+            LogUtil.error("输出参数[GetRealTimeBillRes]=" + info.toString(), e, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
         LogUtil.debug("END [getRealTimeBill] SERVICE...", null, this.getClass());
+        LogUtil.debug("输出参数 getRealTimeBill=" + info.toString(), null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
