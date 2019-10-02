@@ -58,17 +58,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         } catch (Exception e) {
-            LogUtil.error("/local/queryMonthHighFee服务调用失败", e, this.getClass());
+            LogUtil.error("/local/queryMonthHighFee服务调用失败" + "body>>" + JSON.toJSONString(qryMonthHighFeeReq, SerializerFeature.WriteMapNullValue)
+                    + " header>>" + JSON.toJSONString(headers), e, this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [queryMonthHighFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -82,7 +83,6 @@ public class LocalController {
                 +" header>>"+JSON.toJSONString(headers),null, this.getClass());
         QryMonthHighFeeRes qryMonthHighFeeRes=new QryMonthHighFeeRes();
         try {
-
             //用户校验
             checkCommonServiceRequest(qryMonthHighFeeReq);
             qryMonthHighFeeRes = localSevice.qryRealHighFee(qryMonthHighFeeReq,headers);
@@ -93,17 +93,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
-            LogUtil.error("/local/qryRealHighFee服务调用失败", e, this.getClass());
+            LogUtil.error("/local/qryRealHighFee服务调用失败"+ "body>>"+JSON.toJSONString(qryMonthHighFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qryRealHighFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -130,17 +131,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
-            LogUtil.error("/local/qryDataHighFlow服务调用失败", e, this.getClass());
+            LogUtil.error("/local/qryDataHighFlow服务调用失败"+ "body>>"+JSON.toJSONString(qryMonthHighFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qryDataHighFlow] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -164,17 +166,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
-            LogUtil.error("/local/qryAccuOverFlow服务调用失败", e, this.getClass());
+            LogUtil.error("/local/qryAccuOverFlow服务调用失败"+ "body>>"+JSON.toJSONString(qryMonthHighFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qryAccuOverFlow] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -198,17 +201,17 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
             LogUtil.error("/local/qrySendMsgUser服务调用失败", e, this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qrySendMsgUser] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -232,17 +235,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
-            LogUtil.error("/local/qryUserFlowFee服务调用失败", e, this.getClass());
+            LogUtil.error("/local/qryUserFlowFee服务调用失败"+ "body>>"+JSON.toJSONString(qryMonthHighFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qryUserFlowFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -266,17 +270,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
-            LogUtil.error("/local/qryWlanRemain服务调用失败", e, this.getClass());
+            LogUtil.error("/local/qryWlanRemain服务调用失败"+ "body>>"+JSON.toJSONString(qryMonthHighFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qryUserFlowFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -300,17 +305,18 @@ public class LocalController {
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(err.getErrCode());
             qryMonthHighFeeRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
-            LogUtil.error("/local/qryOverAccuFee服务调用失败", e, this.getClass());
+            LogUtil.error("/local/qryOverAccuFee服务调用失败"+ "body>>"+JSON.toJSONString(qryMonthHighFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             qryMonthHighFeeRes.setResult("1");
             qryMonthHighFeeRes.setCode(Constant.ResultCode.ERROR);
             qryMonthHighFeeRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + qryMonthHighFeeRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[qryMonthHighFeeRes]=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + qryMonthHighFeeRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 qryMonthHighFeeRes=" + JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [qryOverAccuFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(qryMonthHighFeeRes, SerializerFeature.WriteMapNullValue);
     }
@@ -344,17 +350,18 @@ public class LocalController {
             userMeterOrderRes.setResult("1");
             userMeterOrderRes.setCode(err.getErrCode());
             userMeterOrderRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[userMeterOrderRes]=" + userMeterOrderRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[userMeterOrderRes]=" + JSON.toJSONString(userMeterOrderRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(userMeterOrderRes, SerializerFeature.WriteMapNullValue);
         } catch (Exception e) {
-            LogUtil.error("/local/userMeterOrderService服务调用失败", e, this.getClass());
+            LogUtil.error("/local/userMeterOrderService服务调用失败"+ "body>>"+JSON.toJSONString(userMeterOrderReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             userMeterOrderRes.setResult("1");
             userMeterOrderRes.setCode(Constant.ResultCode.ERROR);
             userMeterOrderRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[userMeterOrderRes]=" + userMeterOrderRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[userMeterOrderRes]=" + JSON.toJSONString(userMeterOrderRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(userMeterOrderRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 userMeterOrderRes=" + userMeterOrderRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 userMeterOrderRes=" + JSON.toJSONString(userMeterOrderRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [userMeterOrderService] SERVICE...", null, this.getClass());
         return JSON.toJSONString(userMeterOrderRes, SerializerFeature.WriteMapNullValue);
     }
@@ -409,7 +416,7 @@ public class LocalController {
             meterPrintActionRes.setResult("1");
             meterPrintActionRes.setCode(err.getErrCode());
             meterPrintActionRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[printRecordService]=" + meterPrintActionRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[printRecordService]=" + JSON.toJSONString(meterPrintActionRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(meterPrintActionRes, SerializerFeature.WriteMapNullValue);
         } catch (Exception e) {
             LogUtil.error("/local/printRecordService服务调用失败"+ "body>>"+JSON.toJSONString(meterPrintActionRes,SerializerFeature.WriteMapNullValue)
@@ -417,10 +424,10 @@ public class LocalController {
             meterPrintActionRes.setResult("1");
             meterPrintActionRes.setCode(Constant.ResultCode.ERROR);
             meterPrintActionRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[printRecordService]=" + meterPrintActionRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[printRecordService]=" + JSON.toJSONString(meterPrintActionRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(meterPrintActionRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 meterPrintActionRes=" + meterPrintActionRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 meterPrintActionRes=" + JSON.toJSONString(meterPrintActionRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [printRecordService] SERVICE...", null, this.getClass());
         return JSON.toJSONString(meterPrintActionRes, SerializerFeature.WriteMapNullValue);
     }
@@ -448,7 +455,7 @@ public class LocalController {
             queryAgreementConsumptionRes.setResult("1");
             queryAgreementConsumptionRes.setCode(err.getErrCode());
             queryAgreementConsumptionRes.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[queryAgreementConsumptionRes]=" + queryAgreementConsumptionRes.toString(), err, this.getClass());
+            LogUtil.error("输出参数[queryAgreementConsumptionRes]=" + JSON.toJSONString(queryAgreementConsumptionReq,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(queryAgreementConsumptionRes, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
             LogUtil.error("/local/queryAgreementConsumption服务调用失败"+ "body>>"+JSON.toJSONString(queryAgreementConsumptionReq,SerializerFeature.WriteMapNullValue)
@@ -456,10 +463,10 @@ public class LocalController {
             queryAgreementConsumptionRes.setResult("1");
             queryAgreementConsumptionRes.setCode(Constant.ResultCode.ERROR);
             queryAgreementConsumptionRes.setMsg(e.getMessage());
-            LogUtil.error("输出参数[queryAgreementConsumptionRes]=" + queryAgreementConsumptionRes.toString(), e, this.getClass());
+            LogUtil.error("输出参数[queryAgreementConsumptionRes]=" + JSON.toJSONString(queryAgreementConsumptionRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(queryAgreementConsumptionRes, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 queryAgreementConsumptionRes=" + queryAgreementConsumptionRes.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 queryAgreementConsumptionRes=" + JSON.toJSONString(queryAgreementConsumptionRes,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [queryAgreementConsumption] SERVICE...", null, this.getClass());
         return JSON.toJSONString(queryAgreementConsumptionRes, SerializerFeature.WriteMapNullValue);
     }
@@ -497,17 +504,17 @@ public class LocalController {
                     +" header>>"+JSON.toJSONString(headers), err,this.getClass());
             info.setErrorCode(err.getErrCode());
             info.setErrorMsg(err.getErrMsg());
-            LogUtil.error("输出参数[StdCcaRealTimeBillQueryResponse]=" + info.toString(), err, this.getClass());
+            LogUtil.error("输出参数[StdCcaRealTimeBillQueryResponse]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
             LogUtil.error("/local/queryAddValueList服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrRealTimeBillQueryRequest,SerializerFeature.WriteMapNullValue)
                     +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             info.setErrorCode(Constant.ResultCode.ERROR);
             info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数[StdCcaRealTimeBillQueryResponse]=" + stdCcrRealTimeBillQueryRequest.toString(), e, this.getClass());
+            LogUtil.error("输出参数[StdCcaRealTimeBillQueryResponse]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 stdCcaRealTimeBillQueryResponse=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 stdCcaRealTimeBillQueryResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [queryAddValueList] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
@@ -537,7 +544,7 @@ public class LocalController {
             info.setResult("1");
             info.setCode(err.getErrCode());
             info.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[mobileNumberQueryRes]=" + mobileNumberQueryReq.toString(), err, this.getClass());
+            LogUtil.error("输出参数[mobileNumberQueryRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }catch (Exception e) {
             LogUtil.error("/local/mobileNumberQueryService服务调用失败"+ "body>>"+JSON.toJSONString(mobileNumberQueryReq,SerializerFeature.WriteMapNullValue)
@@ -545,10 +552,10 @@ public class LocalController {
             info.setResult("1");
             info.setErrorCode(Constant.ResultCode.ERROR);
             info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数[mobileNumberQueryRes]=" + mobileNumberQueryReq.toString(), e, this.getClass());
+            LogUtil.error("输出参数[mobileNumberQueryRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 mobileNumberQueryRes=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 mobileNumberQueryRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [mobileNumberQueryService] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
@@ -579,17 +586,17 @@ public class LocalController {
                     +" header>>"+JSON.toJSONString(headers), err,this.getClass());
             info.setIsSucess(err.getErrCode());
             info.setMsg(err.getErrMsg());
-            LogUtil.error("输出参数[accountBalanceCpcpQueryRes]=" + accountBalanceCpcpQueryReq.toString(), err, this.getClass());
+            LogUtil.error("输出参数[accountBalanceCpcpQueryRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         } catch (Exception e) {
             LogUtil.error("/local/accountBalanceCpcpQuery服务调用失败"+ "body>>"+JSON.toJSONString(accountBalanceCpcpQueryReq,SerializerFeature.WriteMapNullValue)
                     +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             info.setIsSucess(Constant.ResultCode.ERROR);
             info.setMsg(e.getMessage());
-            LogUtil.error("输出参数[accountBalanceCpcpQueryRes]=" + accountBalanceCpcpQueryReq.toString(), e, this.getClass());
+            LogUtil.error("输出参数[accountBalanceCpcpQueryRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 accountBalanceCpcpQueryRes=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 accountBalanceCpcpQueryRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [accountBalanceCpcpQuery] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
@@ -629,16 +636,17 @@ public class LocalController {
                     +" header>>"+JSON.toJSONString(headers), err,this.getClass());
             info.setErrorCode(err.getErrCode());
             info.setErrorMsg(err.getMessage());
-            LogUtil.error("输出参数[queryAddValueFeeRes]=" + queryAddValueFeeReq.toString(), err, this.getClass());
+            LogUtil.error("输出参数[queryAddValueFeeRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         } catch (Exception e) {
-            logger.error("/local/queryAddValueFeeReq服务调用失败", e, this.getClass());
+            LogUtil.error("/local/queryAddValueFeeReq服务调用失败"+ "body>>"+JSON.toJSONString(queryAddValueFeeReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
             info.setErrorCode(Constant.ResultCode.ERROR);
             info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数[queryAddValueFeeRes]=" + queryAddValueFeeReq.toString(), e, this.getClass());
+            LogUtil.error("输出参数[queryAddValueFeeRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 queryAddValueFeeRes=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 queryAddValueFeeRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [queryAddValueFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }

@@ -27,18 +27,5 @@ public class DubboController{
 		acctService.test();
 		return null;
 	}
-	/*@RequestMapping("/test1")
-	public String getSystemSwitch (){
 
-		SystemSwitchQuery systemSwitchQuery = new SystemSwitchQuery();
-		systemSwitchQuery.setStaffID(1L);
-		systemSwitchQuery.setSwitchID(123L);
-
-		SystemSwitchQueryRequest systemSwitchQueryRequest = new SystemSwitchQueryRequest();
-		systemSwitchQueryRequest.setSystemSwitchQuery(systemSwitchQuery);
-
-		SystemSwitchQueryResponse systemSwitchQueryResponse = systemSwitchService.getSystemSwitch(systemSwitchQueryRequest);
-
-		return JSON.toJSONString(systemSwitchQueryResponse);
-	}*/
 }

@@ -367,16 +367,20 @@ public class OpenApiConroller{
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){
-			LogUtil.error("/openApi/rechargeBalance服务调用失败", err, this.getClass());
+			LogUtil.error("/openApi/rechargeBalance服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[rechargeBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
-			LogUtil.error("/openApi/rechargeBalance服务调用失败", e, this.getClass());
+			LogUtil.error("/openApi/rechargeBalance服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[rechargeBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.info("[输出参数] rechargeBalanceRes=" + returnInfo.toString(),null, this.getClass());
+        LogUtil.info("[输出参数] rechargeBalanceRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [RechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -395,28 +399,49 @@ public class OpenApiConroller{
 			@RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
 		//记录业务日志
 		LogUtil.info("START [RtBillItem] SERVICE...",null, this.getClass());
-		LogUtil.info("/openApi/rtBillItem" + " body>>"+body.toString()
+		LogUtil.info("/openApi/rtBillItem" + " body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
 			+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
 		try {
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			//验证系统id
 			String systemId = body.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
+			//验证查询类型
+			if (body.getQryType() == null||"".equals(body.getQryType())) {
+				throw new BillException(ErrorCodeCompEnum.QRY_TYPE_IS_EMPTY);
+			}
 			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,true);
 			headers.forEach(response::setHeader);
 		} catch (BillException err) {
-			LogUtil.error("/openApi/rtBillItem服务调用失败", err, this.getClass());
+			LogUtil.error("/openApi/rtBillItem服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[RtBillItemRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
-			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
+			LogUtil.error("/openApi/rtBillItem服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[RtBillItemRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.info("[输出参数] rtBillItemRes=" + returnInfo.toString(),null, this.getClass());
+		LogUtil.info("[输出参数] rtBillItemRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [RtBillItem] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -432,7 +457,7 @@ public class OpenApiConroller{
 									 @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
 		LogUtil.info("START [RollRechargeBalance] SERVICE...",null, this.getClass());
-		LogUtil.info("/openApi/RollRechargeBalance" + " body>>"+body.toString()
+		LogUtil.info("/openApi/RollRechargeBalance" + " body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
 				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		RollRechargeBalanceRes returnInfo=new RollRechargeBalanceRes();
         String errinfo = "";
@@ -482,17 +507,21 @@ public class OpenApiConroller{
             returnInfo=openAPIServiceImpl.rollRechargeBalnce(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){
-			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", err, this.getClass());
+			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[rollRechargeBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
-			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败", e, this.getClass());
+			LogUtil.error("/openApi/rollRechargeBalnce服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[rollRechargeBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.info("[输出参数] rollRechargeBalanceRes=" + returnInfo.toString(),null, this.getClass());
+        LogUtil.info("[输出参数] rollRechargeBalanceRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [RollRechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
@@ -508,21 +537,49 @@ public class OpenApiConroller{
 							 @RequestHeader Map<String,String> headers,HttpServletResponse response) throws IOException {
 		//记录业务日志
 		LogUtil.info("START [RtBillItemNoSms] SERVICE...",null, this.getClass());
-		LogUtil.info("/openApi/RtBillItemNoSms" +" body>>"+body.toString()
+		LogUtil.info("/openApi/RtBillItemNoSms" +" body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
 				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
 		RtBillItemRes returnInfo=new RtBillItemRes();
 		try {
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			//验证系统id
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+			//验证查询类型
+			if (body.getQryType() == null||"".equals(body.getQryType())) {
+				throw new BillException(ErrorCodeCompEnum.QRY_TYPE_IS_EMPTY);
+			}
 			returnInfo = openAPIServiceImpl.rtBillItem(body, headers,false);
 			headers.forEach(response::setHeader);
 		} catch (BillException err) {
+			LogUtil.error("/openApi/rtBillItemNoSms服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[RtBillItemRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
-			LogUtil.error("/openApi/rtBillItem服务调用失败", e, this.getClass());
-			returnInfo.setResultCode("-1");
+			LogUtil.error("/openApi/rtBillItemNoSms服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[RtBillItemRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.info("[输出参数] rtBillItemRes=" + returnInfo.toString(),null, this.getClass());
+        LogUtil.info("[输出参数] rtBillItemRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [RtBillItemNoSms] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
