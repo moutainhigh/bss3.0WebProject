@@ -65,10 +65,9 @@ public class OrclCommonDao {
      * @Param [accNum, queryMoth, map]
      * @return com.asia.internal.common.ResultInfo
     */
-    public ResultInfo overAccuData(long accNum, String queryMoth, Map map) {
-        String paramName = "";
-        Map returnMap = new HashMap();
+    public ResultInfo overAccuData(String prodInstId, String queryMoth, Map map,String areaCode) {
         try {
+            LogUtil.debug("[begin 数据库读取账期]-------------------------------",null,this.getClass());
             List<BillingCycle> billingCycleList = infoOverAccuFeeMapperDao.selectBillingCyle(queryMoth);
             if (billingCycleList.size() == 0) {
                 throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
@@ -76,29 +75,18 @@ public class OrclCommonDao {
             BillingCycle billingCycle = new BillingCycle();
             billingCycle = billingCycleList.get(0);
             long billingCycleId = billingCycle.getBillingCycleId();
-            List<ProdInst> prodInstList = infoOverAccuFeeMapperDao.selectProdInst(accNum);
-            if (prodInstList.size() == 0) {
-                throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
-            }
-            ProdInst prodInst = prodInstList.get(0);
-            long prodInstId = prodInst.getProdInstId();
-            List<ProdInstRegion> prodInstRegionList = infoOverAccuFeeMapperDao.selectProdInstRegion(prodInstId);
-            if (prodInstRegionList.size() == 0) {
-                throw new BillException(ErrorCodeCompEnum.PROD_REGION_ERR);
-            }
-
-            ProdInstRegion prodInstRegion = prodInstRegionList.get(0);
-            String areaCode = prodInstRegion.getRegionId().toString();
-            areaCode = areaCode.substring(0, 3);
-            String strTableName = "mobile_data_event_0" + areaCode + "_" + billingCycleId;
-            List<Map<String, Object>> overFeeAccuList = infoOverAccuFeeMapperDao.selectMobileDataEvent(String.valueOf(prodInstId), strTableName);
+            LogUtil.debug("[数据库读取账期] " + billingCycleId,null,this.getClass());
+            String strTableName = "mobile_data_event_" + areaCode + "_" + billingCycleId;
+            LogUtil.debug("[begin 数据库读取累积量超出量]-------------------------------",null,this.getClass());
+            List<Map<String, Object>> overFeeAccuList = infoOverAccuFeeMapperDao.selectMobileDataEvent(prodInstId, strTableName);
+            LogUtil.debug("[数据库读取累积量超出量] " + overFeeAccuList.toString(),null,this.getClass());
             map = overFeeAccuList.get(0);
             resultInfo.setResultInfo(ErrorCodePublicEnum.SUCCESS);
         } catch (BillException err) {
+            LogUtil.error("累计量查询量失败",err,this.getClass());
             resultInfo.setResultInfo(err);
-            logger.error("", err);
         }catch (Exception e) {
-            logger.error("", e);
+            LogUtil.error("累计量查询量失败",e,this.getClass());
             resultInfo.setResultInfo(new BillException("1",e));
         }
         return resultInfo;
@@ -121,12 +109,14 @@ public class OrclCommonDao {
             if ("0".equals(action)) {
                 if (cnt == 0) {
                     if (ifUserMeterMapperDao.insertIfUserMeter(ifUserMeter) < 0) {
+                        LogUtil.error("详单禁查插入失败",null,this.getClass());
                         throw new BillException(ErrorCodeCompEnum.USER_METER_OPEN_ERR);
                     }
                 }
             } else {
                 if (cnt > 0) {
                     if (ifUserMeterMapperDao.deleteIfUserMeter(servId) < 0) {
+                        LogUtil.error("详单禁查取消失败",null,this.getClass());
                         throw new BillException(ErrorCodeCompEnum.USER_METER_CANCEL_ERR);
                     }
                 }

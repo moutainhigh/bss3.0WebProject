@@ -275,9 +275,9 @@ public class LocalSeviceImpl implements IlocalService {
         LogUtil.debug("[Begin 数据库查询累积量超出提醒]-------------------",null,this.getClass());
         //按起止时间查询
         if ("1".equals(queryTimeType)) {
-            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2ServiceByBeginDate(accNumb, body.getBeginDate(), body.getEndDate());
+            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2ServiceByBeginDate(accNbr, body.getBeginDate(), body.getEndDate());
         } else {//按月查询
-            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
+            info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNbr, billMonth);
         }
         LogUtil.debug("[数据库查询累积量超出提醒] " + info3mExeFeeList.toString(),null,this.getClass());
         //List<InfoAccu2Service> info3mExeFeeList = infoAccu2ServiceMapperDao.selectInfoAccu2Service(accNumb, billMonth);
@@ -491,10 +491,11 @@ public class LocalSeviceImpl implements IlocalService {
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
-
+        String areaCode = stdCcaQueryServ.getHomeAreaCode();
         String billMonth = body.getQueryMonth();
+        String prodInstId = stdCcaQueryServ.getServId();
         Map map = new HashMap();
-        resultInfo = orclCommonDao.overAccuData(accNumb, billMonth, map);
+        resultInfo = orclCommonDao.overAccuData(prodInstId, billMonth, map,areaCode);
         if ("0".equals(resultInfo.getCode())) {
             //qryMonthHighFeeRes.setResult("0");
             intfCommServiceListBean.setAccNbr(accNbr);
@@ -806,14 +807,13 @@ public class LocalSeviceImpl implements IlocalService {
                                                 Map<String, String> heads) throws Exception, BillException {
         QueryAddValueFeeRes queryAddValueFeeRes = new QueryAddValueFeeRes();
         QueryAddValueFeeResBean queryAddValueFeeResBean = new QueryAddValueFeeResBean();
-        QueryAddValueFeeResListBean bean = new QueryAddValueFeeResListBean();
         String query = queryAddValueFeeReq.toString();
         List<QueryAddValueFeeResListBean> list = new ArrayList<QueryAddValueFeeResListBean>();
-
+        //要是需要消息头这里增加
         Map<String, String> object = new HashMap<String, String>();
         object.put("appID", "1111111");
 
-        LogUtil.debug("[开始调用远程服务 账单查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 账单查询]"+ acctApiUrl.getGetOweList(),null, this.getClass());
         LogUtil.debug("输入参数[queryAddValueFeeReq]="+queryAddValueFeeReq.toString(),null, this.getClass());
         HttpResult resultOweList = null;
         try {
@@ -836,57 +836,60 @@ public class LocalSeviceImpl implements IlocalService {
         }
         LogUtil.debug("[调用远程服务 账单查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
                 +resultOweList.toString(),null,this.getClass());
-
         JSONObject json = JSON.parseObject(resultOweList.getData());
         Map<String, Object> map = (Map) json.get("stdCcaCustomizeBillQueryBill");
         String acctName = map.get("acctName").toString();
         List<Map<String, Object>> itemList = (List) map.get("itemInformation");
         int sumCharge = 0;
         for (int i = 0; i < itemList.size(); i++) {
-            String showlevel = itemList.get(i).get("showlevel").toString();
-            String classId = itemList.get(i).get("classId").toString();
-            String parentClassId = itemList.get(i).get("parentClassId").toString();
-            String charge = itemList.get(i).get("charge").toString();
-            String accNbrDetail = itemList.get(i).get("accNbrDetail").toString();
-            String chargeTypeName = itemList.get(i).get("chargeTypeName").toString();
-            String productOffName = itemList.get(i).get("productOffName").toString();
-            if (classId.equals("2005") || classId.equals("2006")) {
+            String showlevel = String.valueOf(itemList.get(i).get("showlevel"));
+            String classId = String.valueOf(itemList.get(i).get("classId"));
+            String parentClassId = String.valueOf(itemList.get(i).get("parentClassId"));
+            String charge = String.valueOf(itemList.get(i).get("charge"));
+            String accNbrDetail = String.valueOf(itemList.get(i).get("accNbrDetail"));
+            String chargeTypeName = String.valueOf(itemList.get(i).get("chargeTypeName"));
+            String productOffName = String.valueOf(itemList.get(i).get("productOffName"));
+            if ("2005".equals(classId) || "2006".equals(classId)) {
+                QueryAddValueFeeResListBean beanLevel2 = new QueryAddValueFeeResListBean();
                 sumCharge += Integer.parseInt(charge);
-                bean.setShowlevel(showlevel);
-                bean.setClassId(classId);
-                bean.setParentClassId(parentClassId);
-                bean.setCharge(charge);
-                bean.setAccNbrDetail(accNbrDetail);
-                bean.setChargeTypeName(chargeTypeName);
-                bean.setProductOffName(productOffName);
-                list.add(bean);
+                beanLevel2.setShowlevel(showlevel);
+                beanLevel2.setClassId(classId);
+                beanLevel2.setParentClassId(parentClassId);
+                beanLevel2.setCharge(charge);
+                beanLevel2.setAccNbrDetail(accNbrDetail);
+                beanLevel2.setChargeTypeName(chargeTypeName);
+                beanLevel2.setProductOffName(productOffName);
+                list.add(beanLevel2);
                 for (int m = 0; m < itemList.size(); m++) {
-                    String showlevel2 = itemList.get(m).get("showlevel").toString();
-                    String classId2 = itemList.get(m).get("classId").toString();
-                    String parentClassId2 = itemList.get(m).get("parentClassId").toString();
-                    String charge2 = itemList.get(m).get("charge").toString();
-                    String accNbrDetail2 = itemList.get(m).get("accNbrDetail").toString();
-                    String chargeTypeName2 = itemList.get(m).get("chargeTypeName").toString();
-                    String productOffName2 = itemList.get(m).get("productOffName").toString();
-                    if (classId2.equals(parentClassId) && classId.equals("2005")) {//2005与2006 同一个父类，取一个
-                        bean.setShowlevel(showlevel2);
-                        bean.setClassId(classId2);
-                        bean.setParentClassId(parentClassId2);
-                        bean.setCharge(charge2);
-                        bean.setAccNbrDetail(accNbrDetail2);
-                        bean.setChargeTypeName(chargeTypeName2);
-                        bean.setProductOffName(productOffName2);
-                        list.add(bean);
+                    String showlevel2 = String.valueOf(itemList.get(m).get("showlevel"));
+                    String classId2 = String.valueOf(itemList.get(m).get("classId"));
+                    String parentClassId2 = String.valueOf(itemList.get(m).get("parentClassId"));
+                    String charge2 = String.valueOf(itemList.get(m).get("charge"));
+                    String accNbrDetail2 = String.valueOf(itemList.get(m).get("accNbrDetail"));
+                    String chargeTypeName2 = String.valueOf(itemList.get(m).get("chargeTypeName"));
+                    String productOffName2 = String.valueOf(itemList.get(m).get("productOffName"));
+                    if (classId2.equals(parentClassId) ) {
+                        QueryAddValueFeeResListBean beanLevel3 = new QueryAddValueFeeResListBean();
+                        beanLevel3.setShowlevel(showlevel2);
+                        beanLevel3.setClassId(classId2);
+                        beanLevel3.setParentClassId(parentClassId2);
+                        beanLevel3.setCharge(charge2);
+                        beanLevel3.setAccNbrDetail(accNbrDetail2);
+                        beanLevel3.setChargeTypeName(chargeTypeName2);
+                        beanLevel3.setProductOffName(productOffName2);
+                        list.add(beanLevel3);
                     }
-                    if (parentClassId2.equals(classId)) {//取其子类
-                        bean.setShowlevel(showlevel2);
-                        bean.setClassId(classId2);
-                        bean.setParentClassId(parentClassId2);
-                        bean.setCharge(charge2);
-                        bean.setAccNbrDetail(accNbrDetail2);
-                        bean.setChargeTypeName(chargeTypeName2);
-                        bean.setProductOffName(productOffName2);
-                        list.add(bean);
+                    //取其父类
+                    if (parentClassId2.equals(classId)) {
+                        QueryAddValueFeeResListBean beanLevel1 = new QueryAddValueFeeResListBean();
+                        beanLevel1.setShowlevel(showlevel2);
+                        beanLevel1.setClassId(classId2);
+                        beanLevel1.setParentClassId(parentClassId2);
+                        beanLevel1.setCharge(charge2);
+                        beanLevel1.setAccNbrDetail(accNbrDetail2);
+                        beanLevel1.setChargeTypeName(chargeTypeName2);
+                        beanLevel1.setProductOffName(productOffName2);
+                        list.add(beanLevel1);
                     }
 
                 }

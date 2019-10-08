@@ -61,13 +61,16 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
+			LogUtil.error("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
 			LogUtil.error("/bon3/searchServInfo服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
+			LogUtil.error("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), e, this.getClass());
 			return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.error("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [searchServInfo] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -253,17 +256,17 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
-            LogUtil.error("输出参数 getUnitedAccuResponse=" + info.toString(), err, this.getClass());
+            LogUtil.error("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
 		catch (Exception e) {
 			LogUtil.error("/bon3/getUnitedAccu服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数 getUnitedAccuResponse=" + info.toString(), e, this.getClass());
+            LogUtil.error("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.debug("输出参数 getUnitedAccuResponse=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [getUnitedAccu] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -309,16 +312,17 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
-            LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + info.toString(), err, this.getClass());
+            LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), err, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
-			LogUtil.error("/bon3/getUnitedAccuDetail服务调用失败", e, this.getClass());
+			LogUtil.error("/bon3/getUnitedAccuDetail服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrUserResourceQueryDetail,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + info.toString(), e, this.getClass());
+            LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数 getUnitedAccuDetailResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [getUnitedAccuDetail] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -369,17 +373,17 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
-            LogUtil.error("输出参数[getCreditInfoRes]=" + info.toString(), err, this.getClass());
+            LogUtil.error("输出参数[getCreditInfoRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
             LogUtil.error("/bon3/getCreditInfo服务调用失败"+ "body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
                     +" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数[getCreditInfoRes]=" + info.toString(), e, this.getClass());
+            LogUtil.error("输出参数[getCreditInfoRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.debug("输出参数[getCreditInfoRes]=" + info.toString(), null, this.getClass());
+        LogUtil.debug("输出参数[getCreditInfoRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [getCreditInfo] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -433,17 +437,17 @@ public class Bon3Controller{
                     err, this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
-			LogUtil.error("输出参数[getOweListRes]=" + info.toString(), err, this.getClass());
+			LogUtil.error("输出参数[getOweListRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}catch (Exception e) {
 			LogUtil.error("输入参数[getOweListReq]=" + JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue),
                     e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
-			LogUtil.error("输出参数[getOweListRes]=" + info.toString(), e, this.getClass());
+			LogUtil.error("输出参数[getOweListRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.debug("输出参数 getOweListReq=" + getOweListReq.toString(), null, this.getClass());
+		LogUtil.debug("输出参数 getOweListReq=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [getOweList] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
@@ -496,18 +500,18 @@ public class Bon3Controller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			info.setErrorCode(err.getErrCode());
 			info.setErrorMsg(err.getErrMsg());
-            LogUtil.error("输出参数[GetRealTimeBillRes]=" + info.toString(), err, this.getClass());
+            LogUtil.error("输出参数[GetRealTimeBillRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
             LogUtil.error("/bon3/getRealTimeBill服务调用失败" + " body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
                     +" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
-            LogUtil.error("输出参数[GetRealTimeBillRes]=" + info.toString(), e, this.getClass());
+            LogUtil.error("输出参数[GetRealTimeBillRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.debug("输出参数 getRealTimeBill=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [getRealTimeBill] SERVICE...", null, this.getClass());
-        LogUtil.debug("输出参数 getRealTimeBill=" + info.toString(), null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 

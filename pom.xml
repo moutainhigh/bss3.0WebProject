@@ -10,9 +10,9 @@
 	</parent>
 	
 	<groupId>com.asia</groupId>
-	<artifactId>bill-srv-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>bill-srv-test</name>
+	<artifactId>billInterface</artifactId>
+	<version>0.0.1</version>
+	<name>billInterface</name>
 	<description>bill webservice</description>
 
 	<properties>

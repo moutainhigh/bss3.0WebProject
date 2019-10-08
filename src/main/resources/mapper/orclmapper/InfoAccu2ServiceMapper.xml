@@ -26,7 +26,7 @@
     <include refid="Base_Column_List" />
     from INFO_ACCU_2_SERVICE
     where
-    ACC_NBR = #{accNbr}
+    ACC_NBR = #{accNbr,jdbcType=VARCHAR}
     and ALARM_DATE &gt; to_date(#{beginDate},'YYYYMMDDHH24MISS')
     and ALARM_DATE &lt; to_date(#{endDate},'YYYYMMDDHH24MISS')
   </select>

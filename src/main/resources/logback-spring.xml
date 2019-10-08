@@ -129,6 +129,8 @@
     -->
     <logger name="com.alibaba.druid" />
     <logger name="com.asia.web" />
+    <logger name="com.asia.service.impl"/>
+    <logger name="com.asia.mapper"/>
     <logger name="org.apache.ibatis" additivity="false" />
 
 
