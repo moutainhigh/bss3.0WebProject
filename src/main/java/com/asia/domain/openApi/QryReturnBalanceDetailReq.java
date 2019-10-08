@@ -9,7 +9,7 @@ public class QryReturnBalanceDetailReq extends BaseDomain {
     private SvcObjectStruct svcObjectStruct;
     private String queryFlag;
     private String queryItemType;
-
+    private String systemId;
     public OperAttrStruct getOperAttrStruct() {
         return operAttrStruct;
     }
@@ -40,5 +40,13 @@ public class QryReturnBalanceDetailReq extends BaseDomain {
 
     public void setQueryItemType(String queryItemType) {
         this.queryItemType = queryItemType;
+    }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 }

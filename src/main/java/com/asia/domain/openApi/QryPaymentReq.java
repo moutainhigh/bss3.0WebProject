@@ -15,8 +15,9 @@ public class QryPaymentReq extends BaseDomain{
 	//帐务周期 
 	private OperAttrStruct operAttrStruct;
 	//操作人属性
-	private Integer billingCycleId;
-
+	private String billingCycleId;
+	//系统标示
+	private String systemId;
 	public SvcObjectStruct getSvcObjectStruct() {
 		return svcObjectStruct;
 	}
@@ -33,11 +34,19 @@ public class QryPaymentReq extends BaseDomain{
 		this.operAttrStruct = operAttrStruct;
 	}
 
-	public Integer getBillingCycleId() {
+	public String getBillingCycleId() {
 		return billingCycleId;
 	}
 
-	public void setBillingCycleId(Integer billingCycleId) {
+	public void setBillingCycleId(String billingCycleId) {
 		this.billingCycleId = billingCycleId;
+	}
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

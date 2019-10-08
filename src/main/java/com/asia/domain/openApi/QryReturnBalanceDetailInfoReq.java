@@ -10,7 +10,7 @@ public class QryReturnBalanceDetailInfoReq extends BaseDomain {
     private String returnPlanId;
     private String queryFlag;
     private String queryItemType;
-
+    private String systemId;
     public OperAttrStruct getOperAttrStruct() {
         return operAttrStruct;
     }
@@ -49,5 +49,13 @@ public class QryReturnBalanceDetailInfoReq extends BaseDomain {
 
     public void setReturnPlanId(String returnPlanId) {
         this.returnPlanId = returnPlanId;
+    }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 }

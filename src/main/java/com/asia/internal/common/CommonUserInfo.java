@@ -41,7 +41,7 @@ public class CommonUserInfo {
         stdCcrQueryServ.setValueType(valueType);
         stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
         //http调用账务查询用户信息服务
-        info = bon3Service.searchServInfo(stdCcrQueryServRequest, headers);
+        info = bon3Service.commSearchServInfo(stdCcrQueryServRequest, headers);
         if(info==null){
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }

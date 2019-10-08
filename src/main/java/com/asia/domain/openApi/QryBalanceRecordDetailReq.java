@@ -18,6 +18,7 @@ public class QryBalanceRecordDetailReq extends BaseDomain{
 	
 	private String billingCycleId;
 
+	private String systemId;
 	public OperAttrStruct getOperAttrStruct() {
 		return operAttrStruct;
 	}
@@ -40,5 +41,13 @@ public class QryBalanceRecordDetailReq extends BaseDomain{
 
 	public void setBillingCycleId(String billingCycleId) {
 		this.billingCycleId = billingCycleId;
+	}
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

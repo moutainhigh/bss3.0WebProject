@@ -20,7 +20,8 @@ public class QueryBalanceReq extends BaseDomain{
 	private String queryItemType;
 	//电话区号
 	private String areacode;
-
+	//系统id
+	private String systemId;
 	public OperAttrStruct getOperAttrStruct() {
 		return operAttrStruct;
 	}
@@ -59,5 +60,13 @@ public class QueryBalanceReq extends BaseDomain{
 
 	public void setAreacode(String areacode) {
 		this.areacode = areacode;
+	}
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

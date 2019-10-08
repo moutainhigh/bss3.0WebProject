@@ -6,12 +6,7 @@ import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
 import com.asia.common.utils.StringUtil;
 import com.asia.domain.openApi.*;
-import com.asia.domain.openApi.QryBillRes.FeeBillingCycle;
-import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup;
-import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup.AcctItemType;
 import com.asia.domain.openApi.QryInstantFeeListRes.ItemInformation;
-import com.asia.domain.openApi.QryPaymentRes.PaymentInfo;
-import com.asia.domain.openApi.QryPaymentRes.PaymentInfo.AccNbrDetail;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
@@ -124,23 +119,51 @@ public class OpenApiConroller{
 	public String qryPayment(@RequestBody QryPaymentReq qryPaymentReq,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/openApi/qryPayment","body>>"+qryPaymentReq.toString()
-			+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [QryPayment] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryPayment" + " body>>"+JSON.toJSONString(qryPaymentReq,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		QryPaymentRes returnInfo=new QryPaymentRes();
 		try {
-			returnInfo.setPaymentInfoList(new ArrayList<>());
-			
-			PaymentInfo paymentInfo =new PaymentInfo();
-			paymentInfo.setAccNbrDetailList(new ArrayList<>());
-			paymentInfo.getAccNbrDetailList().add(new AccNbrDetail());
-			
-			returnInfo.getPaymentInfoList().add(paymentInfo);
-			
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = qryPaymentReq.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = qryPaymentReq.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			//系统标识
+			String systemId = qryPaymentReq.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+            String billingCycyId = qryPaymentReq.getBillingCycleId();
+			if (StringUtil.isEmpty(billingCycyId)) {
+				throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+			}
 			returnInfo=openAPIServiceImpl.qryPayment(qryPaymentReq, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
+		} catch (BillException err) {
+			LogUtil.error("/openApi/qryPayment服务调用失败"+ "body>>"+JSON.toJSONString(qryPaymentReq,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("[输出参数] qryPaymentRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
-			LogUtil.error("/openApi/qryPayment服务调用失败", e, this.getClass());
+			LogUtil.error("/openApi/qryPayment服务调用失败"+ "body>>"+JSON.toJSONString(qryPaymentReq,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("[输出参数] qryPaymentRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.info("[输出参数] qryPaymentRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [QryPayment] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -160,14 +183,48 @@ public class OpenApiConroller{
 		LogUtil.opeLog("/openApi/qryCustBill","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		QryCustBillRes returnInfo=new QryCustBillRes();
 		try {
-			returnInfo.setItemInformationList(new ArrayList<>());
-			returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
-//			returnInfo=openAPIServiceImpl.qryCustBill(body, headers);
+            //验证操作人属性
+            OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+            String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+            if (!isOperAttrStruct[0].equals("0")) {
+                throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+            }
+            //系统标识
+            String systemId = body.getSystemId();
+            if (StringUtil.isEmpty(systemId)) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+            /**
+             * 查询业务类型 0：按帐户查询1：按用户查询
+             */
+            String queryFlag = body.getQueryFlag();
+            if (StringUtil.isEmpty(queryFlag)) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+            }
+            String billingCycleId = body.getBillingCycle();
+            if (StringUtil.isEmpty(billingCycleId)) {
+                throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+            }
+			returnInfo=openAPIServiceImpl.qryCustBill(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
-			LogUtil.error("/openApi/qryCustBill服务调用失败", e, this.getClass());
-		}
-		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		} catch (BillException err) {
+            LogUtil.error("/openApi/qryCustBill服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), err,this.getClass());
+            returnInfo.setResultCode(err.getErrCode());
+            returnInfo.setResultMsg(err.getErrMsg());
+            LogUtil.error("[输出参数] qryCustBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        } catch (Exception e) {
+            LogUtil.error("/openApi/qryCustBill服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+            returnInfo.setResultCode(Constant.ResultCode.ERROR);
+            returnInfo.setResultMsg(e.getMessage());
+            LogUtil.error("[输出参数] qryCustBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        }
+        LogUtil.info("[输出参数] qryCustBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+        LogUtil.info("END [QryCustBill] SERVICE...",null, this.getClass());
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	
 	/**
@@ -183,23 +240,55 @@ public class OpenApiConroller{
 	public String qryBill(@RequestBody QryBillReq body,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/openApi/qryBill","body>>"+body+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [QryBill] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryBill" +"body>>"+body+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		QryBillRes returnInfo=new QryBillRes();
-		try {
-			returnInfo.setFeeBillingCycle(new ArrayList<>());
-			FeeBillingCycle feeBillingCycle= new FeeBillingCycle();
-			returnInfo.getFeeBillingCycle().add(feeBillingCycle);
-			feeBillingCycle.setAcctItemGroupList(new ArrayList<>());
-			AcctItemGroup acctItemGroup=new AcctItemGroup();
-			acctItemGroup.setAcctItemType(new ArrayList<>());
-			acctItemGroup.getAcctItemType().add(new AcctItemType());
-			feeBillingCycle.getAcctItemGroupList().add(acctItemGroup);
-			returnInfo=openAPIServiceImpl.qryBill(body, headers);
-			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
-			LogUtil.error("/openApi/qryBill服务调用失败", e, this.getClass());
-		}
-		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        try {
+            //验证操作人属性
+            OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+            String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+            if (!isOperAttrStruct[0].equals("0")) {
+                throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+            }
+            //系统标识
+            String systemId = body.getSystemId();
+            if (StringUtil.isEmpty(systemId)) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+            if (StringUtil.isEmpty(body.getFeeQueryFlag())) {
+				throw new BillException(ErrorCodeCompEnum.FEE_QRY_FLAG_IS_EMPTY);
+			}
+            if (StringUtil.isEmpty(body.getDestinationAttr())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            /**
+             * 查询业务类型 0：按帐户查询1：按用户查询
+             */
+            Integer queryFlag = body.getQueryFlag();
+            if (StringUtil.isEmpty(queryFlag)) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+            }
+
+            returnInfo=openAPIServiceImpl.qryBill(body, headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        } catch (BillException err) {
+            LogUtil.error("/openApi/QryBill服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), err,this.getClass());
+            returnInfo.setResultCode(err.getErrCode());
+            returnInfo.setResultMsg(err.getErrMsg());
+            LogUtil.error("[输出参数] qryBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        } catch (Exception e) {
+            LogUtil.error("/openApi/QryBill服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+            returnInfo.setResultCode(Constant.ResultCode.ERROR);
+            returnInfo.setResultMsg(e.getMessage());
+            LogUtil.error("[输出参数] qryBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        }
+        LogUtil.info("[输出参数] qryBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+        LogUtil.info("END [QryBill] SERVICE...",null, this.getClass());
+        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	
 	/**
@@ -215,18 +304,55 @@ public class OpenApiConroller{
 	public String queryBalance(@RequestBody QueryBalanceReq body,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/openApi/queryBalance","body>>"+body+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [queryBalance] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/queryBalance" +"body>>"+body+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		QueryBalanceRes returnInfo=new QueryBalanceRes();
 		try {
-			//returnInfo.setBalanceQuery(new ArrayList<>());
-			//returnInfo.getBalanceQuery().add(new BalanceQuery());
-			returnInfo=openAPIServiceImpl.queryBalance(body, headers);
-			headers.forEach((key,val)->{response.setHeader(key, val);});
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			//系统标识
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+			/**
+			 * 查询业务类型 0：按帐户查询1：按用户查询
+			 */
+			String queryFlag = body.getQueryFlag();
+			if (StringUtil.isEmpty(queryFlag)) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+			returnInfo = openAPIServiceImpl.queryBalance(body, headers);
+			headers.forEach((key, val) -> {
+				response.setHeader(key, val);
+			});
+		} catch (BillException err) {
+			LogUtil.error("/openApi/queryBalance服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[queryBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
-			LogUtil.error("/openApi/queryBalance服务调用失败", e, this.getClass());
-			returnInfo.setResultCode("2001");
+			LogUtil.error("/openApi/queryBalance服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[queryBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.info("[输出参数] queryBalanceRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [queryBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -247,13 +373,47 @@ public class OpenApiConroller{
 				+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		QryBalanceRecordDetailRes returnInfo=new QryBalanceRecordDetailRes();
 		try {
-			/*returnInfo.setBalanceChangeList(new ArrayList<>());
-			returnInfo.getBalanceChangeList().add(new BalanceChangeList());*/
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			//系统标识
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+			//账期
+			String billingCycleId = body.getBillingCycleId();
+			if (StringUtil.isEmpty(billingCycleId)) {
+				throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+			}
 			returnInfo=openAPIServiceImpl.qryBalanceRecordDetail(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
+		} catch (BillException err) {
+			LogUtil.error("/openApi/qryBalanceRecordDetail服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[qryBalanceRecordDetailRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
-			LogUtil.error("/openApi/qryBalanceRecordDetail服务调用失败", e, this.getClass());
+			LogUtil.error("/openApi/qryBalanceRecordDetail服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), null,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[qryBalanceRecordDetailRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+		LogUtil.info("[输出参数] qryBalanceRecordDetailRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [qryBalanceRecordDetail] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -376,6 +536,7 @@ public class OpenApiConroller{
 		}catch (Exception e) {
 			LogUtil.error("/openApi/rechargeBalance服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
 					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
 			LogUtil.error("输出参数[rechargeBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
@@ -598,17 +759,47 @@ public class OpenApiConroller{
     public String QryReturnBalanceDetail(@RequestBody QryReturnBalanceDetailReq body,
                               @RequestHeader Map<String,String> headers,HttpServletResponse response){
         //记录业务日志
-        LogUtil.opeLog("/openApi/QryReturnBalanceDetail","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
-        QryReturnBalanceDetailRes returnInfo=new QryReturnBalanceDetailRes();
+		LogUtil.info("START [QryReturnBalanceDetail] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryReturnBalanceDetail" +" body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
+		QryReturnBalanceDetailRes returnInfo=new QryReturnBalanceDetailRes();
         try {
-           // returnInfo.setItemInformationList(new ArrayList<>());
-            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			returnInfo=openAPIServiceImpl.qryReturnBalanceDetail(body, headers);
             headers.forEach((key,val)->{response.setHeader(key, val);});
-        } catch (Exception e) {
-            LogUtil.error("/openApi/QryReturnBalanceDetail服务调用失败", e, this.getClass());
-        }
-        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        } catch (BillException err) {
+			LogUtil.error("/openApi/QryReturnBalanceDetail服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[qryReturnBalanceDetailRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		} catch (Exception e) {
+			LogUtil.error("/openApi/QryReturnBalanceDetail服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("输出参数[qryReturnBalanceDetailRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		}
+		LogUtil.info("[输出参数] qryReturnBalanceDetailRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [QryReturnBalanceDetail] SERVICE...",null, this.getClass());
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
     }
 
 
@@ -625,17 +816,47 @@ public class OpenApiConroller{
     public String QryReturnBalanceInfoDetail(@RequestBody QryReturnBalanceDetailInfoReq body,
                                          @RequestHeader Map<String,String> headers,HttpServletResponse response){
         //记录业务日志
-        LogUtil.opeLog("/openApi/QryReturnBalanceInfoDetail","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [QryReturnBalanceInfoDetail] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryReturnBalanceInfoDetail" +" body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
 		QryReturnBalanceDetailInfoRes returnInfo=new QryReturnBalanceDetailInfoRes();
         try {
-            // returnInfo.setItemInformationList(new ArrayList<>());
-            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
             returnInfo=openAPIServiceImpl.qryReturnBalanceInfoDetail(body, headers);
             headers.forEach((key,val)->{response.setHeader(key, val);});
-        } catch (Exception e) {
-            LogUtil.error("/openApi/QryReturnBalanceInfoDetail服务调用失败", e, this.getClass());
-        }
-        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        } catch (BillException err) {
+			LogUtil.error("/openApi/QryReturnBalanceInfoDetail服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[qryReturnBalanceDetailRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		} catch (Exception e) {
+			LogUtil.error("/openApi/QryReturnBalanceInfoDetail服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("[输出参数] QryReturnBalanceInfoDetailRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		}
+		LogUtil.info("[输出参数] QryReturnBalanceInfoDetailRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [QryReturnBalanceInfoDetail] SERVICE...",null, this.getClass());
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
     }
 
     /**
@@ -651,17 +872,47 @@ public class OpenApiConroller{
     public String QryBalanceRecord(@RequestBody QryBalanceRecordReq body,
                                          @RequestHeader Map<String,String> headers,HttpServletResponse response){
         //记录业务日志
-        LogUtil.opeLog("/openApi/QryBalanceRecord","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
+		LogUtil.info("START [QryBalanceRecord] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryBalanceRecord" +" body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
         QryBalanceRecordRes returnInfo=new QryBalanceRecordRes();
         try {
-            // returnInfo.setItemInformationList(new ArrayList<>());
-            //returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+			//验证操作人属性
+			OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+			String[] isOperAttrStruct = isOperAttrStruct(operAttrStruct);
+			if (!isOperAttrStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			// 验证操作对象属性
+			SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+			String[] isSvcObjectStruct = isSvcObjectStruct(svcObjectStruct);
+			if (!isSvcObjectStruct[0].equals("0")) {
+				throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+			}
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
             returnInfo=openAPIServiceImpl.qryBalanceRecord(body, headers);
             headers.forEach((key,val)->{response.setHeader(key, val);});
-        } catch (Exception e) {
-            LogUtil.error("/openApi/QryBalanceRecord服务调用失败", e, this.getClass());
-        }
-        return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+        } catch (BillException err) {
+			LogUtil.error("/openApi/QryBalanceRecord服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[qryBalanceRecordReq]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		} catch (Exception e) {
+			LogUtil.error("/openApi/QryBalanceRecord服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("[输出参数] qryBalanceRecordReq=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		}
+		LogUtil.info("[输出参数] qryBalanceRecordReq=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [QryBalanceRecord] SERVICE...",null, this.getClass());
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
     }
     /**
      * 判断操作人属性是否符合规则
