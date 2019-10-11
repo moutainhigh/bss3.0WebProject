@@ -17,10 +17,11 @@ public class QryCustBillReq extends BaseDomain{
 	//查询帐期
 	private String billingCycle;
 	//查询业务类型
-	private Integer queryFlag;
+	private String queryFlag;
 	//操作人属性
 	private OperAttrStruct operAttrStruct;
-
+	//系统id
+	private String systemId;
 	public String getAccNbr() {
 		return accNbr;
 	}
@@ -45,11 +46,11 @@ public class QryCustBillReq extends BaseDomain{
 		this.billingCycle = billingCycle;
 	}
 
-	public Integer getQueryFlag() {
+	public String getQueryFlag() {
 		return queryFlag;
 	}
 
-	public void setQueryFlag(Integer queryFlag) {
+	public void setQueryFlag(String queryFlag) {
 		this.queryFlag = queryFlag;
 	}
 
@@ -59,5 +60,13 @@ public class QryCustBillReq extends BaseDomain{
 
 	public void setOperAttrStruct(OperAttrStruct operAttrStruct) {
 		this.operAttrStruct = operAttrStruct;
+	}
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

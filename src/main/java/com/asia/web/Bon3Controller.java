@@ -50,6 +50,18 @@ public class Bon3Controller{
 			+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcrQueryServRes info=new StdCcrQueryServRes();
 		try {
+			//查询类型
+			if (StringUtil.isEmpty(stdCcrQueryServ.getStdCcrQueryServ().getQueryType())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+			//查询值类型
+			if (StringUtil.isEmpty(stdCcrQueryServ.getStdCcrQueryServ().getValueType())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+			}
+			//查询值
+			if (StringUtil.isEmpty(stdCcrQueryServ.getStdCcrQueryServ().getValue())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+			}
             String systemId = stdCcrQueryServ.getSystemId();
             if (StringUtil.isEmpty(systemId)) {
                 throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
@@ -70,7 +82,7 @@ public class Bon3Controller{
 			LogUtil.error("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), e, this.getClass());
 			return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.error("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), null, this.getClass());
+		LogUtil.debug("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [searchServInfo] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}

@@ -34,7 +34,7 @@ public class QryBillReq extends BaseDomain{
 	 * 操作人属性
 	 */
 	private OperAttrStruct operAttrStruct;
-
+	private String systemId;
 	public Integer getBillQueryType() {
 		return billQueryType;
 	}
@@ -81,5 +81,13 @@ public class QryBillReq extends BaseDomain{
 
 	public void setOperAttrStruct(OperAttrStruct operAttrStruct) {
 		this.operAttrStruct = operAttrStruct;
+	}
+
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
 	}
 }

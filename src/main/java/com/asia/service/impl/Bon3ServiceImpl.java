@@ -45,16 +45,18 @@ public class Bon3ServiceImpl {
 	public StdCcrQueryServRes searchServInfo(StdCcrQueryServReq stdCcrQueryServ, Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
 		HttpResult result = null;
-		LogUtil.debug("[开始调用远程服务 ABM查询用户信息]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+		LogUtil.debug("[开始调用远程服务 ABM查询用户信息]"+ acctApiUrl.getSearchServInfo()+ "\n",null, this.getClass());
 		LogUtil.debug("输入参数[stdCcrQueryServ]="+stdCcrQueryServ.toString(),null, this.getClass());
 		try {
 			result = HttpUtil.doPostJson(acctApiUrl.getSearchServInfo(),
 					JSON.toJSONString(stdCcrQueryServ, SerializerFeature.WriteMapNullValue), headers);
-            LogUtil.debug("[调用远程服务 ABM查询用户信息]"+acctApiUrl.getSearchServInfo()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
+            LogUtil.debug("[调用远程服务 ABM查询用户信息]"+acctApiUrl.getSearchServInfo()+"\n输出结果[result]="
+                    +JSON.toJSONString(result.toString(),SerializerFeature.WriteMapNullValue),null,this.getClass());
+		} catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		} catch (IOException e) {
-			String errorMsg=getHttpErrorInfo(acctApiUrl.getSearchServInfo(),result);
-			LogUtil.error(errorMsg,null,this.getClass());
+			LogUtil.error("IO流错误", e, this.getClass());
 			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 		//状态码为请求成功
@@ -177,18 +179,20 @@ public class Bon3ServiceImpl {
 	public StdCcaUserResourceQueryResponse getUnitedAccu(StdCcrUserResourceQuery stdCcrUserResourceQuery, Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
         HttpResult result = null;
-        LogUtil.debug("[开始调用远程服务 免费资源使用量查询]"+ acctApiUrl.getGetUnitedAccu(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 免费资源使用量查询]"+ acctApiUrl.getGetUnitedAccu()+ "\n",null, this.getClass());
         LogUtil.debug("输入参数[stdCcrUserResourceQuery]="+stdCcrUserResourceQuery.toString(),null, this.getClass());
         try {
             result = HttpUtil.doPostJson(acctApiUrl.getGetUnitedAccu(),
                     JSON.toJSONString(stdCcrUserResourceQuery, SerializerFeature.WriteMapNullValue), headers);
-            LogUtil.debug("[调用远程服务 免费资源使用量查询]"+acctApiUrl.getGetUnitedAccu()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetUnitedAccu(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+            LogUtil.debug("[调用远程服务 免费资源使用量查询]"+acctApiUrl.getGetUnitedAccu()+"\n输出结果[result]="
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -214,18 +218,20 @@ public class Bon3ServiceImpl {
 	public StdCcaUserResourceQueryDetailResponse getUnitedAccuDetail(StdCcrUserResourceQueryDetail stdCcrUserResourceQueryDetail,Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
         HttpResult result = null;
-        LogUtil.debug("[开始调用远程服务 查询使用量明细信息查询]"+ acctApiUrl.getGetUnitedAccuDetail(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 查询使用量明细信息查询]"+ acctApiUrl.getGetUnitedAccuDetail() + "\n" ,null, this.getClass());
         LogUtil.debug("输入参数[stdCcrUserResourceQueryDetail]="+stdCcrUserResourceQueryDetail.toString(),null, this.getClass());
         try {
             result = HttpUtil.doPostJson(acctApiUrl.getGetUnitedAccuDetail(),
                     JSON.toJSONString(stdCcrUserResourceQueryDetail, SerializerFeature.WriteMapNullValue), headers);
-            LogUtil.debug("[调用远程服务 查询使用量明细信息查询]"+acctApiUrl.getGetUnitedAccuDetail()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetUnitedAccuDetail(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+            LogUtil.debug("[调用远程服务 查询使用量明细信息查询]"+acctApiUrl.getGetUnitedAccuDetail()+"\n输出结果[result]="
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -253,12 +259,14 @@ public class Bon3ServiceImpl {
             result = HttpUtil.doPostJson(acctApiUrl.getGetOweList(),
                     JSON.toJSONString(stdCcrRealTimeBillQueryRequest, SerializerFeature.WriteMapNullValue), headers);
             LogUtil.debug("[调用远程服务 实时账单查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetOweList(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -281,18 +289,20 @@ public class Bon3ServiceImpl {
 	public GetCreditInfoRes getCreditInfo(GetCreditInfoReq creditInfoReq, Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
         HttpResult result = null;
-        LogUtil.debug("[开始调用远程服务 用户信用度查询]"+ acctApiUrl.getCreditInfo(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 用户信用度查询]"+ acctApiUrl.getCreditInfo() + "\n",null, this.getClass());
         LogUtil.debug("输入参数[creditInfoReq]="+creditInfoReq.toString(),null, this.getClass());
         try {
             result = HttpUtil.doPostJson(acctApiUrl.getCreditInfo(),
                     JSON.toJSONString(creditInfoReq, SerializerFeature.WriteMapNullValue), headers);
-            LogUtil.debug("[调用远程服务 用户信用度查询]"+acctApiUrl.getCreditInfo()+"输出结果[result]="
+            LogUtil.debug("[调用远程服务 用户信用度查询]"+acctApiUrl.getCreditInfo()+"\n输出结果[result]="
                     +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.getCreditInfo(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -315,18 +325,20 @@ public class Bon3ServiceImpl {
 	public GetOweListRes getBon3OweListBy(GetOweListReq getOweListReq, Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
         HttpResult result = null;
-        LogUtil.debug("[开始调用远程服务 实时账单查询]"+ acctApiUrl.getGetOweList(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 实时账单查询]"+ acctApiUrl.getGetOweList() + "\n",null, this.getClass());
         LogUtil.debug("输入参数[getOweListReq]="+getOweListReq.toString(),null, this.getClass());
         try {
             result = HttpUtil.doPostJson(acctApiUrl.getGetOweList(),
                     JSON.toJSONString(getOweListReq, SerializerFeature.WriteMapNullValue), headers);
-            LogUtil.debug("[调用远程服务 实时账单查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetOweList(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+            LogUtil.debug("[调用远程服务 实时账单查询]"+acctApiUrl.getGetOweList()+ "\n输出结果[result]="
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -350,25 +362,27 @@ public class Bon3ServiceImpl {
 	public GetRealTimeBillRes getRealTimeBill(GetRealTimeBillReq getRealTimeBillReq, Map<String,String> headers)
 			throws ClientProtocolException, IOException, BillException {
         HttpResult result = null;
-        LogUtil.debug("[开始调用远程服务 实时费用查询]"+ acctApiUrl.getRtBillItem(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 实时费用查询]"+ acctApiUrl.getRealTimeBill() + "\n",null, this.getClass());
         LogUtil.debug("输入参数[getRealTimeBillReq]="+getRealTimeBillReq.toString(),null, this.getClass());
         try {
-            result = HttpUtil.doPostJson(acctApiUrl.getRtBillItem(),
+            result = HttpUtil.doPostJson(acctApiUrl.getRealTimeBill(),
                     JSON.toJSONString(getRealTimeBillReq, SerializerFeature.WriteMapNullValue), headers);
-            LogUtil.debug("[调用远程服务 实时费用查询]"+acctApiUrl.getRtBillItem()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.getRtBillItem(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+            LogUtil.debug("[调用远程服务 实时费用查询]"+acctApiUrl.getRealTimeBill()+"\n输出结果[result]="
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
 			headers.putAll(result.getHeaders());
 			return JSON.parseObject(result.getData(), GetRealTimeBillRes.class) ;
 		}else{
-			String errorMsg=getHttpErrorInfo(acctApiUrl.getRtBillItem(),result);
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getRealTimeBill(),result);
 			LogUtil.error(errorMsg,null,this.getClass());
 			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
@@ -391,12 +405,14 @@ public class Bon3ServiceImpl {
             result = HttpUtil.doPostJson(acctApiUrl.searchAcctInfo(),
                     JSON.toJSONString(searchAcctInfoReq, SerializerFeature.WriteMapNullValue), headers);
             LogUtil.debug("[调用远程服务 账户信息查询]"+acctApiUrl.searchAcctInfo()+"输出结果[result]="
-                    +result.toString(),null,this.getClass());
-        } catch (IOException e) {
-            String errorMsg=getHttpErrorInfo(acctApiUrl.searchAcctInfo(),result);
-            LogUtil.error(errorMsg,null,this.getClass());
-            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-        }
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
         //状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
@@ -424,4 +440,37 @@ public class Bon3ServiceImpl {
 		}
 		return errMsg;
 	}
+/**
+ * @Author WangBaoQiang
+ * @Description //资料查询调用通用方法
+ * @Date 16:35 2019/10/6
+ * @Param [stdCcrQueryServ, headers]
+ * @return com.asia.domain.bon3.StdCcrQueryServRes
+*/
+    public StdCcrQueryServRes commSearchServInfo(StdCcrQueryServReq stdCcrQueryServ, Map<String,String> headers)
+            throws ClientProtocolException, IOException, BillException {
+        HttpResult result = null;
+        LogUtil.debug("[开始调用远程服务 ABM查询用户信息]"+ acctApiUrl.getSearchServInfo() + "\n" ,null, this.getClass());
+        LogUtil.debug("输入参数[stdCcrQueryServ]="+stdCcrQueryServ.toString(),null, this.getClass());
+        try {
+            result = HttpUtil.doPostJson(acctApiUrl.getSearchServInfo(),
+                    JSON.toJSONString(stdCcrQueryServ, SerializerFeature.WriteMapNullValue), headers);
+            LogUtil.debug("[调用远程服务 ABM查询用户信息]"+acctApiUrl.getSearchServInfo()+"\n输出结果[result]="
+                    +JSON.parseObject(result.getData(), StdCcrQueryServRes.class),null,this.getClass());
+        } catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+        //状态码为请求成功
+        if(result.getCode() == HttpStatus.SC_OK){
+            return JSON.parseObject(result.getData(), StdCcrQueryServRes.class) ;
+        }else{
+            String errorMsg=getHttpErrorInfo(acctApiUrl.getSearchServInfo(),result);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }
+    }
 }

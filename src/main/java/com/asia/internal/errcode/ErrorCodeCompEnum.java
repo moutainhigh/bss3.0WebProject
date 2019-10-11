@@ -1203,7 +1203,8 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     QUERY_TIME_IS_EMPTY("100024", "查询时间为空"),
     QUERY_TIME_IS_ILLEGAL("100025", "查询时间不合法"),
     ACTION_TYPE_IS_EMPTY("100026", "动作为空"),
-    QRY_TYPE_IS_EMPTY("100027", "查询类型为空");
+    QRY_TYPE_IS_EMPTY("100027", "查询类型为空"),
+    FEE_QRY_FLAG_IS_EMPTY("100028", "费用查询类型为空");
 
 
 

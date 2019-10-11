@@ -54,6 +54,13 @@ public class AcctApiUrl {
     private String rtBillItem;
     @Value("${bon3.qryBalance}")
     private String qryBalance;
+    @Value("${plca.otherremind}")
+    private String otheRemind;
+    @Value("${api.QryBalanceRecordDetail}")
+    private String qryBalanceRecordDetail;
+    @Value("${api.QryCustBill}")
+    private String qryCustBill;
+
 
     public String getSearchServInfo() {
         return searchServInfo;
@@ -198,4 +205,7 @@ public class AcctApiUrl {
     public void setQryBalance(String qryBalance) {
         this.qryBalance = qryBalance;
     }
+    public String getOtheRemind(){ return otheRemind;}
+    public String getQryBalanceRecordDetail(){ return qryBalanceRecordDetail;}
+    public String getQryCustBill(){ return qryCustBill;}
 }

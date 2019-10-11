@@ -25,11 +25,9 @@ public class RechargeBalanceRes extends BaseApiResDomain{
 	//失效时间 
 	private String expDate;
 	//赠送金额
-	private String bonusAmount;     
-	//赠送有效期起始时间
-	private String startTime;  
-	//赠送有效期终结时间
-	private String endTime;
+	private String bonusAmount;
+	//缴费流水
+	private long paymentId;
 
 	public String getRetBalance() {
 		return retBalance;
@@ -103,19 +101,11 @@ public class RechargeBalanceRes extends BaseApiResDomain{
 		this.bonusAmount = bonusAmount;
 	}
 
-	public String getStartTime() {
-		return startTime;
+	public long getPaymentId() {
+		return paymentId;
 	}
 
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-
-	public String getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
+	public void setPaymentId(long paymentId) {
+		this.paymentId = paymentId;
 	}
 }
