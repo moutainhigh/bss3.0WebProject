@@ -160,9 +160,9 @@ public class OpenApiConroller{
 		LogUtil.opeLog("/openApi/qryCustBill","body>>"+body.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
 		QryCustBillRes returnInfo=new QryCustBillRes();
 		try {
-			returnInfo.setItemInformationList(new ArrayList<>());
-			returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
-//			returnInfo=openAPIServiceImpl.qryCustBill(body, headers);
+			//returnInfo.setItemInformationList(new ArrayList<>());
+			//returnInfo.getItemInformationList().add(new com.asia.domain.openApi.QryCustBillRes.ItemInformation());
+			returnInfo=openAPIServiceImpl.qryCustBill(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/qryCustBill服务调用失败", e, this.getClass());
