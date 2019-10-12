@@ -7,7 +7,7 @@ import java.util.List;
 
 public class QryBalanceRecordRes extends BaseApiResDomain {
     private Integer billingCycleId;
-    private List<BalanceTypeFlagQuery>  balanceTypeFlagQuery;
+    private List<BalanceTypeFlagQuery>  balanceTypeFlagQueryList;
 
     public Integer getBillingCycleId() {
         return billingCycleId;
@@ -17,11 +17,11 @@ public class QryBalanceRecordRes extends BaseApiResDomain {
         this.billingCycleId = billingCycleId;
     }
 
-    public List<BalanceTypeFlagQuery> getBalanceTypeFlagQuery() {
-        return balanceTypeFlagQuery;
+    public List<BalanceTypeFlagQuery> getBalanceTypeFlagQueryList() {
+        return balanceTypeFlagQueryList;
     }
 
-    public void setBalanceTypeFlagQuery(List<BalanceTypeFlagQuery> balanceTypeFlagQuery) {
-        this.balanceTypeFlagQuery = balanceTypeFlagQuery;
+    public void setBalanceTypeFlagQueryList(List<BalanceTypeFlagQuery> balanceTypeFlagQueryList) {
+        this.balanceTypeFlagQueryList = balanceTypeFlagQueryList;
     }
 }
