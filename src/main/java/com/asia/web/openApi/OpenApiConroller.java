@@ -524,6 +524,14 @@ public class OpenApiConroller{
                 LogUtil.error(errinfo, null, this.getClass());
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
+			//vc充值需要传入卡号
+			if ("4102".equals(systemId)) {
+				String cardNo = body.getCardNo();
+				StringUtil.isEmpty(cardNo);
+				String errinfo = "充值卡号[cardNo]不能为空，请重新输入！";
+				LogUtil.error(errinfo, null, this.getClass());
+				throw new BillException(ErrorCodeCompEnum.CARD_NO_ERROR);
+			}
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){
@@ -541,6 +549,7 @@ public class OpenApiConroller{
 			LogUtil.error("输出参数[rechargeBalanceRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
+		returnInfo.setFlowId(body.getFlowId());
         LogUtil.info("[输出参数] rechargeBalanceRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [RechargeBalance] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);

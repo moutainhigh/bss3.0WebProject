@@ -29,6 +29,8 @@ public class RechargeBalanceReq extends BaseDomain{
 	//工号
 	//private String staffId;
 	private String systemId;
+	//vc卡号
+	private String cardNo;
 
 
 	public OperAttrStruct getOperAttrStruct() {
@@ -109,5 +111,13 @@ public class RechargeBalanceReq extends BaseDomain{
 
 	public void setSystemId(String systemId) {
 		this.systemId = systemId;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
 	}
 }

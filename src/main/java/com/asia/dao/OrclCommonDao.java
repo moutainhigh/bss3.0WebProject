@@ -276,10 +276,12 @@ public class OrclCommonDao {
         long amount = rechargeBalanceReq.getRechargeAmount();
         String tableName = "";
         long cnt=0;
+        String cardNo = rechargeBalanceReq.getCardNo();
         LogUtil.info("[开始插入缴费流水]----------------",null, this.getClass());
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             vcChargeRecord.setAccNbr(acctNbr);
             vcChargeRecord.setBusiCode(channelId);
+            vcChargeRecord.setCardnumber(cardNo);
             vcChargeRecord.setOtherPaymentId(otherPaymentId);
             vcChargeRecord.setStaffId(staffId);
             vcChargeRecord.setPaymentDate(new Date());

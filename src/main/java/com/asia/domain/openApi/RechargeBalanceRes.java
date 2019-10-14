@@ -28,7 +28,8 @@ public class RechargeBalanceRes extends BaseApiResDomain{
 	private String bonusAmount;
 	//缴费流水
 	private long paymentId;
-
+	//外围流水号
+	private String flowId;
 	public String getRetBalance() {
 		return retBalance;
 	}
@@ -107,5 +108,13 @@ public class RechargeBalanceRes extends BaseApiResDomain{
 
 	public void setPaymentId(long paymentId) {
 		this.paymentId = paymentId;
+	}
+
+	public String getFlowId() {
+		return flowId;
+	}
+
+	public void setFlowId(String flowId) {
+		this.flowId = flowId;
 	}
 }
