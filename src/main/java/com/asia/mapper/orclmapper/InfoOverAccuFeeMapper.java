@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Repository
 public interface InfoOverAccuFeeMapper {
-    List<BillingCycle> selectBillingCyle(@Param("Month") String queryMonth);
+    List<BillingCycle> selectBillingCyle(@Param("queryMonth") String queryMonth);
     List<Map<String, Object>> selectMobileDataEvent(@Param("servId") String servId,
                                                     @Param("tableName") String tableName);
     List<ProdInst> selectProdInst(@Param("accNum") long accNum);

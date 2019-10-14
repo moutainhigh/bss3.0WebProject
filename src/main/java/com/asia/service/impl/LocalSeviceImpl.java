@@ -495,14 +495,15 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String prodInstId = stdCcaQueryServ.getServId();
         Map map = new HashMap();
-        resultInfo = orclCommonDao.overAccuData(prodInstId, billMonth, map,areaCode);
-        if ("0".equals(resultInfo.getCode())) {
+        //resultInfo = orclCommonDao.overAccuData(prodInstId, billMonth, map,areaCode);
+        map=orclCommonDao.overAccuData(prodInstId, billMonth,areaCode);
+        if (map!=null) {//
             //qryMonthHighFeeRes.setResult("0");
             intfCommServiceListBean.setAccNbr(accNbr);
             intfCommServiceListBean.setCustName(custName);
             intfCommServiceListBean.setServId(servId);
-            intfCommServiceListBean.setRetCol1(map.get("overCharge").toString());
-            intfCommServiceListBean.setRetCol2(map.get("OverData").toString());
+            intfCommServiceListBean.setRetCol1(map.get("OVERCHARGE").toString());
+            intfCommServiceListBean.setRetCol2(map.get("OVERDATA").toString());
             intfCommServiceList.add(intfCommServiceListBean);
             intfCommServiceListTypeBean.setIntfCommServiceList(intfCommServiceList);
             qryMonthHighFeeRes.setIntfCommServiceListType(intfCommServiceListTypeBean);

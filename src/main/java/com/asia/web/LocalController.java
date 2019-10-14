@@ -296,7 +296,8 @@ public class LocalController {
         QryMonthHighFeeRes qryMonthHighFeeRes=new QryMonthHighFeeRes();
         try {
             //用户校验
-            checkCommonServiceRequest(qryMonthHighFeeReq);
+            //checkCommonServiceRequest(qryMonthHighFeeReq);
+            checkQryOverAccuFeeRequest(qryMonthHighFeeReq);
             qryMonthHighFeeRes = localSevice.qryOverAccuFee(qryMonthHighFeeReq,headers);
             headers.forEach((key,val)->{response.setHeader(key, val);});
         } catch (BillException err) {
@@ -693,5 +694,52 @@ public class LocalController {
             }
         }
     }
+    /**
+     * qryOverAccuFee校验
+     *
+     * */
+    private void checkQryOverAccuFeeRequest(@RequestBody QryMonthHighFeeReq qryMonthHighFeeReq) throws BillException {
+        if (StringUtil.isEmpty(qryMonthHighFeeReq.getQueryType())) {
+            throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+        }
+        //查询值类型
+        if (StringUtil.isEmpty(qryMonthHighFeeReq.getUserType())) {
+            throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+        }
+        //查询值
+        if (StringUtil.isEmpty(qryMonthHighFeeReq.getQueryValue())) {
+            throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+        }
+        //系统id
+        String systemId = qryMonthHighFeeReq.getSystemId();
+        if (StringUtil.isEmpty(systemId)) {
+            throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+        }
+        //按月份查询
+        if ("2".equals(qryMonthHighFeeReq.getQueryTimeType())) {
+            if (StringUtil.isEmpty(qryMonthHighFeeReq.getQueryMonth())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_TIME_IS_EMPTY);
+            } else if (qryMonthHighFeeReq.getQueryMonth().length() != 8) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_TIME_IS_ILLEGAL);
+            }
+        }
+        if ("1".equals(qryMonthHighFeeReq.getQueryTimeType())) {
+            if (StringUtil.isEmpty(qryMonthHighFeeReq.getBeginDate()) ||
+                    StringUtil.isEmpty(qryMonthHighFeeReq.getEndDate())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_TIME_IS_EMPTY);
+            } else if (qryMonthHighFeeReq.getBeginDate().length() != 8 ||
+                    qryMonthHighFeeReq.getEndDate().length() != 8 ||
+                    qryMonthHighFeeReq.getBeginDate().compareTo(qryMonthHighFeeReq.getEndDate()) > 0) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_TIME_IS_ILLEGAL);
+            }
+        }
+    }
 
 }
+
+
+
+
+
+
+
