@@ -296,8 +296,8 @@ public class LocalController {
         QryMonthHighFeeRes qryMonthHighFeeRes=new QryMonthHighFeeRes();
         try {
             //用户校验
-            //checkCommonServiceRequest(qryMonthHighFeeReq);
-            checkQryOverAccuFeeRequest(qryMonthHighFeeReq);
+            checkCommonServiceRequest(qryMonthHighFeeReq);
+            //checkQryOverAccuFeeRequest(qryMonthHighFeeReq);
             qryMonthHighFeeRes = localSevice.qryOverAccuFee(qryMonthHighFeeReq,headers);
             headers.forEach((key,val)->{response.setHeader(key, val);});
         } catch (BillException err) {
