@@ -434,7 +434,7 @@ public class OpenApiConroller{
 		List<BillingCycle> returnInfo=new ArrayList<>();
 		try {
 			returnInfo.add(new BillingCycle());
-//			returnInfo=openAPIServiceImpl.billingCycle(body, headers);
+			returnInfo=openAPIServiceImpl.billingCycle(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (Exception e) {
 			LogUtil.error("/openApi/billingCycle服务调用失败", e, this.getClass());

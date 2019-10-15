@@ -8,7 +8,7 @@ public class StdCcrUserResourceQueryDetail extends BaseDomain{
 	/**
 	 * stdCcrUserResourceQueryDetail : {"systemId":"","resourceInformation":{"queryFlag":"","billingCycle":"","destinationAttr":"","accNbr":"","prodOfferInstanceId":"","productOfferId":""}}
 	 */
-
+	private String systemId;
 	private StdCcrUserResourceQueryDetailBean stdCcrUserResourceQueryDetail;
 
 	public StdCcrUserResourceQueryDetailBean getStdCcrUserResourceQueryDetail() {
@@ -19,22 +19,22 @@ public class StdCcrUserResourceQueryDetail extends BaseDomain{
 		this.stdCcrUserResourceQueryDetail = stdCcrUserResourceQueryDetail;
 	}
 
+	public String getSystemId() {
+		return systemId;
+	}
+
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
+	}
+
 	public static class StdCcrUserResourceQueryDetailBean {
 		/**
 		 * systemId :
 		 * resourceInformation : {"queryFlag":"","billingCycle":"","destinationAttr":"","accNbr":"","prodOfferInstanceId":"","productOfferId":""}
 		 */
 
-		private String systemId;
+
 		private ResourceInformationBean resourceInformation;
-
-		public String getSystemId() {
-			return systemId;
-		}
-
-		public void setSystemId(String systemId) {
-			this.systemId = systemId;
-		}
 
 		public ResourceInformationBean getResourceInformation() {
 			return resourceInformation;

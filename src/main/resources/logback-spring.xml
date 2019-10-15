@@ -8,7 +8,7 @@
     <!-- 定义日志文件 输入位置 -->
     <property name="LOG_HOME" value="logs/${PROJECT_NAME}/" />
     <!-- 活动文件的大小，默认值是10MB -->
-    <property name="FILE_SIZE" value="50MB" />
+    <property name="FILE_SIZE" value="100MB" />
     <!-- 日志最大的历史 100天,自动去除旧的日志文件 -->
     <property name="MAX_HISTORY" value="100" />
     <!-- 日期格式 -->

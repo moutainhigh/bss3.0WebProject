@@ -256,7 +256,7 @@ public class Bon3Controller{
                 throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
             }
 			//校验系统id
-			String systemId = stdCcrUserResourceQuery.getStdCcrUserResourceQuery().getSystemId();
+			String systemId = stdCcrUserResourceQuery.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}
