@@ -415,7 +415,7 @@ public class LocalSeviceImpl implements IlocalService {
         List<IntfCommServiceListBean> intfCommServiceList = new ArrayList<>();
         IntfCommServiceListBean intfCommServiceListBean = new IntfCommServiceListBean();
 
-        long accNumb = body.getQueryValue();
+        String accNumb = String.valueOf(body.getQueryValue());
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
@@ -495,14 +495,15 @@ public class LocalSeviceImpl implements IlocalService {
         String billMonth = body.getQueryMonth();
         String prodInstId = stdCcaQueryServ.getServId();
         Map map = new HashMap();
-        resultInfo = orclCommonDao.overAccuData(prodInstId, billMonth, map,areaCode);
-        if ("0".equals(resultInfo.getCode())) {
+        //resultInfo = orclCommonDao.overAccuData(prodInstId, billMonth, map,areaCode);
+        map=orclCommonDao.overAccuData(prodInstId, billMonth,areaCode);
+        if (map!=null) {//
             //qryMonthHighFeeRes.setResult("0");
             intfCommServiceListBean.setAccNbr(accNbr);
             intfCommServiceListBean.setCustName(custName);
             intfCommServiceListBean.setServId(servId);
-            intfCommServiceListBean.setRetCol1(map.get("overCharge").toString());
-            intfCommServiceListBean.setRetCol2(map.get("OverData").toString());
+            intfCommServiceListBean.setRetCol1(map.get("OVERCHARGE").toString());
+            intfCommServiceListBean.setRetCol2(map.get("OVERDATA").toString());
             intfCommServiceList.add(intfCommServiceListBean);
             intfCommServiceListTypeBean.setIntfCommServiceList(intfCommServiceList);
             qryMonthHighFeeRes.setIntfCommServiceListType(intfCommServiceListTypeBean);
@@ -622,7 +623,8 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
                 "", headers);
         checkServExist(stdCcaQueryServ);
-        return orclCommonDao.moBileNumberQuery(mobileNumberQueryReq, headers);
+        MobileNumberQueryRes mobileNumberQueryRes=orclCommonDao.moBileNumberQuery(mobileNumberQueryReq, headers);
+        return mobileNumberQueryRes;
     }
 
     //查询余额信息，返回违约金、专用账目组、专用账目组
@@ -664,7 +666,7 @@ public class LocalSeviceImpl implements IlocalService {
         object.put("appID", "1111111");
 
         HttpResult balanceResult = null;
-        LogUtil.debug("[开始调用远程服务 余额查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+        LogUtil.debug("[开始调用远程服务 余额查询]"+ acctApiUrl.getQueryBalance(),null, this.getClass());
         LogUtil.debug("输入参数[balanceQuery]="+balanceQuery.toString(),null, this.getClass());
         try {
             balanceResult = HttpUtil.doPostJson(acctApiUrl.getQueryBalance(), balanceQuery, object);
@@ -733,18 +735,22 @@ public class LocalSeviceImpl implements IlocalService {
         balanceInfosListBean.setAocBalance(String.valueOf(tyBalance));
         balanceInfosListBean.setAocUnitName("通用余额");
         infosList.add(balanceInfosListBean);
-        balanceInfosListBean.setAocBalance(String.valueOf(zyBalance));
-        balanceInfosListBean.setAocUnitName("专用余额");
-        infosList.add(balanceInfosListBean);
-        balanceInfosListBean.setAocBalance(String.valueOf(userLevelBalance));
-        balanceInfosListBean.setAocUnitName("用户级");
-        infosList.add(balanceInfosListBean);
-        balanceInfosListBean.setAocBalance(String.valueOf(userAcctBalance));
-        balanceInfosListBean.setAocUnitName("用户账目组级");
-        infosList.add(balanceInfosListBean);
-        balanceInfosListBean.setAocBalance(String.valueOf(acctLevelBalance));
-        balanceInfosListBean.setAocUnitName("账户账目组级");
-        infosList.add(balanceInfosListBean);
+        BalanceInfosListBean balanceInfosListZy = new BalanceInfosListBean();
+        balanceInfosListZy.setAocBalance(String.valueOf(zyBalance));
+        balanceInfosListZy.setAocUnitName("专用余额");
+        infosList.add(balanceInfosListZy);
+        BalanceInfosListBean balanceInfosListYh = new BalanceInfosListBean();
+        balanceInfosListYh.setAocBalance(String.valueOf(userLevelBalance));
+        balanceInfosListYh.setAocUnitName("用户级");
+        infosList.add(balanceInfosListYh);
+        BalanceInfosListBean balanceInfosListYhAcct = new BalanceInfosListBean();
+        balanceInfosListYhAcct.setAocBalance(String.valueOf(userAcctBalance));
+        balanceInfosListYhAcct.setAocUnitName("用户账目组级");
+        infosList.add(balanceInfosListYhAcct);
+        BalanceInfosListBean balanceInfosListZh = new BalanceInfosListBean();
+        balanceInfosListZh.setAocBalance(String.valueOf(acctLevelBalance));
+        balanceInfosListZh.setAocUnitName("账户账目组级");
+        infosList.add(balanceInfosListZh);
 
         result.setBalanceInfos(infosList);
         result.setBalanceItems(itemsList);

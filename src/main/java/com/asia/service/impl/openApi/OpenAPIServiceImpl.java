@@ -327,8 +327,8 @@ public class OpenAPIServiceImpl{
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
 		SvcObjectStruct svcObjectStruct=body.getSvcObjectStruct();
 		//调账务服务查询用户信息
-		stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "", "",
-				"",headers);
+		stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "0431", "2",
+				"1",headers);
 		//用户校验
 		checkServExist(stdCcaQueryServ);
 		String localNet=stdCcaQueryServ.getHomeAreaCode();
@@ -548,8 +548,9 @@ public class OpenAPIServiceImpl{
 			headers.putAll(result.getHeaders());
 			rechargeBalanceRes=JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
 			ResultInfo resultInfo = null;
+			System.out.println(body.getOperAttrStruct().getOperOrgId());
 			//VC更新缴费历史表记录
-			if ("4012".equals(body.getOperAttrStruct().getOperOrgId())) {
+			if ("4102".equals(body.getOperAttrStruct().getOperOrgId())) {
 				String reqServiceId=rechargeBalanceRes.getReqServiceId();
 				resultInfo = orclCommonDao.updateSerialnumber(body,0,reqServiceId);
 				if (!"0".equals(resultInfo.getCode())) {

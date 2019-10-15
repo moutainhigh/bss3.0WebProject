@@ -65,7 +65,8 @@ public class OrclCommonDao {
      * @Param [accNum, queryMoth, map]
      * @return com.asia.internal.common.ResultInfo
     */
-    public ResultInfo overAccuData(String prodInstId, String queryMoth, Map map,String areaCode) {
+    public Map overAccuData(String prodInstId, String queryMoth,String areaCode) {
+        Map<String,Object> map=new HashMap();
         try {
             LogUtil.debug("[begin 数据库读取账期]-------------------------------",null,this.getClass());
             List<BillingCycle> billingCycleList = infoOverAccuFeeMapperDao.selectBillingCyle(queryMoth);
@@ -85,11 +86,13 @@ public class OrclCommonDao {
         } catch (BillException err) {
             LogUtil.error("累计量查询量失败",err,this.getClass());
             resultInfo.setResultInfo(err);
+            map=null;
         }catch (Exception e) {
             LogUtil.error("累计量查询量失败",e,this.getClass());
             resultInfo.setResultInfo(new BillException("1",e));
+            map=null;
         }
-        return resultInfo;
+        return map;
     }
     /**
      * @Author WangBaoQiang
@@ -141,8 +144,8 @@ public class OrclCommonDao {
         ResultInfo resultInfo = new ResultInfo();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         EChannlMeterPrintLog eChannlMeterPrintLog = new EChannlMeterPrintLog();
-        try {
 
+        try {
             eChannlMeterPrintLog.setActionDate(sdf.parse(meterPrintActionReq.getPrintDate()));
             eChannlMeterPrintLog.setExpirDate(sdf.parse(meterPrintActionReq.getExpirDate()));
             eChannlMeterPrintLog.setPrintMonth(meterPrintActionReq.getPrintMonth());
