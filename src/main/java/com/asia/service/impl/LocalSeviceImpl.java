@@ -503,6 +503,7 @@ public class LocalSeviceImpl implements IlocalService {
         String prodInstId = stdCcaQueryServ.getServId();
         Map map = new HashMap();
         //resultInfo = orclCommonDao.overAccuData(prodInstId, billMonth, map,areaCode);
+        billMonth+="01";
         map=orclCommonDao.overAccuData(prodInstId, billMonth,areaCode);
         if (map!=null) {//
             //qryMonthHighFeeRes.setResult("0");
