@@ -1,29 +1,14 @@
 package com.asia.domain.bon3;
 
+import com.asia.common.baseObj.BaseBonResDomain;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.asia.common.baseObj.BaseBonResDomain;
-import com.asia.common.baseObj.BaseDomain;
-import com.asia.domain.bon3.StdCcaQueryBalance.Bon3StdCcaQueryBalance.BalanceItemDetail;
-
 @Deprecated
 public class StdCcaQueryBalance extends BaseBonResDomain{
-	public static void main(String[] args) {
-		StdCcaQueryBalance a=new StdCcaQueryBalance();
-		a.setTotalBalanceAvailable("0");
-		BalanceItemDetail balanceItemDetail = new BalanceItemDetail();
-		balanceItemDetail.setBalanceItemTypeDetail("赠款账本");
-		balanceItemDetail.setBalanceAmount("10000");
-		balanceItemDetail.setBalanceAvailable("10000");
-		balanceItemDetail.setBalanceUsed("10000");
-		balanceItemDetail.setBalanceReserved("0");
-		balanceItemDetail.setEffDate("20190501000000");
-		balanceItemDetail.setExpDate("20190601000000");
-		
-		a.getStdCcaQueryBalance().getBalanceItemDetail().add(balanceItemDetail);
-		System.out.println(a.toString());
-	}
+
 	private static final long serialVersionUID = -1356438195160459909L;
 	private Bon3StdCcaQueryBalance stdCcaQueryBalance = new Bon3StdCcaQueryBalance();
 	private String totalBalanceAvailable;

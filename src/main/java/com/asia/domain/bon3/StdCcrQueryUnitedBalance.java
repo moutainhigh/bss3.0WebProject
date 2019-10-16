@@ -7,101 +7,120 @@ import com.asia.common.baseObj.BaseDomain;
  * date: 2019年4月24日 上午11:03:05 <br/>
  * @author yinyanzhen
  */
-@Deprecated
 public class StdCcrQueryUnitedBalance extends BaseDomain{
-	public static void main(String[] args) {
-		StdCcrQueryUnitedBalance a = new StdCcrQueryUnitedBalance();
-		System.out.println(a.toString());
-	}
-	private static final long serialVersionUID = -225273870737946595L;
-	private BalanceQueryInformation balanceQueryInformation = new BalanceQueryInformation();
-	
-	public BalanceQueryInformation getBalanceQueryInformation() {
-		return balanceQueryInformation;
-	}
+    private static final long serialVersionUID = -225273870737946595L;
 
-	public void setBalanceQueryInformation(BalanceQueryInformation balanceQueryInformation) {
-		this.balanceQueryInformation = balanceQueryInformation;
-	}
+    /**
+     * stdCcrQueryBalanceBalance : {"balanceQueryInformation":{"queryFlag":"1","queryItemType":"1","areaCode":"1","destinationIdType":"1","destinationAttr":"2","destinationId":"15354515388","returnPlanId":"1"}}
+     */
+    private String systemId;
+    private StdCcrQueryBalanceBalanceBean stdCcrQueryBalanceBalance;
 
-	/**
-	 * 内部类
-	 * ClassName: BalanceQueryInformation <br/>
-	 * date: 2019年4月24日 上午11:01:47 <br/>
-	 * @author yinyanzhen
-	 */
-	public static class BalanceQueryInformation extends BaseDomain{
-		private static final long serialVersionUID = 5334050906591450396L;
-		
-		private String queryFlag;
-		
-		private String queryItemType;
-		
-		private String areaCode;
-		
-		private String destinationIdType;
-		
-		private String destinationAttr;
-		
-		private String destinationId;
-		
-		private String returnPlanId;
+    public StdCcrQueryBalanceBalanceBean getStdCcrQueryBalanceBalance() {
+        return stdCcrQueryBalanceBalance;
+    }
 
-		public String getQueryFlag() {
-			return queryFlag;
-		}
+    public void setStdCcrQueryBalanceBalance(StdCcrQueryBalanceBalanceBean stdCcrQueryBalanceBalance) {
+        this.stdCcrQueryBalanceBalance = stdCcrQueryBalanceBalance;
+    }
 
-		public void setQueryFlag(String queryFlag) {
-			this.queryFlag = queryFlag;
-		}
+    public String getSystemId() {
+        return systemId;
+    }
 
-		public String getQueryItemType() {
-			return queryItemType;
-		}
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
 
-		public void setQueryItemType(String queryItemType) {
-			this.queryItemType = queryItemType;
-		}
+    public static class StdCcrQueryBalanceBalanceBean {
+        /**
+         * balanceQueryInformation : {"queryFlag":"1","queryItemType":"1","areaCode":"1","destinationIdType":"1","destinationAttr":"2","destinationId":"15354515388","returnPlanId":"1"}
+         */
 
-		public String getAreaCode() {
-			return areaCode;
-		}
+        private BalanceQueryInformationBean balanceQueryInformation;
 
-		public void setAreaCode(String areaCode) {
-			this.areaCode = areaCode;
-		}
+        public BalanceQueryInformationBean getBalanceQueryInformation() {
+            return balanceQueryInformation;
+        }
 
-		public String getDestinationIdType() {
-			return destinationIdType;
-		}
+        public void setBalanceQueryInformation(BalanceQueryInformationBean balanceQueryInformation) {
+            this.balanceQueryInformation = balanceQueryInformation;
+        }
 
-		public void setDestinationIdType(String destinationIdType) {
-			this.destinationIdType = destinationIdType;
-		}
+        public static class BalanceQueryInformationBean {
+            /**
+             * queryFlag : 1
+             * queryItemType : 1
+             * areaCode : 1
+             * destinationIdType : 1
+             * destinationAttr : 2
+             * destinationId : 15354515388
+             * returnPlanId : 1
+             */
 
-		public String getDestinationAttr() {
-			return destinationAttr;
-		}
+            private String queryFlag;
+            private String queryItemType;
+            private String areaCode;
+            private String destinationIdType;
+            private String destinationAttr;
+            private String destinationId;
+            private String returnPlanId;
 
-		public void setDestinationAttr(String destinationAttr) {
-			this.destinationAttr = destinationAttr;
-		}
+            public String getQueryFlag() {
+                return queryFlag;
+            }
 
-		public String getDestinationId() {
-			return destinationId;
-		}
+            public void setQueryFlag(String queryFlag) {
+                this.queryFlag = queryFlag;
+            }
 
-		public void setDestinationId(String destinationId) {
-			this.destinationId = destinationId;
-		}
+            public String getQueryItemType() {
+                return queryItemType;
+            }
 
-		public String getReturnPlanId() {
-			return returnPlanId;
-		}
+            public void setQueryItemType(String queryItemType) {
+                this.queryItemType = queryItemType;
+            }
 
-		public void setReturnPlanId(String returnPlanId) {
-			this.returnPlanId = returnPlanId;
-		}
-		
-	}
+            public String getAreaCode() {
+                return areaCode;
+            }
+
+            public void setAreaCode(String areaCode) {
+                this.areaCode = areaCode;
+            }
+
+            public String getDestinationIdType() {
+                return destinationIdType;
+            }
+
+            public void setDestinationIdType(String destinationIdType) {
+                this.destinationIdType = destinationIdType;
+            }
+
+            public String getDestinationAttr() {
+                return destinationAttr;
+            }
+
+            public void setDestinationAttr(String destinationAttr) {
+                this.destinationAttr = destinationAttr;
+            }
+
+            public String getDestinationId() {
+                return destinationId;
+            }
+
+            public void setDestinationId(String destinationId) {
+                this.destinationId = destinationId;
+            }
+
+            public String getReturnPlanId() {
+                return returnPlanId;
+            }
+
+            public void setReturnPlanId(String returnPlanId) {
+                this.returnPlanId = returnPlanId;
+            }
+        }
+    }
 }

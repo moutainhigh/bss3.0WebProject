@@ -24,7 +24,7 @@ import java.util.Map;
  * 场景三服务暴漏
  * ClassName: Bon3Controller <br/>
  * date: 2019年4月23日 下午8:33:27 <br/>
- * @author yinyanzhen
+ * @author wangBaoQiang
  */
 @RequestMapping( value="/bon3",produces="application/json;charset=UTF-8")
 @RestController
@@ -34,7 +34,7 @@ public class Bon3Controller{
 
 	/**
 	 * searchServInfo:(用户信息查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrQueryServ
 	 * @param headers
 	 * @param response
@@ -89,7 +89,7 @@ public class Bon3Controller{
 	
 	/**
 	 * getFcDeposit:(流量卡充值记录查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrFlowCardRecQry
 	 * @param headers
 	 * @param response
@@ -127,7 +127,7 @@ public class Bon3Controller{
 	
 	/**
 	 * flowGetRate:(流量卡使用量查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrFlowCardUsageQuery
 	 * @param headers
 	 * @param response
@@ -166,7 +166,7 @@ public class Bon3Controller{
 	
 	/**
 	 * qryBalance:(余额查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrQueryBalance
 	 * @param headers
 	 * @param response
@@ -203,7 +203,7 @@ public class Bon3Controller{
 	}
 	/**
 	 * getUnitedBalance:(余额查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrQueryUnitedBalance
 	 * @param headers
 	 * @param response
@@ -211,24 +211,60 @@ public class Bon3Controller{
 	 * @since V1.0.0
 	 */
 	@PostMapping("/getUnitedBalance") 
-	public String getUnitedBalance(@RequestBody StdCcrQueryBalanceBalanceRequest stdCcrQueryUnitedBalance,
+	public String getUnitedBalance(@RequestBody StdCcrQueryUnitedBalance stdCcrQueryUnitedBalance,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.opeLog("/bon3/getUnitedBalance", "body>>"+stdCcrQueryUnitedBalance.toString()+" header>>"+JSON.toJSONString(headers), this.getClass());
-		StdCcaQueryBalanceBalanceResponse info=new StdCcaQueryBalanceBalanceResponse();
+        LogUtil.debug("START [getUnitedAccu] SERVICE...", null, this.getClass());
+		LogUtil.debug("/bon3/getUnitedBalance" +"body>>"+stdCcrQueryUnitedBalance.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
+		StdCcaQueryUnitedBalance info=new StdCcaQueryUnitedBalance();
 		try {
+			//查询类型
+			if (StringUtil.isEmpty(stdCcrQueryUnitedBalance.getStdCcrQueryBalanceBalance().getBalanceQueryInformation().getQueryFlag())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+			//查询值类型
+			if (StringUtil.isEmpty(stdCcrQueryUnitedBalance.getStdCcrQueryBalanceBalance().getBalanceQueryInformation().getDestinationAttr())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+			}
+			//查询值
+			if (StringUtil.isEmpty(stdCcrQueryUnitedBalance.getStdCcrQueryBalanceBalance().getBalanceQueryInformation().getDestinationId())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+			}
+			//校验用户区号
+			if (StringUtil.isEmpty(stdCcrQueryUnitedBalance.getStdCcrQueryBalanceBalance().getBalanceQueryInformation().getAreaCode())) {
+				throw new BillException(ErrorCodeCompEnum.AREA_CODE_IS_EMPTY);
+			}
+			//校验系统id
+			String systemId = stdCcrQueryUnitedBalance.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
 			info = bon3ServiceImpl.getUnitedBalance(stdCcrQueryUnitedBalance, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
-		} catch (Exception e) {
-			LogUtil.error("/bon3/getUnitedBalance服务调用失败", e, this.getClass());
-			info.setErrorCode(Constant.ResultCode.ERROR);
+		} catch (BillException err) {
+			LogUtil.error("/bon3/getUnitedBalance服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrQueryUnitedBalance,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			info.setErrorCode(err.getErrCode());
+			info.setErrorMsg(err.getErrMsg());
+			LogUtil.error("输出参数 getUnitedBalanceRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
+		catch (Exception e) {
+            LogUtil.error("/bon3/getUnitedBalance服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrQueryUnitedBalance,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			info.setErrorCode(Constant.ResultCode.ERROR);
+			info.setErrorMsg(e.getMessage());
+			LogUtil.error("输出参数 getUnitedBalanceResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+		}
+		LogUtil.debug("输出参数 getUnitedBalanceResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+		LogUtil.debug("END [getUnitedBalance] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 	
 	/**
 	 * getUnitedAccu:(使用量查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrUserResourceQuery
 	 * @param headers
 	 * @param response
@@ -272,7 +308,8 @@ public class Bon3Controller{
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
 		catch (Exception e) {
-			LogUtil.error("/bon3/getUnitedAccu服务调用失败", e, this.getClass());
+            LogUtil.error("/bon3/getUnitedAccu服务调用失败"+ "body>>"+JSON.toJSONString(stdCcrUserResourceQuery,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 			info.setErrorMsg(e.getMessage());
             LogUtil.error("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
@@ -285,7 +322,7 @@ public class Bon3Controller{
 	
 	/**
 	 * getUnitedAccuDetail:(使用量明细查询). <br/>
-	 * @author yinyanzhen
+	 * @author wangBaoQiang
 	 * @param stdCcrUserResourceQueryDetail
 	 * @param headers
 	 * @param response
@@ -301,7 +338,7 @@ public class Bon3Controller{
 		StdCcaUserResourceQueryDetailResponse info=new StdCcaUserResourceQueryDetailResponse();
 		try {
 		    //系统id
-			String systemId = stdCcrUserResourceQueryDetail.getStdCcrUserResourceQueryDetail().getSystemId();
+			String systemId = stdCcrUserResourceQueryDetail.getSystemId();
 			if (StringUtil.isEmpty(systemId)) {
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
 			}

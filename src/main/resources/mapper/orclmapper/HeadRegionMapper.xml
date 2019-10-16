@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.orclmapper.HeadRegionMapper">
+    <select id="selectHeadRegion" resultType="java.util.HashMap" parameterType="map" >
+        SELECT C.ORG_AREA_CODE "orgAreaCode" ,decode(d.party_role_id,0,0,90,0,1) "nettype"
+        FROM (SELECT A.HEAD, A.REGION_ID REGION_ID,a.emulatory_partner_id
+        FROM B_HEAD_REGION A
+        WHERE SYSDATE >= A.EFF_DATE
+        AND (SYSDATE &lt; A.EXP_DATE OR A.EXP_DATE IS NULL)
+        AND A.TYPE_CODE = '52Z'
+        AND  #{accNbr}  LIKE concat(A.HEAD ,'%')) B,
+        ORG C,
+        emulatory_partner d
+        WHERE B.REGION_ID = C.ORG_ID
+        and b.emulatory_partner_id=d.party_role_id
+    </select>
+</mapper>

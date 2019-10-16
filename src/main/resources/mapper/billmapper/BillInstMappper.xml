@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.asia.mapper.billmapper.BillInstMappper">
+
+    <select id="selectNpAccNbr" resultType="map" parameterType="map">
+        SELECT acc_num accNum,in_network inNetwork,out_network outNetwork,own_netnetwork ownNetnetwork FROM lsms_np_acc_num_inst
+        WHERE acc_num = #{accNum}
+        and status_cd = 0
+
+    </select>
+    <select id="selectNewWorkPartner" resultType="map" parameterType="map">
+        SELECT NETWORK_ID networkId,PARTNER_ID  partnerId FROM B_NETWORK_MAP_PARTNER
+        WHERE NETWORK_ID = #{netWrokId}
+    </select>
+</mapper>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.asia.mapper.billmapper.IntfServCustChangeContrastMapper">
+<mapper namespace="com.asia.mapper.orclmapper.IntfServCustChangeContrastMapper">
 
   <sql id="Base_Column_List">
     ARCH_GRP_ID, SERV_ID, OLD_CUST_ID, NEW_CUST_ID, CHANGE_DATE

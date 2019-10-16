@@ -12,7 +12,7 @@ import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.internal.common.BillException;
 import com.asia.internal.errcode.ErrorCodeCompEnum;
-import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
+import com.asia.mapper.ordmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.ordmapper.ProdInstRouteMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
 import com.asia.service.impl.openApi.OpenAPIServiceImpl;

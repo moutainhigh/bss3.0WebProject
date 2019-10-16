@@ -653,6 +653,62 @@ public class LocalController {
     }
     /**
      * @Author WangBaoQiang
+     * @Description 判断本网异网，本地异地
+     * @Date 20:21 2019/10/15
+     * @Param [userByPhoneQueryServiceReq, headers, response]
+     * @return java.lang.String
+    */
+    @PostMapping("/userByPhoneQueryService")
+    public String userByPhoneQueryService(@RequestBody UserByPhoneQueryServiceReq userByPhoneQueryServiceReq,
+                                   @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        LogUtil.debug("START [userByPhoneQueryService] SERVICE...", null, this.getClass());
+        LogUtil.debug("/local/userByPhoneQueryService" +" body>>"+JSON.toJSONString(userByPhoneQueryServiceReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers),null, this.getClass());
+        UserByPhoneQueryServiceRes info=new UserByPhoneQueryServiceRes();
+        try {
+            //查询值类型
+            if (StringUtil.isEmpty(userByPhoneQueryServiceReq.getAccNumType())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            //查询值
+            if (StringUtil.isEmpty(userByPhoneQueryServiceReq.getAccNum())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
+            //系统id
+            String systemId = userByPhoneQueryServiceReq.getSystemId();
+            if (StringUtil.isEmpty(systemId)) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+            //工号
+            //系统id
+            String staffId = userByPhoneQueryServiceReq.getStaffId();
+            if (StringUtil.isEmpty(staffId)) {
+                throw new BillException(ErrorCodeCompEnum.STAFF_ID_IS_EMPTY);
+            }
+            info = localSevice.userByPhoneQueryService(userByPhoneQueryServiceReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        }catch (BillException err) {
+            LogUtil.error("/local/userByPhoneQueryService服务调用失败"+ "body>>"+JSON.toJSONString(userByPhoneQueryServiceReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), err,this.getClass());
+            info.setErrorCode(err.getErrCode());
+            info.setErrorMsg(err.getMessage());
+            LogUtil.error("输出参数[UserByPhoneQueryServiceRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        } catch (Exception e) {
+            LogUtil.error("/local/userByPhoneQueryService服务调用失败"+ "body>>"+JSON.toJSONString(userByPhoneQueryServiceReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+            info.setErrorCode(Constant.ResultCode.ERROR);
+            info.setErrorMsg(e.getMessage());
+            LogUtil.error("输出参数[UserByPhoneQueryServiceRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        LogUtil.debug("输出参数 UserByPhoneQueryServiceRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.debug("END [userByPhoneQueryService] SERVICE...", null, this.getClass());
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
+    /**
+     * @Author WangBaoQiang
      * @Description //万号通用接口的校验方法
      * @Date 21:40 2019/9/29
      * @Param [qryMonthHighFeeReq]

@@ -9,11 +9,14 @@ import com.asia.common.utils.LogUtil;
 import com.asia.dao.OrclCommonDao;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.localApi.*;
+import com.asia.domain.localApi.UserByPhoneQueryServiceRes.UserByPhoneQueryServiceResBean;
+import com.asia.domain.localApi.UserByPhoneQueryServiceRes.UserByPhoneQueryServiceResBean.UserInfoListBean;
 import com.asia.domain.localApi.child.*;
 import com.asia.internal.common.BillException;
 import com.asia.internal.common.CommonUserInfo;
 import com.asia.internal.common.ResultInfo;
 import com.asia.internal.errcode.ErrorCodeCompEnum;
+import com.asia.mapper.billmapper.BillInstMappper;
 import com.asia.mapper.orclmapper.*;
 import com.asia.service.IlocalService;
 import com.asia.vo.*;
@@ -65,6 +68,10 @@ public class LocalSeviceImpl implements IlocalService {
     Bon3ServiceImpl bon3Service;
     @Autowired
     AcctApiUrl acctApiUrl;
+    @Autowired
+    BillInstMappper billInstMappperDao;
+    @Autowired
+    HeadRegionMapper headRegionMapperDao;
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //月账话费高额
@@ -571,7 +578,13 @@ public class LocalSeviceImpl implements IlocalService {
             return userMeterOrderRes;
         }
     }
-
+    /*
+     * @Author WangBaoQiang
+     * @Description 协议金额查询
+     * @Date 20:27 2019/10/15
+     * @Param [body, headers]
+     * @return com.asia.domain.localApi.QueryAgreementConsumptionRes
+    */
     @Override
     public QueryAgreementConsumptionRes queryAgreementConsumption(QueryAgreementConsumptionReq body,
                                                                   Map<String, String> headers) throws ClientProtocolException, IOException, BillException {
@@ -607,7 +620,56 @@ public class LocalSeviceImpl implements IlocalService {
         }
         return queryAgreementConsumptionRes;
     }
+    /**
+     * @Author WangBaoQiang
+     * @Description 判断本网异网
+     * @Date 20:30 2019/10/15
+     * @Param [body, headers]
+     * @return com.asia.domain.localApi.UserByPhoneQueryServiceRes
+    */
+    @Override
+    public UserByPhoneQueryServiceRes userByPhoneQueryService(UserByPhoneQueryServiceReq body,
+                                                              Map<String, String> headers) throws ClientProtocolException, IOException, BillException {
+        UserByPhoneQueryServiceRes userByPhoneQueryServiceRes = new UserByPhoneQueryServiceRes();
+        UserByPhoneQueryServiceResBean userByPhoneQueryServiceResBean = new UserByPhoneQueryServiceResBean();
+        UserInfoListBean userInfoListBean = new UserInfoListBean();
+        //用户信息查询
+        String accNum = body.getAccNum();
+        Map map = new HashMap();
+        map.put("accNbr", accNum);
+        //先屏蔽掉携号转网
+       /*
+       Map npMap = new HashMap();
+        Map netWorkMap = new HashMap();
+       List<Map<String,Object>> npList =  billInstMappperDao.selectNpAccNbr(map);
+        List<Map<String, Object>> netWorkList = new ArrayList<>();
+       if(npList.size() > 0){
+           npMap = npList.get(0);
+           netWorkList = billInstMappperDao.selectNewWorkPartner(npMap);
+           netWorkMap = netWorkList.get(0);
+           if ("00104310".equals(netWorkMap.get("networkId"))) {
+               userInfoListBean.setNetType("0");
+           }
 
+       }*/
+        LogUtil.debug("[开始查询数据库，查询用户归属信息]-----------------",null, this.getClass());
+        List<Map<String,Object>> regionList = headRegionMapperDao.selectHeadRegion(map);
+        LogUtil.debug("[数据库返回结果]" + regionList.toString(),null, this.getClass());
+        if (regionList.size() > 0) {
+            map = regionList.get(0);
+            userInfoListBean.setAreaCode(String.valueOf(map.get("orgAreaCode")));
+            userInfoListBean.setPhoneId(body.getAccNum());
+            userInfoListBean.setUserType(body.getAccNumType());
+            userInfoListBean.setNetType(String.valueOf(map.get("nettype")));
+            userByPhoneQueryServiceResBean.setUserInfoList(userInfoListBean);
+        }else {
+            throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
+        }
+        userByPhoneQueryServiceRes.setResult("0");
+        userByPhoneQueryServiceRes.setMsg("SUCESS");
+        userByPhoneQueryServiceRes.setUserByPhoneQueryServiceRes(userByPhoneQueryServiceResBean);
+        return userByPhoneQueryServiceRes;
+    }
     @Override
     public StdCcaRealTimeBillQueryResponse queryAddValueList(StdCcrRealTimeBillQueryRequest body, Map<String, String> headers) throws ClientProtocolException, IOException {
         StdCcaRealTimeBillQueryResponse stdCcaRealTimeBillQueryResponse = new StdCcaRealTimeBillQueryResponse();

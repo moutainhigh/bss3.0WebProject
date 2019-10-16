@@ -1,8 +1,8 @@
 package com.asia;
 
-import com.asia.mapper.billmapper.IntfServCustChangeContrastMapper;
 import com.asia.mapper.orclmapper.Info3mExeFeeMapper;
 import com.asia.mapper.orclmapper.InfoOverAccuFeeMapper;
+import com.asia.mapper.ordmapper.IntfServCustChangeContrastMapper;
 import com.asia.vo.Info3mExeFee;
 import org.junit.Test;
 import org.junit.runner.RunWith;

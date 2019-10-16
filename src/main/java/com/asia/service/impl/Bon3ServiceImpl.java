@@ -152,17 +152,32 @@ public class Bon3ServiceImpl {
 	 * @throws IOException
 	 * @since V1.0.0
 	 */
-	public StdCcaQueryBalanceBalanceResponse getUnitedBalance(StdCcrQueryBalanceBalanceRequest stdCcrQueryUnitedBalance, Map<String,String> headers)
-			throws ClientProtocolException, IOException{
-		HttpResult result = HttpUtil.doPostJson(Constant.Bon3.getUnitedBalance, 
-				JSON.toJSONString(stdCcrQueryUnitedBalance,SerializerFeature.WriteMapNullValue), headers);
+	public StdCcaQueryUnitedBalance getUnitedBalance(StdCcrQueryUnitedBalance stdCcrQueryUnitedBalance, Map<String,String> headers)
+			throws ClientProtocolException, IOException, BillException {
+		LogUtil.debug("[开始调用远程服务 余额查询]"+ acctApiUrl.getGetUnitedBalance()+ "\n",null, this.getClass());
+		LogUtil.debug("输入参数[stdCcrQueryUnitedBalance]="+stdCcrQueryUnitedBalance.toString(),null, this.getClass());
+		HttpResult result = null;
+		try {
+			result = HttpUtil.doPostJson(Constant.Bon3.getUnitedBalance,
+					JSON.toJSONString(stdCcrQueryUnitedBalance,SerializerFeature.WriteMapNullValue), headers);
+			LogUtil.debug("[调用远程服务 余额查询]"+acctApiUrl.getGetUnitedBalance()+"\n输出结果[result]="
+					+JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+		} catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
 		//状态码为请求成功
 		if(result.getCode() == HttpStatus.SC_OK){
 			headers.clear();
 			headers.putAll(result.getHeaders());
-			return JSON.parseObject(result.getData(), StdCcaQueryBalanceBalanceResponse.class) ;
+			return JSON.parseObject(result.getData(), StdCcaQueryUnitedBalance.class) ;
 		}else{
-			return new StdCcaQueryBalanceBalanceResponse();
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getGetUnitedBalance(),result);
+			LogUtil.error(errorMsg,null,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 	}
 	

@@ -7,12 +7,13 @@ import java.util.Map;
 
 /**
  * @author WangBaoQiang
- * @ClassName: IntfServCustChangeContrastDao
+ * @ClassName: billInstMappper
  * @description: TODO
- * @date 2019/7/309:40
+ * @date 2019/10/1510:49
  * @Version 1.0
  */
 @Repository
-public interface IntfServCustChangeContrastMapper {
-   public List<Map<String, Object>> selectIntfServCustChangeContrast(Map map);
+public interface BillInstMappper {
+    List<Map<String, Object>> selectNpAccNbr(Map map);
+    List<Map<String, Object>> selectNewWorkPartner(Map map);
 }
