@@ -834,7 +834,7 @@ public class LocalSeviceImpl implements IlocalService {
             Map<String, String> object2 = new HashMap<String, String>();
             object2.put("appID", "1111111");
 
-            LogUtil.debug("[开始调用远程服务 欠费查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+            LogUtil.debug("[开始调用远程服务 欠费查询]"+ acctApiUrl.getQryBill(),null, this.getClass());
             LogUtil.debug("输入参数[oweQry]="+oweQry.toString(),null, this.getClass());
             HttpResult oweResult = null;
             try {
