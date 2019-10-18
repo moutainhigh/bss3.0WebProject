@@ -1206,7 +1206,9 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     QRY_TYPE_IS_EMPTY("100027", "查询类型为空"),
     FEE_QRY_FLAG_IS_EMPTY("100028", "费用查询类型为空"),
     CARD_NO_ERROR("100029", "充值卡号为空"),
-    AREA_CODE_IS_EMPTY("100030", "区号为空");
+    AREA_CODE_IS_EMPTY("100030", "区号为空"),
+    BILL_FORMAT_TYPE_IS_EMPTY("100031", "账单格式为空"),
+    QURY_TYPE_IS_EMPTY("100032", "查询类型为空");
 
 
 

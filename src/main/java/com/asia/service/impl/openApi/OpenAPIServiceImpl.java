@@ -600,11 +600,40 @@ public class OpenAPIServiceImpl{
 
 
     /**
-     * 余额变动汇总查询
-     *
-     * */
-    public QryBalanceRecordRes qryBalanceRecord(QryBalanceRecordReq body,
+     * @Author WangBaoQiang
+     * @Description 客户化账单查询
+     * @Date 21:10 2019/10/16
+     * @Param [body, headers]
+     * @return com.asia.domain.openApi.QryBalanceRecordRes
+    */
+    public QryForeignBillRes qryForeignBill(QryForeignBillReq body,
                                                             Map<String,String> headers) throws IOException, BillException {
+		LogUtil.info("[开始调用远程服务 客户化账单查询]"+ acctApiUrl.getQryForeignBill(),null, this.getClass());
+		LogUtil.info("输入参数[qryBalanceRecordReq]="+body.toString(),null, this.getClass());
+		HttpResult result = null;
+		try {
+			result = HttpUtil.doPostJson(acctApiUrl.getQryForeignBill(), body.toString(), headers);
+		} catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), QryForeignBillRes.class) ;
+		}else{
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getQryBalanceRecord(),result);
+			LogUtil.error(errorMsg,null,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+
+    }
+	public QryBalanceRecordRes qryBalanceRecord(QryBalanceRecordReq body,
+												Map<String,String> headers) throws IOException, BillException {
 		LogUtil.info("[开始调用远程服务 余额变动汇总查询]"+ acctApiUrl.getQryBalanceRecord(),null, this.getClass());
 		LogUtil.info("输入参数[qryBalanceRecordReq]="+body.toString(),null, this.getClass());
 		HttpResult result = null;
@@ -628,8 +657,7 @@ public class OpenAPIServiceImpl{
 			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 
-    }
-
+	}
 
 	/**
 	 * 话费返还记录明细查询
