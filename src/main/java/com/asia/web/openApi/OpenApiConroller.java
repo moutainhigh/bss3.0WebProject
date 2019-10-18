@@ -909,20 +909,82 @@ public class OpenApiConroller{
 					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
 			returnInfo.setResultCode(err.getErrCode());
 			returnInfo.setResultMsg(err.getErrMsg());
-			LogUtil.error("输出参数[qryBalanceRecordReq]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			LogUtil.error("输出参数[qryBalanceRecordRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		} catch (Exception e) {
 			LogUtil.error("/openApi/QryBalanceRecord服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
 					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
 			returnInfo.setResultCode(Constant.ResultCode.ERROR);
 			returnInfo.setResultMsg(e.getMessage());
-			LogUtil.error("[输出参数] qryBalanceRecordReq=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			LogUtil.error("[输出参数] qryBalanceRecordRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
 			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.info("[输出参数] qryBalanceRecordReq=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("[输出参数] qryBalanceRecordRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [QryBalanceRecord] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
     }
+    /**
+     * @Author WangBaoQiang
+     * @Description 调查询中心查询客户化账单
+     * @Date 20:58 2019/10/16
+     * @Param [body, headers, response]
+     * @return java.lang.String
+    */
+	@PostMapping("/qryForeignBill")
+	public String QryForeignBill(@RequestBody QryForeignBillReq body,
+								   @RequestHeader Map<String,String> headers,HttpServletResponse response){
+		//记录业务日志
+		LogUtil.info("START [QryForeignBill] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryForeignBill" +" body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
+		QryForeignBillRes returnInfo=new QryForeignBillRes();
+		try {
+			//验证系统id
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+			//验证查询值
+			if (StringUtil.isEmpty(body.getQryValue())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+			}
+			//验证账期
+			if (StringUtil.isEmpty(body.getCycleId())) {
+				throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+			}
+			//验证账单类型
+			if (StringUtil.isEmpty(body.getZdType())) {
+				throw new BillException(ErrorCodeCompEnum.BILL_FORMAT_TYPE_IS_EMPTY);
+			}
+			//验证查询值类型
+			if (StringUtil.isEmpty(body.getQryFlag())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+			//查询类型
+			if (StringUtil.isEmpty(body.getQueryType())) {
+				throw new BillException(ErrorCodeCompEnum.QURY_TYPE_IS_EMPTY);
+			}
+			returnInfo=openAPIServiceImpl.qryForeignBill(body, headers);
+			headers.forEach((key,val)->{response.setHeader(key, val);});
+		} catch (BillException err) {
+			LogUtil.error("/openApi/QryForeignBill服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[QryForeignBillRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		} catch (Exception e) {
+			LogUtil.error("/openApi/QryForeignBill服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("[输出参数] QryForeignBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		}
+		LogUtil.info("[输出参数] QryForeignBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [QryForeignBill] SERVICE...",null, this.getClass());
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+	}
     /**
      * 判断操作人属性是否符合规则
      * @param operAttrStruct

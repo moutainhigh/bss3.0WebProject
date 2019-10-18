@@ -22,6 +22,7 @@ import com.asia.service.IlocalService;
 import com.asia.vo.*;
 import com.asiainfo.account.model.request.StdCcrRealTimeBillQueryRequest;
 import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -743,7 +744,7 @@ public class LocalSeviceImpl implements IlocalService {
         if (balanceResult.getData() == null) {
             throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
-        if(balanceResult.getCode() != 200){
+        if(balanceResult.getCode() != HttpStatus.SC_OK){
             String errorMsg=getHttpErrorInfo(acctApiUrl.getQryBill(),balanceResult);
             LogUtil.error(errorMsg,null,this.getClass());
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
@@ -834,7 +835,7 @@ public class LocalSeviceImpl implements IlocalService {
             Map<String, String> object2 = new HashMap<String, String>();
             object2.put("appID", "1111111");
 
-            LogUtil.debug("[开始调用远程服务 欠费查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+            LogUtil.debug("[开始调用远程服务 欠费查询]"+ acctApiUrl.getQryBill(),null, this.getClass());
             LogUtil.debug("输入参数[oweQry]="+oweQry.toString(),null, this.getClass());
             HttpResult oweResult = null;
             try {
@@ -846,7 +847,7 @@ public class LocalSeviceImpl implements IlocalService {
                 LogUtil.error("IO流错误", e, this.getClass());
                 throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
             }
-            if(oweResult.getCode() != 200){
+            if(oweResult.getCode() != HttpStatus.SC_OK){
                 String errorMsg=getHttpErrorInfo(acctApiUrl.getQryBill(),oweResult);
                 LogUtil.error(errorMsg,null,this.getClass());
                 throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
@@ -895,7 +896,7 @@ public class LocalSeviceImpl implements IlocalService {
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
         //状态码为请求成功
-        if(resultOweList.getCode() != 200){
+        if(resultOweList.getCode() != HttpStatus.SC_OK){
             String errorMsg=getHttpErrorInfo(acctApiUrl.getGetOweList(),resultOweList);
             LogUtil.error(errorMsg,null,this.getClass());
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
