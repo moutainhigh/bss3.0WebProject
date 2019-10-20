@@ -10,6 +10,7 @@ import com.asia.domain.localApi.*;
 import com.asia.internal.common.BillException;
 import com.asia.internal.errcode.ErrorCodeCompEnum;
 import com.asia.service.impl.Bon3ServiceImpl;
+import com.asia.service.impl.DubboServiceImpl;
 import com.asia.service.impl.LocalSeviceImpl;
 import com.asiainfo.account.model.response.StdCcaRealTimeBillQueryResponse;
 import org.slf4j.Logger;
@@ -35,6 +36,8 @@ public class LocalController {
     private LocalSeviceImpl localSevice;
     @Autowired
     private Bon3ServiceImpl bon3Service;
+    @Autowired
+    private DubboServiceImpl acctService;
     //月账高额
     @PostMapping("/queryMonthHighFee")
     public String qryMonthHighFee(@RequestBody QryMonthHighFeeReq qryMonthHighFeeReq,
@@ -705,6 +708,62 @@ public class LocalController {
         }
         LogUtil.debug("输出参数 UserByPhoneQueryServiceRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
         LogUtil.debug("END [userByPhoneQueryService] SERVICE...", null, this.getClass());
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
+    @PostMapping("/acountRealFeeDetailService")
+    public String acountRealFeeDetailService(@RequestBody AcountRealFeeDetailServiceReq acountRealFeeDetailServiceReq,
+                                 @RequestHeader Map<String,String> headers,HttpServletResponse response){
+        //记录业务日志
+        LogUtil.debug("START [acountRealFeeDetailService] SERVICE...", null, this.getClass());
+        LogUtil.debug("/local/acountRealFeeDetailService" +" body>>"+JSON.toJSONString(acountRealFeeDetailServiceReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers),null, this.getClass());
+        AcountRealFeeDetailServiceRes info=new AcountRealFeeDetailServiceRes();
+        try {
+            //查询值类型
+            if (StringUtil.isEmpty(acountRealFeeDetailServiceReq.getExactlyRtQry().getQueryFlag())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+            }
+            //查询值
+            if (StringUtil.isEmpty(acountRealFeeDetailServiceReq.getExactlyRtQry().getQueryValue())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
+            //系统id
+            String systemId = acountRealFeeDetailServiceReq.getSystemId();
+            if (StringUtil.isEmpty(systemId)) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+            //值类型
+            if (StringUtil.isEmpty(acountRealFeeDetailServiceReq.getExactlyRtQry().getValueType())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_ATTR_IS_EMPTY);
+            }
+            //工号
+            //系统id
+            long staffId = acountRealFeeDetailServiceReq.getExactlyRtQry().getStaffID();
+            if (StringUtil.isEmpty(staffId)) {
+                throw new BillException(ErrorCodeCompEnum.STAFF_ID_IS_EMPTY);
+            }
+            if (StringUtil.isEmpty(acountRealFeeDetailServiceReq.getExactlyRtQry().getAreaCode())) {
+                throw new BillException(ErrorCodeCompEnum.AREA_CODE_IS_EMPTY);
+            }
+            info = acctService.rtQueryService(acountRealFeeDetailServiceReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        }catch (BillException err) {
+            LogUtil.error("/local/acountRealFeeDetailService服务调用失败"+ "body>>"+JSON.toJSONString(acountRealFeeDetailServiceReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), err,this.getClass());
+            info.setErrorCode(err.getErrCode());
+            info.setErrorMsg(err.getMessage());
+            LogUtil.error("输出参数[acountRealFeeDetailServiceRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        } catch (Exception e) {
+            LogUtil.error("/local/acountRealFeeDetailService服务调用失败"+ "body>>"+JSON.toJSONString(acountRealFeeDetailServiceReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+            info.setErrorCode(Constant.ResultCode.ERROR);
+            info.setErrorMsg(e.getMessage());
+            LogUtil.error("输出参数[acountRealFeeDetailServiceRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        LogUtil.debug("输出参数 acountRealFeeDetailServiceRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.debug("END [acountRealFeeDetailService] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
     /**

@@ -62,6 +62,8 @@ public class AcctApiUrl {
     private String qryCustBill;
     @Value("${api.QryForeignBill}")
     private String qryForeignBill;
+    @Value("${api.QryJTBillInfo}")
+    private String qryJTBillInfo;
 
 
     public String getSearchServInfo() {
@@ -211,4 +213,5 @@ public class AcctApiUrl {
     public String getQryBalanceRecordDetail(){ return qryBalanceRecordDetail;}
     public String getQryCustBill(){ return qryCustBill;}
     public String getQryForeignBill(){ return qryForeignBill;}
+    public String getQryJTBillInfo(){ return qryJTBillInfo;}
 }
