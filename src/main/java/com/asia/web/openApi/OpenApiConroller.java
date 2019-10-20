@@ -930,7 +930,7 @@ public class OpenApiConroller{
      * @Param [body, headers, response]
      * @return java.lang.String
     */
-	@PostMapping("/qryForeignBill")
+	@PostMapping("/QryForeignBill")
 	public String QryForeignBill(@RequestBody QryForeignBillReq body,
 								   @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
@@ -983,6 +983,64 @@ public class OpenApiConroller{
 		}
 		LogUtil.info("[输出参数] QryForeignBillRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
 		LogUtil.info("END [QryForeignBill] SERVICE...",null, this.getClass());
+		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+	}
+	/**
+	 * @Author WangBaoQiang
+	 * @Description 调查询中心查询客户账单 三级账单展示
+	 * @Date 20:58 2019/10/16
+	 * @Param [body, headers, response]
+	 * @return java.lang.String
+	 */
+	@PostMapping("/QryJTBillInfo")
+	public String QryJTBillInfo(@RequestBody QryJTBillInfoReq body,
+								 @RequestHeader Map<String,String> headers,HttpServletResponse response){
+		//记录业务日志
+		LogUtil.info("START [QryJTBillInfo] SERVICE...",null, this.getClass());
+		LogUtil.info("/openApi/QryJTBillInfoRes" +" body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
+		QryJTBillInfoRes returnInfo=new QryJTBillInfoRes();
+		try {
+			//验证系统id
+			String systemId = body.getSystemId();
+			if (StringUtil.isEmpty(systemId)) {
+				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}
+			//验证查询值
+			if (StringUtil.isEmpty(body.getQryValue())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+			}
+			//验证账期
+			if (StringUtil.isEmpty(body.getCycleId())) {
+				throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
+			}
+			//验证账单类型
+			if (StringUtil.isEmpty(body.getZdType())) {
+				throw new BillException(ErrorCodeCompEnum.BILL_FORMAT_TYPE_IS_EMPTY);
+			}
+			//验证查询值类型
+			if (StringUtil.isEmpty(body.getQryFlag())) {
+				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
+			}
+			returnInfo=openAPIServiceImpl.qryJTBillInfo(body, headers);
+			headers.forEach((key,val)->{response.setHeader(key, val);});
+		} catch (BillException err) {
+			LogUtil.error("/openApi/QryJTBillInfo服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), err,this.getClass());
+			returnInfo.setResultCode(err.getErrCode());
+			returnInfo.setResultMsg(err.getErrMsg());
+			LogUtil.error("输出参数[QryJTBillInfoRes]=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), err, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		} catch (Exception e) {
+			LogUtil.error("/openApi/QryJTBillInfo服务调用失败"+ "body>>"+JSON.toJSONString(body,SerializerFeature.WriteMapNullValue)
+					+" header>>"+JSON.toJSONString(headers), e,this.getClass());
+			returnInfo.setResultCode(Constant.ResultCode.ERROR);
+			returnInfo.setResultMsg(e.getMessage());
+			LogUtil.error("[输出参数] QryJTBillInfoRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue), e, this.getClass());
+			return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
+		}
+		LogUtil.info("[输出参数] QryJTBillInfoRes=" + JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue),null, this.getClass());
+		LogUtil.info("END [QryJTBillInfo] SERVICE...",null, this.getClass());
 		return JSON.toJSONString(returnInfo,SerializerFeature.WriteMapNullValue);
 	}
     /**

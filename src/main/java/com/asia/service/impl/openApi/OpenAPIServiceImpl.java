@@ -609,7 +609,7 @@ public class OpenAPIServiceImpl{
     public QryForeignBillRes qryForeignBill(QryForeignBillReq body,
                                                             Map<String,String> headers) throws IOException, BillException {
 		LogUtil.info("[开始调用远程服务 客户化账单查询]"+ acctApiUrl.getQryForeignBill(),null, this.getClass());
-		LogUtil.info("输入参数[qryBalanceRecordReq]="+body.toString(),null, this.getClass());
+		LogUtil.info("输入参数[qryForeignBillReq]="+body.toString(),null, this.getClass());
 		HttpResult result = null;
 		try {
 			result = HttpUtil.doPostJson(acctApiUrl.getQryForeignBill(), body.toString(), headers);
@@ -626,12 +626,45 @@ public class OpenAPIServiceImpl{
 			headers.putAll(result.getHeaders());
 			return JSON.parseObject(result.getData(), QryForeignBillRes.class) ;
 		}else{
-			String errorMsg=getHttpErrorInfo(acctApiUrl.getQryBalanceRecord(),result);
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getQryForeignBill(),result);
 			LogUtil.error(errorMsg,null,this.getClass());
 			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
 		}
 
     }
+/**
+ * @Author WangBaoQiang
+ * @Description //查询客户账户，三级账单展示
+ * @Date 15:35 2019/10/20
+ * @Param [body, headers]
+ * @return com.asia.domain.openApi.QryJTBillInfoRes
+*/
+	public QryJTBillInfoRes qryJTBillInfo(QryJTBillInfoReq body,
+										  Map<String,String> headers) throws IOException, BillException {
+		LogUtil.info("[开始调用远程服务 客户账单查询]"+ acctApiUrl.getQryJTBillInfo(),null, this.getClass());
+		LogUtil.info("输入参数[qryJTBillInfoReq]="+body.toString(),null, this.getClass());
+		HttpResult result = null;
+		try {
+			result = HttpUtil.doPostJson(acctApiUrl.getQryJTBillInfo(), body.toString(), headers);
+		} catch (ClientProtocolException e) {
+			LogUtil.error("连接错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		} catch (IOException e) {
+			LogUtil.error("IO流错误", e, this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+		//状态码为请求成功
+		if(result.getCode() == HttpStatus.SC_OK){
+			headers.clear();
+			headers.putAll(result.getHeaders());
+			return JSON.parseObject(result.getData(), QryJTBillInfoRes.class) ;
+		}else{
+			String errorMsg=getHttpErrorInfo(acctApiUrl.getQryForeignBill(),result);
+			LogUtil.error(errorMsg,null,this.getClass());
+			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+		}
+
+	}
 	public QryBalanceRecordRes qryBalanceRecord(QryBalanceRecordReq body,
 												Map<String,String> headers) throws IOException, BillException {
 		LogUtil.info("[开始调用远程服务 余额变动汇总查询]"+ acctApiUrl.getQryBalanceRecord(),null, this.getClass());

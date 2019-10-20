@@ -24,7 +24,7 @@ public class DubboController{
 	@PostMapping("/test")
 	public String searchServInfo(@RequestBody String str,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
-		acctService.test();
+		acctService.doProductNameCheck("310669383","3104402572");
 		return null;
 	}
 

@@ -1,6 +1,7 @@
 package com.asia.internal.common;
 
 import com.asia.common.AcctApiUrl;
+import com.asia.common.utils.StringUtil;
 import com.asia.domain.bon3.StdCcrQueryServReq;
 import com.asia.domain.bon3.StdCcrQueryServRes;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +36,7 @@ public class CommonUserInfo {
         StdCcrQueryServRes info = new StdCcrQueryServRes();
         StdCcrQueryServReq stdCcrQueryServRequest = new StdCcrQueryServReq();
         StdCcaQueryServResBean stdCcaQueryServResBean = new StdCcaQueryServResBean();
+        List<StdCcaQueryServListBean> stdCcaQueryServList = new ArrayList<>();
         StdCcaQueryServListBean stdCcaQueryServListBean = new StdCcaQueryServListBean();
         StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
         stdCcrQueryServ.setAreaCode(areaCode);
@@ -42,11 +46,16 @@ public class CommonUserInfo {
         stdCcrQueryServRequest.setStdCcrQueryServ(stdCcrQueryServ);
         //http调用账务查询用户信息服务
         info = bon3Service.commSearchServInfo(stdCcrQueryServRequest, headers);
-        if(info==null){
+        stdCcaQueryServResBean = info.getStdCcaQueryServRes();
+        if (StringUtil.isEmpty(stdCcaQueryServResBean)) {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }
-        stdCcaQueryServResBean = info.getStdCcaQueryServRes();
-        stdCcaQueryServListBean = stdCcaQueryServResBean.getStdCcaQueryServList().get(0);
+        stdCcaQueryServList = stdCcaQueryServResBean.getStdCcaQueryServList();
+        if (StringUtil.isEmpty(stdCcaQueryServList)) {
+            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+        }
+
+        stdCcaQueryServListBean = stdCcaQueryServList.get(0);
         return stdCcaQueryServListBean;
     }
 

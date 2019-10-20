@@ -7,11 +7,14 @@
 
     <dubbo:application name="bill_srv"/>
 
-    <dubbo:config-center address="zookeeper://127.0.0.1:2181"/>
-    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
-    <dubbo:metadata-report address="zookeeper://127.0.0.1:2181"/>
+    <dubbo:config-center address="zookeeper://136.160.161.31:2181"/>
+    <dubbo:registry address="zookeeper://136.160.161.31:2181"/>
+    <dubbo:metadata-report address="zookeeper://136.160.161.31:2181"/>
 
-    <dubbo:reference id="systemSwitchService" check="false"
-                     interface="com.asiainfo.account.api.SystemSwitchService"
-                     group="ConfigService" version="1.0.0" timeout="20000"/>
+    <dubbo:reference id="RtQueryService" check="false"
+                     interface="com.asiainfo.account.api.RtQueryService"
+                     group="CoreService" version="1.0.0" timeout="20000"/>
+    <dubbo:reference id="ServInfoService" check="false"
+                     interface="com.asiainfo.account.api.ServInfoService"
+                     group="CoreService" version="1.0.0" timeout="20000"/>
 </beans>
