@@ -22,7 +22,7 @@ public class QryForeignBillReq extends BaseDomain {
     private String qryValue;
     private int qryFlag;
     private String cycleId;
-    private String zdType;
+    private String areaCode;
     private String queryType;
     private String systemId;
 
@@ -50,14 +50,6 @@ public class QryForeignBillReq extends BaseDomain {
         this.cycleId = cycleId;
     }
 
-    public String getZdType() {
-        return zdType;
-    }
-
-    public void setZdType(String zdType) {
-        this.zdType = zdType;
-    }
-
     public String getQueryType() {
         return queryType;
     }
@@ -72,5 +64,13 @@ public class QryForeignBillReq extends BaseDomain {
 
     public void setSystemId(String systemId) {
         this.systemId = systemId;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
     }
 }

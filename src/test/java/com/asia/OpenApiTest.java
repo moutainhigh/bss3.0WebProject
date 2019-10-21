@@ -1,37 +1,36 @@
 package com.asia;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.asia.domain.localApi.MobileNumberQueryReq;
-import com.asia.domain.openApi.child.OperAttrStruct;
-import com.asia.domain.openApi.child.SvcObjectStruct;
-import com.asia.web.LocalController;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class OpenApiTest{
-	public static void main(String[] args) {
-		Map map=new HashMap();
+	public static void main(String[] args) throws ParseException {
+		String month = "201908";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");// 格式化为年月
+		Calendar calendar = Calendar.getInstance();
+		Date date = null;
+		date = sdf.parse(month);
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, -6);
+		/*String before_six = String.valueOf(calendar.get(Calendar.YEAR)) + calendar.get(Calendar.MONTH);//六个月前
+		ArrayList<String> resultMonth = new ArrayList<String>();
+		Calendar min = Calendar.getInstance();
+		Calendar max = Calendar.getInstance();
+		min.setTime(sdf.parse(before_six));
+		min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
+		max.setTime(sdf.parse(sdf.format(new Date())));
+		max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
+		Calendar curr = min;
+		while (curr.before(max)) {
+			resultMonth.add(sdf.format(curr.getTime()));
+			curr.add(Calendar.MONTH, 1);
+		}*/
+		for (int i = 0; i < 6; i++) {
+			calendar.add(Calendar.MONTH, 1);
+			String date1 = sdf.format(calendar.getTime());
 
-		OperAttrStruct oper= new OperAttrStruct();
-		oper.setLanId(11);
-		oper.setOperOrgId(1);
-		oper.setOperPost(11);
-		oper.setOperServiceId("111");
-		oper.setOperTime("sksk");
-		oper.setStaffId(11);
-		SvcObjectStruct svc =new SvcObjectStruct();
-		svc.setDataArea("0531");
-		svc.setObjAttr("sksk");
-		svc.setObjType("type");
-		svc.setObjValue("val");
-		map.put("operAttrStruct", oper);
-		map.put("svcObjectStruct", svc);
-		map.put("billingCycleId", 201803);
-		Map<String,String> m=JSON.parseObject(JSON.toJSONString(oper), Map.class);
-
-		System.out.println(JSON.toJSONString(map,SerializerFeature.WriteMapNullValue));
-
+		}
 	}
 }
