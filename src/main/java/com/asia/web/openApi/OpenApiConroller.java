@@ -2,6 +2,7 @@ package com.asia.web.openApi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.asia.common.SystemConfig;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.LogUtil;
 import com.asia.common.utils.StringUtil;
@@ -52,6 +53,8 @@ public class OpenApiConroller{
 	private IntfServCustChangeContrastMapper intfServCustChangeContrastDao;
 	@Autowired
 	private ProdInstRouteMapper prodInstRouteMapperDao;
+    @Autowired
+    private SystemConfig systemConfig;
 	/**
 	 * qryInstantFee:(实时话费查询). <br/>
 	 * @author yinyanzhen
@@ -527,11 +530,25 @@ public class OpenApiConroller{
 			//vc充值需要传入卡号
 			if ("4102".equals(systemId)) {
 				String cardNo = body.getCardNo();
-				StringUtil.isEmpty(cardNo);
-				String errinfo = "充值卡号[cardNo]不能为空，请重新输入！";
-				LogUtil.error(errinfo, null, this.getClass());
-				throw new BillException(ErrorCodeCompEnum.CARD_NO_ERROR);
+                if (StringUtil.isEmpty(cardNo)) {
+                    String errinfo = "充值卡号[cardNo]不能为空，请重新输入！";
+                    LogUtil.error(errinfo, null, this.getClass());
+                    throw new BillException(ErrorCodeCompEnum.CARD_NO_ERROR);
+                }
 			}
+            if (StringUtil.isEmpty(body.getBalanceItemTypeId())) {
+                throw new BillException(ErrorCodeCompEnum.BALANCE_TYPE_IS_EMPTY);
+            }
+            if ("4102".equals(systemId)) {
+                if (!systemConfig.getVcBalanceType().equals(body.getBalanceItemTypeId())) {
+                    throw new BillException(ErrorCodeCompEnum.BALANCE_TYPE_IS_ILLEGAL);
+                }
+            }
+            if ("9".equals(systemId)) {
+                if (!systemConfig.getCrmBalanceType().equals(body.getBalanceItemTypeId())) {
+                    throw new BillException(ErrorCodeCompEnum.BALANCE_TYPE_IS_ILLEGAL);
+                }
+            }
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){
@@ -953,8 +970,8 @@ public class OpenApiConroller{
 				throw new BillException(ErrorCodeCompEnum.BILLING_CYCYLE_ERR);
 			}
 			//验证账单类型
-			if (StringUtil.isEmpty(body.getZdType())) {
-				throw new BillException(ErrorCodeCompEnum.BILL_FORMAT_TYPE_IS_EMPTY);
+			if (StringUtil.isEmpty(body.getAreaCode())) {
+				throw new BillException(ErrorCodeCompEnum.AREA_CODE_IS_EMPTY);
 			}
 			//验证查询值类型
 			if (StringUtil.isEmpty(body.getQryFlag())) {

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ImportResource;
 @ServletComponentScan
 //@MapperScan("com.asia.mapper")
 //@Import({DynamicDataSourceRegister.class})
-@ImportResource(locations="application-dubbo.xml")//不调试dubbo服务时,可以注释掉,避免ZK找不到注册地址报错
+@ImportResource("classpath:application-dubbo.xml")//不调试dubbo服务时,可以注释掉,避免ZK找不到注册地址报错
 public class BillSrvApplication {
 
 	public static void main(String[] args) {

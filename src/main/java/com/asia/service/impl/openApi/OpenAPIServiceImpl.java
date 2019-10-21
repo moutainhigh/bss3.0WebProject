@@ -1,15 +1,27 @@
 package com.asia.service.impl.openApi;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.AcctApiUrl;
 import com.asia.common.baseObj.Constant;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
 import com.asia.common.utils.LogUtil;
+import com.asia.common.utils.StringUtil;
 import com.asia.dao.OrclCommonDao;
+import com.asia.domain.bon3.GetOweListReq;
+import com.asia.domain.bon3.GetOweListReq.StdCcrCustomizeBillQueryBill;
+import com.asia.domain.bon3.StdCcrQueryServReq;
+import com.asia.domain.bon3.StdCcrQueryServRes;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
+import com.asia.domain.bon3.StdCcrUserResourceQuery;
+import com.asia.domain.bon3.StdCcrUserResourceQuery.StdCcrUserResourceQueryBean;
+import com.asia.domain.bon3.StdCcrUserResourceQuery.StdCcrUserResourceQueryBean.ResourceInformationBean;
 import com.asia.domain.openApi.*;
+import com.asia.domain.openApi.QryForeignBillRes.DataBean;
+import com.asia.domain.openApi.QryForeignBillRes.DataBean.*;
+import com.asia.domain.openApi.QryForeignBillRes.DataBean.BillConsumeInfo.EchartsDataBeanBean;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.domain.plcaApi.OtherRemindReq;
@@ -23,6 +35,8 @@ import com.asia.internal.errcode.ErrorCodePublicEnum;
 import com.asia.mapper.orclmapper.IfUserMeterMapper;
 import com.asia.mapper.ordmapper.IntfServCustChangeContrastMapper;
 import com.asia.service.impl.Bon3ServiceImpl;
+import com.asiainfo.account.model.domain.StdCcrQueryServ;
+import com.asiainfo.account.model.response.StdCcaUserResourceQueryResponse;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +44,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 /**
  * 服务调用层,但本处不涉及事务
  * ClassName: OpenAPIServiceImpl <br/>
@@ -607,30 +621,147 @@ public class OpenAPIServiceImpl{
      * @return com.asia.domain.openApi.QryBalanceRecordRes
     */
     public QryForeignBillRes qryForeignBill(QryForeignBillReq body,
-                                                            Map<String,String> headers) throws IOException, BillException {
+                                                            Map<String,String> headers) throws IOException, BillException, ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");// 格式化为年月
 		LogUtil.info("[开始调用远程服务 客户化账单查询]"+ acctApiUrl.getQryForeignBill(),null, this.getClass());
 		LogUtil.info("输入参数[qryForeignBillReq]="+body.toString(),null, this.getClass());
 		HttpResult result = null;
-		try {
-			result = HttpUtil.doPostJson(acctApiUrl.getQryForeignBill(), body.toString(), headers);
-		} catch (ClientProtocolException e) {
-			LogUtil.error("连接错误", e, this.getClass());
-			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-		} catch (IOException e) {
-			LogUtil.error("IO流错误", e, this.getClass());
-			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-		}
-		//状态码为请求成功
-		if(result.getCode() == HttpStatus.SC_OK){
-			headers.clear();
-			headers.putAll(result.getHeaders());
-			return JSON.parseObject(result.getData(), QryForeignBillRes.class) ;
-		}else{
-			String errorMsg=getHttpErrorInfo(acctApiUrl.getQryForeignBill(),result);
-			LogUtil.error(errorMsg,null,this.getClass());
-			throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
-		}
-
+		HttpResult rtFeeResult = null;
+		HttpResult accuResult = null;
+        HttpResult servInfo = null;
+        HttpResult custBill = null;
+        QryForeignBillRes qryForeignBillRes = new QryForeignBillRes();
+        DataBean dataBean = new DataBean();
+		Arrears arrears = new Arrears();
+        List<BillsBean> billsBeanList = new ArrayList<>();
+        BillsBean billsBean = new BillsBean();
+		BillCionInfo billCionInfo = new BillCionInfo();
+        OfferConsumerInfosBean offerConsumerInfosBean = new OfferConsumerInfosBean();
+        UserInfoBean userInfoBean = new UserInfoBean();
+		//客户账单查询开始
+        QryJTBillInfoReq qryJTBillInfoReq = new QryJTBillInfoReq();
+        qryJTBillInfoReq.setCycleId(body.getCycleId());
+        qryJTBillInfoReq.setQryValue(body.getQryValue());
+        qryJTBillInfoReq.setZdType("998");
+        qryJTBillInfoReq.setQryFlag(1);
+        LogUtil.info("[开始调用远程服务 客户账单查询]"+ acctApiUrl.getQryJTBillInfo(),null, this.getClass());
+        LogUtil.info("输入参数[qryJTBillInfoReq]="+qryJTBillInfoReq.toString(),null, this.getClass());
+        custBill = HttpUtil.doPostJson(acctApiUrl.getQryJTBillInfo(), qryJTBillInfoReq.toString(), headers);
+        LogUtil.info("输出参数[qryJTBillInfoRes]="+JSON.toJSONString(custBill),null, this.getClass());
+        if (custBill.getCode() == HttpStatus.SC_OK) {
+            JSONObject custBilljson = JSON.parseObject(custBill.getData());
+            String userResourceQuery =  custBilljson.getString("data");
+			arrears = JSON.parseObject(userResourceQuery,Arrears.class);
+            //dataBean.setArrears(arrearsBean);
+            billsBean = JSON.parseObject(userResourceQuery,BillsBean.class);
+            billsBeanList.add(billsBean);
+           // dataBean.setBills(billsBeanList);
+        }
+        //历史账单查询开始
+		GetOweListReq getOweListReq = new GetOweListReq();
+		StdCcrCustomizeBillQueryBill stdCcrCustomizeBillQueryBill = new StdCcrCustomizeBillQueryBill();
+		stdCcrCustomizeBillQueryBill.setAccNbr(body.getQryValue());
+		stdCcrCustomizeBillQueryBill.setDestinationAttr("2");
+		stdCcrCustomizeBillQueryBill.setQueryFlag("1");
+        String month = body.getCycleId();
+		Calendar calendar = Calendar.getInstance();
+		Date date = null;
+		date = sdf.parse(month);
+		calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -6);
+        BillConsumeInfo billConsumeInfo = new BillConsumeInfo();
+        List<EchartsDataBeanBean> echartsDataBeanBeanList = new ArrayList<>();
+        //循环调用服务取用户的近六个月账单
+        for (int i = 0; i < 6; i++) {
+            EchartsDataBeanBean echartsDataBeanBean = new EchartsDataBeanBean();
+            calendar.add(Calendar.MONTH, 1);
+            String billingCyclyId = sdf.format(calendar.getTime());
+			stdCcrCustomizeBillQueryBill.setBillingCycle(billingCyclyId);
+			getOweListReq.setStdCcrCustomizeBillQueryBill(stdCcrCustomizeBillQueryBill);
+            String totalCharge = "";
+            rtFeeResult = HttpUtil.doPostJson(acctApiUrl.getGetOweList(), getOweListReq.toString(), headers);
+            if (rtFeeResult.getCode() == HttpStatus.SC_OK ) {
+                JSONObject json = JSON.parseObject(rtFeeResult.getData());
+                Map RealTimeBillQueryMap  = (Map) json.get("stdCcaCustomizeBillQueryBill");
+                if (!StringUtil.isEmpty(RealTimeBillQueryMap)) {
+                    totalCharge = String.valueOf(RealTimeBillQueryMap.get("sumCharge"));
+                } else {
+                    totalCharge = "";
+                }
+                echartsDataBeanBean.setBillMonth(billingCyclyId);
+                echartsDataBeanBean.setBillFee(totalCharge);
+                echartsDataBeanBeanList.add(echartsDataBeanBean);
+            }else{
+                String errorMsg=getHttpErrorInfo(acctApiUrl.getGetOweList(),result);
+                LogUtil.error(errorMsg,null,this.getClass());
+                throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+            }
+        }
+        billConsumeInfo.setEchartsDataBean(echartsDataBeanBeanList);
+        //调用累计量查询
+        StdCcrUserResourceQuery stdCcrUserResourceQuery = new StdCcrUserResourceQuery();
+        ResourceInformationBean resourceInformationBean = new ResourceInformationBean();
+        StdCcrUserResourceQueryBean stdCcrUserResourceQueryBean = new StdCcrUserResourceQueryBean();
+        resourceInformationBean.setAccNbr(body.getQryValue());
+        resourceInformationBean.setBillingCycle(body.getCycleId());
+        resourceInformationBean.setDestinationAttr("1");
+        resourceInformationBean.setQueryFlag("1");
+        stdCcrUserResourceQueryBean.setResourceInformation(resourceInformationBean);
+        stdCcrUserResourceQuery.setStdCcrUserResourceQuery(stdCcrUserResourceQueryBean);
+        LogUtil.info("[开始调用远程服务 累积量查询]"+ acctApiUrl.getGetUnitedAccu(),null, this.getClass());
+        LogUtil.info("输入参数[stdCcrUserResourceQuery]="+qryJTBillInfoReq.toString(),null, this.getClass());
+        accuResult = HttpUtil.doPostJson(acctApiUrl.getGetUnitedAccu(), stdCcrUserResourceQuery.toString(), headers);
+        LogUtil.info("输入参数[stdCcrUserResourceQueryRes]="+JSON.parseObject(accuResult.getData(), StdCcaUserResourceQueryResponse.class),null, this.getClass());
+        if (accuResult.getCode() == HttpStatus.SC_OK) {
+            JSONObject json = JSON.parseObject(accuResult.getData());
+            String userResourceQuery =  json.getString("stdCcaUserResourceQuery");
+            offerConsumerInfosBean=  JSON.parseObject(userResourceQuery, OfferConsumerInfosBean.class);
+        }else{
+            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetUnitedAccu(),result);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }//调用累计量查询END
+       //开始调用用户信息查询
+        StdCcrQueryServReq stdCcrQueryServReq = new StdCcrQueryServReq();
+        StdCcrQueryServ stdCcrQueryServ = new StdCcrQueryServ();
+        stdCcrQueryServ.setQueryType("1");
+        stdCcrQueryServ.setValue(body.getQryValue());
+        stdCcrQueryServ.setValueType("1");
+        stdCcrQueryServ.setAreaCode(body.getAreaCode());
+        stdCcrQueryServReq.setStdCcrQueryServ(stdCcrQueryServ);
+        LogUtil.info("[开始调用远程服务 用户信息查询]"+ acctApiUrl.getSearchServInfo(),null, this.getClass());
+        LogUtil.info("输入参数[stdCcrQueryServReq]="+stdCcrQueryServReq.toString(),null, this.getClass());
+        servInfo = HttpUtil.doPostJson(acctApiUrl.getSearchServInfo(), stdCcrQueryServReq.toString(), headers);
+        LogUtil.info("输出参数[StdCcrQueryServRes]="+JSON.parseObject(servInfo.getData(), StdCcrQueryServRes.class),null, this.getClass());
+        if (servInfo.getCode() == HttpStatus.SC_OK) {
+            JSONObject json = JSON.parseObject(servInfo.getData());
+            String userResourceQuery =  json.getString("stdCcaQueryServRes");
+            JSONObject servListjson = JSON.parseObject(userResourceQuery);
+            List<Map<String, Object>> servList = (List<Map<String, Object>>) servListjson.get("stdCcaQueryServList");
+            String custName = String.valueOf(servList.get(0).get("custName"));
+            String custId = String.valueOf(servList.get(0).get("servId"));
+            String productName = String.valueOf(servList.get(0).get("productName"));
+            userInfoBean.setBillingCycle(body.getCycleId());
+            userInfoBean.setCustName(custName);
+            userInfoBean.setServId(custId);
+            userInfoBean.setProductName(productName);
+        }else{
+            String errorMsg=getHttpErrorInfo(acctApiUrl.getGetUnitedAccu(),result);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }
+        dataBean.setArrears(arrears);
+        dataBean.setBills(billsBeanList);
+        dataBean.setBillConsumeInfo(billConsumeInfo);
+        dataBean.setOfferConsumerInfos(offerConsumerInfosBean);
+        dataBean.setUserInfo(userInfoBean);
+        dataBean.setBillCionInfo(billCionInfo);
+        qryForeignBillRes.setData(dataBean);
+        qryForeignBillRes.setResultCode("0");
+        qryForeignBillRes.setResultMsg("SUCESS");
+        headers.clear();
+        headers.putAll(accuResult.getHeaders());
+        return qryForeignBillRes ;
     }
 /**
  * @Author WangBaoQiang
@@ -722,6 +853,7 @@ public class OpenAPIServiceImpl{
 		}
 
 	}
+
 	/**
 	 * 获取调用远程HTTP接口状态码不为200时的错误信息
 	 * @param url

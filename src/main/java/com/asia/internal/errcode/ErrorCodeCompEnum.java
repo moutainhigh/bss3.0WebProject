@@ -1208,7 +1208,9 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     CARD_NO_ERROR("100029", "充值卡号为空"),
     AREA_CODE_IS_EMPTY("100030", "区号为空"),
     BILL_FORMAT_TYPE_IS_EMPTY("100031", "账单格式为空"),
-    QURY_TYPE_IS_EMPTY("100032", "查询类型为空");
+    QURY_TYPE_IS_EMPTY("100032", "查询类型为空"),
+    BALANCE_TYPE_IS_ILLEGAL("100033", "渠道对应的余额类型不合法"),
+    BALANCE_TYPE_IS_EMPTY("100034", "余额类型为空");
 
 
 
