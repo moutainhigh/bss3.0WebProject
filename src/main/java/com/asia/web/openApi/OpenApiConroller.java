@@ -527,10 +527,11 @@ public class OpenApiConroller{
 			//vc充值需要传入卡号
 			if ("4102".equals(systemId)) {
 				String cardNo = body.getCardNo();
-				StringUtil.isEmpty(cardNo);
-				String errinfo = "充值卡号[cardNo]不能为空，请重新输入！";
-				LogUtil.error(errinfo, null, this.getClass());
-				throw new BillException(ErrorCodeCompEnum.CARD_NO_ERROR);
+				if (StringUtil.isEmpty(cardNo)) {
+					String errinfo = "充值卡号[cardNo]不能为空，请重新输入！";
+					LogUtil.error(errinfo, null, this.getClass());
+					throw new BillException(ErrorCodeCompEnum.CARD_NO_ERROR);
+				}
 			}
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
