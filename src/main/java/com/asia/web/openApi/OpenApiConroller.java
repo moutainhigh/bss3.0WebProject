@@ -1039,6 +1039,9 @@ public class OpenApiConroller{
 			if (StringUtil.isEmpty(body.getQryFlag())) {
 				throw new BillException(ErrorCodeCompEnum.QUERY_FLAG_IS_EMPTY);
 			}
+			if (StringUtil.isEmpty(body.getAreaCode())) {
+				throw new BillException(ErrorCodeCompEnum.AREA_CODE_IS_EMPTY);
+			}
 			returnInfo=openAPIServiceImpl.qryJTBillInfo(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err) {

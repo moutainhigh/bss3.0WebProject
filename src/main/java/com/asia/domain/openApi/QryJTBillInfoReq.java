@@ -22,6 +22,7 @@ public class QryJTBillInfoReq extends BaseDomain {
     private int qryFlag;
     private String cycleId;
     private String zdType;
+    private String areaCode;
     private String systemId;
 
     public String getQryValue() {
@@ -62,5 +63,13 @@ public class QryJTBillInfoReq extends BaseDomain {
 
     public void setSystemId(String systemId) {
         this.systemId = systemId;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
     }
 }

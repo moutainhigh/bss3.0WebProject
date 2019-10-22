@@ -50,7 +50,7 @@ public class QryJTBillInfoRes {
          * arrears : {"billedFee":0,"cashDeduct":0,"consumeAmount":150.4,"corpusDeduct":0,"curDeposit":0,"needPay":150.4,"returnBalance":0,"returnBalancePayed":0}
          * billItems : [{"acctId":"313014336138","amount":0.1,"billItemName":"基本商品","billItemTypeId":"0","billItems":[{"amount":0.1,"billItemName":"CDMA：17390026402","billItemTypeId":"1","billItems":[{"amount":0.1,"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"amount":0.1,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.1,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"313040326593","typeId":"2065"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"parentId":"1","printOrder":"2401","typeId":"2401"}],"parentId":"0"}]},{"acctId":"313014336138","amount":150.3,"billItemName":"基本商品","billItemTypeId":"0","billItems":[{"amount":150.3,"billItemName":"CDMA：17390026401","billItemTypeId":"1","billItems":[{"amount":150,"billItemName":"套餐及叠加包月基本费","billItemTypeId":"2400","billItems":[{"amount":150,"billItemName":"月基本费","billItemTypeId":"2001","billItems":[{"amount":150,"billItemName":"包月费","billItemTypeId":"2012","billItems":[],"offerId":"87001182","parentId":"2001","printOrder":"2012","servId":"313040326592","typeId":"2012"}],"parentId":"2400","printOrder":"2001","typeId":"2001"}],"parentId":"1","printOrder":"2400","typeId":"2400"},{"amount":0.3,"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"amount":0.3,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.3,"billItemName":"SP短信信息费","billItemTypeId":"2136","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2136","servId":"313040326592","typeId":"2136"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"parentId":"1","printOrder":"2401","typeId":"2401"}],"parentId":"0"}]}]
          */
-
+        private String userName;
         private ArrearsBean arrears;
         private List<BillItemsBeanXXXX> billItems;
 
@@ -68,6 +68,14 @@ public class QryJTBillInfoRes {
 
         public void setBillItems(List<BillItemsBeanXXXX> billItems) {
             this.billItems = billItems;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
         }
 
         public static class ArrearsBean {
