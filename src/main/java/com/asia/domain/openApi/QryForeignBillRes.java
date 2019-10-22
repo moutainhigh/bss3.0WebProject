@@ -109,79 +109,78 @@ public class QryForeignBillRes {
         }
 
         public static class Arrears {
+                private Double billedFee;
+                private Double cashDeduct;
+                private Double consumeAmount;
+                private Double corpusDeduct;
+                private Double curDeposit;
+                private Double needPay;
+                private Double returnBalance;
+                private Double returnBalancePayed;
 
-                private String billedFee;
-                private String cashDeduct;
-                private String consumeAmount;
-                private String corpusDeduct;
-                private String curDeposit;
-                private String needPay;
-                private String returnBalance;
-                private String returnBalancePayed;
+            public Double getBilledFee() {
+                return billedFee;
+            }
 
-                public String getBilledFee() {
-                    return billedFee;
-                }
+            public void setBilledFee(Double billedFee) {
+                this.billedFee = billedFee;
+            }
 
-                public void setBilledFee(String billedFee) {
-                    this.billedFee = billedFee;
-                }
+            public Double getCashDeduct() {
+                return cashDeduct;
+            }
 
-                public String getCashDeduct() {
-                    return cashDeduct;
-                }
+            public void setCashDeduct(Double cashDeduct) {
+                this.cashDeduct = cashDeduct;
+            }
 
-                public void setCashDeduct(String cashDeduct) {
-                    this.cashDeduct = cashDeduct;
-                }
+            public Double getConsumeAmount() {
+                return consumeAmount;
+            }
 
-                public String getConsumeAmount() {
-                    return consumeAmount;
-                }
+            public void setConsumeAmount(Double consumeAmount) {
+                this.consumeAmount = consumeAmount;
+            }
 
-                public void setConsumeAmount(String consumeAmount) {
-                    this.consumeAmount = consumeAmount;
-                }
+            public Double getCorpusDeduct() {
+                return corpusDeduct;
+            }
 
-                public String getCorpusDeduct() {
-                    return corpusDeduct;
-                }
+            public void setCorpusDeduct(Double corpusDeduct) {
+                this.corpusDeduct = corpusDeduct;
+            }
 
-                public void setCorpusDeduct(String corpusDeduct) {
-                    this.corpusDeduct = corpusDeduct;
-                }
+            public Double getCurDeposit() {
+                return curDeposit;
+            }
 
-                public String getCurDeposit() {
-                    return curDeposit;
-                }
+            public void setCurDeposit(Double curDeposit) {
+                this.curDeposit = curDeposit;
+            }
 
-                public void setCurDeposit(String curDeposit) {
-                    this.curDeposit = curDeposit;
-                }
+            public Double getNeedPay() {
+                return needPay;
+            }
 
-                public String getNeedPay() {
-                    return needPay;
-                }
+            public void setNeedPay(Double needPay) {
+                this.needPay = needPay;
+            }
 
-                public void setNeedPay(String needPay) {
-                    this.needPay = needPay;
-                }
+            public Double getReturnBalance() {
+                return returnBalance;
+            }
 
-                public String getReturnBalance() {
-                    return returnBalance;
-                }
+            public void setReturnBalance(Double returnBalance) {
+                this.returnBalance = returnBalance;
+            }
 
-                public void setReturnBalance(String returnBalance) {
-                    this.returnBalance = returnBalance;
-                }
+            public Double getReturnBalancePayed() {
+                return returnBalancePayed;
+            }
 
-                public String getReturnBalancePayed() {
-                    return returnBalancePayed;
-                }
-
-                public void setReturnBalancePayed(String returnBalancePayed) {
-                    this.returnBalancePayed = returnBalancePayed;
-                }
+            public void setReturnBalancePayed(Double returnBalancePayed) {
+                this.returnBalancePayed = returnBalancePayed;
+            }
         }
         public static class BillCionInfo{
             private long currentCoin;

@@ -650,8 +650,9 @@ public class OpenAPIServiceImpl{
         LogUtil.info("输出参数[qryJTBillInfoRes]="+JSON.toJSONString(custBill),null, this.getClass());
         if (custBill.getCode() == HttpStatus.SC_OK) {
             JSONObject custBilljson = JSON.parseObject(custBill.getData());
+			QryForeignBillRes qryForeignBillRes1 = JSON.parseObject(custBill.getData(),QryForeignBillRes.class);
             String userResourceQuery =  custBilljson.getString("data");
-			arrears = JSON.parseObject(userResourceQuery,Arrears.class);
+			arrears = qryForeignBillRes1.getData().getArrears();
             //dataBean.setArrears(arrearsBean);
             billsBean = JSON.parseObject(userResourceQuery,BillsBean.class);
             billsBeanList.add(billsBean);
