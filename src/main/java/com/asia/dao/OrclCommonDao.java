@@ -264,7 +264,7 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(ErrorCodePublicEnum.CHANNEL_ID_NO_FOUND);
             return resultInfo;
         }
-        String channelId = operAttrStruct.getOperOrgId().toString();
+        String channelId = rechargeBalanceReq.getSystemId();
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
         //外围流水
