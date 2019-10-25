@@ -33,7 +33,7 @@
     MSG, REM1, REM2
   </sql>
   <insert id="insertVcChargeRecord" parameterType="com.asia.vo.VcChargeRecord">
-    insert into ACCT.VC_CHARGE_RECORD
+    insert into VC_CHARGE_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paymentId != null">
         PAYMENT_ID,
@@ -178,7 +178,7 @@
     </trim>
   </insert>
   <select id="getCntFromOtherPaymentId" parameterType="java.util.HashMap" resultType="java.lang.Long">
-    select count(PAYMENT_ID) from ACCT.VC_CHARGE_RECORD
+    select count(PAYMENT_ID) from VC_CHARGE_RECORD
    where
    OTHER_PAYMENT_ID = #{otherPayMentId}
    and busi_code = #{busiCode}
@@ -186,15 +186,15 @@
   </select>
 
   <update id="updateVcChargeRecord" parameterType="com.asia.vo.VcChargeRecord">
-    update  ACCT.VC_CHARGE_RECORD t set
+    update  VC_CHARGE_RECORD t set
       t.state = -1,t.UNPAY_PAYMENT_ID=#{unpayPaymentId},
       t.UNPAY_OTHER_PAYMENT_ID=#{unpayOtherPaymentId}
     where 1 = 1
-    <if test = "paymentId != null">
+    <!--<if test = "paymentId != null">
       and PAYMENT_ID = #{paymentId}
-    </if>
+    </if>-->
     <if test = "otherPaymentId != null">
-     and  OTHER_PAYMENT_ID = #{OTHER_PAYMENT_ID}
+     and  OTHER_PAYMENT_ID = #{otherPaymentId}
     </if>
   </update>
 

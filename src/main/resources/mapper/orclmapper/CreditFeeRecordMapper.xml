@@ -24,7 +24,7 @@
     `STATE`, STAFF_ID, BUSI_CODE, MSG, REM1, REM2, REM3, REM4
   </sql>
   <insert id="insertCreditFeeRecord" parameterType="com.asia.vo.CreditFeeRecord">
-    insert into ACCT.CREDIT_FEE_RECORD
+    insert into CREDIT_FEE_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paymentId != null">
         PAYMENT_ID,
@@ -121,7 +121,7 @@
     </trim>
   </insert>
   <select id="getCntFromOtherPaymentId" parameterType="java.util.HashMap" resultType="java.lang.Long">
-    select count(PAYMENT_ID) from ACCT.CREDIT_FEE_RECORD
+    select count(PAYMENT_ID) from CREDIT_FEE_RECORD
    where
    OTHER_PAYMENT_ID = #{otherPayMentId}
    and busi_code = #{busiCode}
@@ -130,7 +130,7 @@
 
 
   <update id="updateCreditFeeRecord" parameterType="com.asia.vo.CreditFeeRecord">
-    update  ACCT.CREDIT_FEE_RECORD t set
+    update  CREDIT_FEE_RECORD t set
       t.state = -1
     where
         PAYMENT_ID = #{paymentId} and  OTHER_PAYMENT_ID= #{otherPaymentId}

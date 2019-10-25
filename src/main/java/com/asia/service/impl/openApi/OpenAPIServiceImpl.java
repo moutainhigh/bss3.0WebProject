@@ -434,7 +434,7 @@ public class OpenAPIServiceImpl {
         //读取过户表,取过户时间为开始时间
         LogUtil.info("[读取用户的过户信息]", null, this.getClass());
         List<Map<String, Object>> owenCustList = intfServCustChangeContrastDao.selectIntfServCustChangeContrast(map);
-        if (owenCustList.size() > 1) {
+        if (owenCustList.size() > 0) {
             Map owenCustMap = owenCustList.get(0);
             Integer effDate = Integer.parseInt(owenCustMap.get("changeDate").toString());
             body.setStartDate(effDate);
@@ -573,11 +573,12 @@ public class OpenAPIServiceImpl {
             headers.putAll(result.getHeaders());
             rechargeBalanceRes = JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
             ResultInfo resultInfo = null;
+            String paymentId=rechargeBalanceRes.getReversePaymentId();
             System.out.println(body.getOperAttrStruct().getOperOrgId());
             //VC更新缴费历史表记录
-            if ("4102".equals(body.getOperAttrStruct().getOperOrgId())) {
+            if ("4102".equals(body.getSystemId())) {
                 String reqServiceId = rechargeBalanceRes.getReqServiceId();
-                resultInfo = orclCommonDao.updateSerialnumber(body, 0, reqServiceId);
+                resultInfo = orclCommonDao.updateSerialnumber(body, paymentId, reqServiceId);
                 if (!"0".equals(resultInfo.getCode())) {
                     String errorMsg = "更新缴费记录表，记录冲正信息异常";
                     LogUtil.error(errorMsg, null, this.getClass());

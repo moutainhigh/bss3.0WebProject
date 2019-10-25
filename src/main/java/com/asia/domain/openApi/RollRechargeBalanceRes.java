@@ -21,6 +21,15 @@ public class RollRechargeBalanceRes extends BaseApiResDomain {
     private String resultCode;
     private String resultMsg;
     private String reqServiceId;
+    private String reversePaymentId;
+
+    public String getReversePaymentId() {
+        return reversePaymentId;
+    }
+
+    public void setReversePaymentId(String reversePaymentId) {
+        this.reversePaymentId = reversePaymentId;
+    }
 
     @Override
     public String getResultCode() {

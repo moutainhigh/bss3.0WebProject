@@ -222,7 +222,7 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(ErrorCodePublicEnum.CHANNEL_ID_NO_FOUND);
             return resultInfo;
         }
-        String channelId = operAttrStruct.getOperOrgId().toString();
+        String channelId = rechargeBalanceReq.getSystemId();
         String tableName = "";
         long cnt=0;
         long flowId = Long.parseLong(rechargeBalanceReq.getFlowId());
@@ -353,7 +353,7 @@ public class OrclCommonDao {
      * @Param [rechargeBalanceReq]
      * @return com.asia.internal.common.ResultInfo
      */
-    public ResultInfo updateSerialnumber(RollRechargeBalanceReq rechargeBalanceReq, long paymentId,String reqServiceId) {
+    public ResultInfo updateSerialnumber(RollRechargeBalanceReq rechargeBalanceReq, String paymentId,String reqServiceId) {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
@@ -364,7 +364,7 @@ public class OrclCommonDao {
 
         operAttrStruct = rechargeBalanceReq.getOperAttrStruct();
 
-        String channelId = operAttrStruct.getOperOrgId().toString();
+        String channelId = rechargeBalanceReq.getSystemId();
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
         //源外围流水
@@ -385,7 +385,7 @@ public class OrclCommonDao {
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             vcChargeRecord.setOtherPaymentId(otherPaymentId);
             vcChargeRecord.setUnpayOtherPaymentId(reqServiceId);
-            vcChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
+            vcChargeRecord.setUnpayPaymentId(paymentId);
             cnt = vcChargeRecordMapperDao.updateVcChargeRecord(vcChargeRecord);
         } /*else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setOtherPaymentId(otherPaymentId);
