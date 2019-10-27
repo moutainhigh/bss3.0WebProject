@@ -30,7 +30,7 @@ public class QryMonthHighFeeReq extends BaseDomain {
     private String queryMonth;
     private String queryTimeType;
     private String queryType;
-    private long queryValue;
+    private String queryValue;
     private String queryValueType;
     private String userType;
     private String systemId;
@@ -83,11 +83,11 @@ public class QryMonthHighFeeReq extends BaseDomain {
         this.queryType = queryType;
     }
 
-    public long getQueryValue() {
+    public String getQueryValue() {
         return queryValue;
     }
 
-    public void setQueryValue(long queryValue) {
+    public void setQueryValue(String queryValue) {
         this.queryValue = queryValue;
     }
 

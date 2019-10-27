@@ -48,7 +48,7 @@ public class TestDataBase {
     @Test
     public void TestOracle() {
         String accNum = "13351501158";
-        List<Info3mExeFee> info3mExeFeeList= info3mExeFeeMapperDao.selectInfo3MExeFee(Long.parseLong(accNum),"201711");
+        List<Info3mExeFee> info3mExeFeeList= info3mExeFeeMapperDao.selectInfo3MExeFee(accNum,"201711");
         if (info3mExeFeeList.size() > 0) {
         }
     }

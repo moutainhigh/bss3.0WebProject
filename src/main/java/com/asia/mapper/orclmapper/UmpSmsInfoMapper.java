@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface UmpSmsInfoMapper {
-    List<UmpSmsInfo> selectUmpSmsInfo(@Param("accNbr") Long accNbr,
+    List<UmpSmsInfo> selectUmpSmsInfo(@Param("accNbr") String accNbr,
                                       @Param("beginDate") String beginDate,
                                       @Param("endDate") String endDate);
 }

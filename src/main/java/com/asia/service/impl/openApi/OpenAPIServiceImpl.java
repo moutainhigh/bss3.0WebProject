@@ -432,15 +432,15 @@ public class OpenAPIServiceImpl {
 
         map.put("servId", servId);
         //读取过户表,取过户时间为开始时间
-        LogUtil.info("[读取用户的过户信息]", null, this.getClass());
+        LogUtil.info("[读取用户" + servId +  "的过户信息]", null, this.getClass());
         List<Map<String, Object>> owenCustList = intfServCustChangeContrastDao.selectIntfServCustChangeContrast(map);
-        if (owenCustList.size() > 1) {
+        if (owenCustList.size() > 0) {
             Map owenCustMap = owenCustList.get(0);
             Integer effDate = Integer.parseInt(owenCustMap.get("changeDate").toString());
             body.setStartDate(effDate);
         }
         LogUtil.info("[用户的过户信息]" + owenCustList.toString(), null, this.getClass());
-        LogUtil.info("[开始调用远程服务 详单信息查询]" + acctApiUrl.getSearchServInfo(), null, this.getClass());
+        LogUtil.info("[开始调用远程服务 详单信息查询]" + acctApiUrl.getRtBillItem(), null, this.getClass());
         LogUtil.info("输入参数[RtBillItemReq]=" + body.toString(), null, this.getClass());
         HttpResult result = null;
         HttpResult resultSms = null;

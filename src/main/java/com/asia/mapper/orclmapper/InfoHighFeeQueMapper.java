@@ -15,9 +15,9 @@ import java.util.List;
  */
 @Repository
 public interface  InfoHighFeeQueMapper {
-    List<InfoHighFeeQue> selectInfoHighFee(@Param("accNbr") Long accNbr,
+    List<InfoHighFeeQue> selectInfoHighFee(@Param("accNbr") String accNbr,
                                           @Param("alarmDate") String alarmDate);
-    List<InfoHighFeeQue> selectInfoHighFeeByBeginDate(@Param("accNbr") Long accNbr,
+    List<InfoHighFeeQue> selectInfoHighFeeByBeginDate(@Param("accNbr") String accNbr,
                                            @Param("beginDate") String beginDate,
                                            @Param("endDate") String endDate);
 }

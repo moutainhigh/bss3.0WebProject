@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface InfoAccu5gUserMapper {
-    List<InfoAccu5gUser> selectInfoAccu5gUser(@Param("accNbr") Long accNbr,
+    List<InfoAccu5gUser> selectInfoAccu5gUser(@Param("accNbr") String accNbr,
                                               @Param("alarmDate") String alarmDate);
-    List<InfoAccu5gUser> selectInfoAccu5gUserByBeginDate(@Param("accNbr") Long accNbr,
+    List<InfoAccu5gUser> selectInfoAccu5gUserByBeginDate(@Param("accNbr") String accNbr,
                                               @Param("beginDate") String beginDate,
                                                          @Param("endDate") String endDate);
 }
