@@ -31,7 +31,7 @@
     UNPAY_OTHER_PAYMENT_ID, STS_DATE, REM1, REM2, REM3, REM4
   </sql>
   <insert id="insertBussihallChargeRecord" parameterType="generator.BussihallChargeRecord">
-    insert into ACCT.BUSSIHALL_CHARGE_RECORD
+    insert into BUSSIHALL_CHARGE_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paymentId != null">
         PAYMENT_ID,
@@ -164,7 +164,7 @@
     </trim>
   </insert>
   <select id="getCntFromOtherPaymentId" parameterType="java.util.HashMap" resultType="java.lang.Long">
-    select count(PAYMENT_ID) from ACCT.BUSSIHALL_CHARGE_RECORD
+    select count(PAYMENT_ID) from BUSSIHALL_CHARGE_RECORD
    where
    OTHER_PAYMENT_ID = #{otherPayMentId}
    and busi_code = #{busiCode}
@@ -173,7 +173,7 @@
 
 
   <update id="updateBussihallChargeRecord" parameterType="generator.BussihallChargeRecord">
-    update  ACCT.BUSSIHALL_CHARGE_RECORD t set
+    update  BUSSIHALL_CHARGE_RECORD t set
       t.state = -1,t.UNPAY_PAYMENT_ID=#{unpayPaymentId},
       t.UNPAY_OTHER_PAYMENT_ID=#{unpayOtherPaymentId}
     where

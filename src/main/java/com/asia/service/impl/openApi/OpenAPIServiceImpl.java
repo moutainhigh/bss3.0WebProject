@@ -358,7 +358,10 @@ public class OpenAPIServiceImpl {
         //用户校验
         checkServExist(stdCcaQueryServ);
         String localNet = stdCcaQueryServ.getHomeAreaCode();
-
+        String productName = stdCcaQueryServ.getProductId();
+        String paymentFlag = stdCcaQueryServ.getPaymentFlag();
+        productName = productName != null ? productName : "379";
+        paymentFlag = paymentFlag != null ? paymentFlag : "1";
         //特殊业务组的跨地市缴费限制
         if ("3003".equals(body.getSystemId())) {
             if (!"433".equals(localNet)) {
@@ -385,7 +388,7 @@ public class OpenAPIServiceImpl {
             rechargeBalanceRes = JSON.parseObject(result.getData(), RechargeBalanceRes.class);
             long paymentId = rechargeBalanceRes.getPaymentId();
             if ("0".equals(rechargeBalanceRes.getResultCode())) {
-                resultInfo = orclCommonDao.insertSerialnumber(body, paymentId, localNet);
+                resultInfo = orclCommonDao.insertSerialnumber(body, paymentId, localNet,productName,paymentFlag);
                 if (!"0".equals(resultInfo.getCode())) {
                     throw new BillException(ErrorCodeCompEnum.INSERT_CHARGE_BALANCE_ERR);
                 }
@@ -513,14 +516,14 @@ public class OpenAPIServiceImpl {
                     + "日" + time.substring(8, 10) + "时"
                     + time.substring(10, 12) + "分";
             String billingCycleId = String.valueOf(body.getBillingCycleId());
-            String sendMsgInfo = "中国电信提醒您：您于" + sendTime + "在电信" + system +
+            String sendMsgInfo = "JLJF000042|{\"msgInfo\":\"中国电信提醒您：您于" + sendTime + "在电信" + system +
                     "查询了" + billingCycleId.substring(0, 4) + "年" + billingCycleId.substring(4)
-                    + "月的" + busiType + "业务的详单";
+                    + "月的" + busiType + "业务的详单\"}";
             msgInfoBean.setAccNbr(accNbr);
-            msgInfoBean.setBusinessId("456");
-            msgInfoBean.setRemindType("123");
+            msgInfoBean.setBusinessId(sdf.format(new Date()));
+            msgInfoBean.setRemindType("查询中心详单查询查询提醒");
             msgInfoBean.setRemindCreateTime(time);
-            msgInfoBean.setRemindCode("123");
+            msgInfoBean.setRemindCode("JLJF000042");
             msgInfoBean.setChannelId(body.getSystemId());
             msgInfoBean.setRemindText(sendMsgInfo);
             msgInfoBeanList.add(msgInfoBean);
@@ -573,11 +576,12 @@ public class OpenAPIServiceImpl {
             headers.putAll(result.getHeaders());
             rechargeBalanceRes = JSON.parseObject(result.getData(), RollRechargeBalanceRes.class);
             ResultInfo resultInfo = null;
+            String paymentId=rechargeBalanceRes.getReversePaymentId();
             System.out.println(body.getOperAttrStruct().getOperOrgId());
             //VC更新缴费历史表记录
-            if ("4102".equals(body.getOperAttrStruct().getOperOrgId())) {
+            if ("4102".equals(body.getSystemId())) {
                 String reqServiceId = rechargeBalanceRes.getReqServiceId();
-                resultInfo = orclCommonDao.updateSerialnumber(body, 0, reqServiceId);
+                resultInfo = orclCommonDao.updateSerialnumber(body, paymentId, reqServiceId);
                 if (!"0".equals(resultInfo.getCode())) {
                     String errorMsg = "更新缴费记录表，记录冲正信息异常";
                     LogUtil.error(errorMsg, null, this.getClass());

@@ -526,6 +526,12 @@ public class OpenApiConroller{
                 String errinfo = "充值系统标识[systemId]不能为空，请重新输入！";
                 LogUtil.error(errinfo, null, this.getClass());
 				throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+			}else{
+				if (!systemId.equals(rechargeSource)) {
+					String errinfo = "充值系统标识[systemId]与充值请求来源[rechargeSource]不相同，请重新输入！";
+					LogUtil.error(errinfo, null, this.getClass());
+					throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_NOT_EQUAL_RECHARGESOURCE);
+				}
 			}
 			//vc充值需要传入卡号
 			if ("4102".equals(systemId)) {
@@ -549,6 +555,13 @@ public class OpenApiConroller{
                     throw new BillException(ErrorCodeCompEnum.BALANCE_TYPE_IS_ILLEGAL);
                 }
             }
+			if ("3005".equals(systemId)
+					||"1003".equals(systemId)
+					||"3001".equals(systemId)) {
+				if (!"0".equals(body.getBalanceItemTypeId())) {
+					throw new BillException(ErrorCodeCompEnum.BALANCE_TYPE_IS_ILLEGAL);
+				}
+			}
 			returnInfo=openAPIServiceImpl.rechargeBalance(body, headers);
 			headers.forEach((key,val)->{response.setHeader(key, val);});
 		} catch (BillException err){

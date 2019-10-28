@@ -23,7 +23,7 @@
   </sql>
 
   <insert id="insertEChannlMeterPrintLog" parameterType="com.asia.vo.EChannlMeterPrintLog">
-    insert into ACCT.E_CHANNL_METER_PRINT_LOG
+    insert into E_CHANNL_METER_PRINT_LOG
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="keyId != null">
         KEY_ID,

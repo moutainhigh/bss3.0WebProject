@@ -32,7 +32,7 @@
   </sql>
 
   <insert id="insertTerminalChargeRecord" parameterType="com.asia.vo.TerminalChargeRecord">
-    insert into ACCT.TERMINAL_CHARGE_RECORD
+    insert into TERMINAL_CHARGE_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paymentId != null">
         PAYMENT_ID,
@@ -165,7 +165,7 @@
     </trim>
   </insert>
   <select id="getCntFromOtherPaymentId" parameterType="java.util.HashMap" resultType="java.lang.Long">
-    select count(PAYMENT_ID) from ACCT.TERMINAL_CHARGE_RECORD
+    select count(PAYMENT_ID) from TERMINAL_CHARGE_RECORD
    where
    OTHER_PAYMENT_ID = #{otherPayMentId}
    and busi_code = #{busiCode}
@@ -173,7 +173,7 @@
   </select>
 
   <update id="updateTerminalChargeRecord" parameterType="com.asia.vo.TerminalChargeRecord">
-    update  ACCT.TERMINAL_CHARGE_RECORD t set
+    update  TERMINAL_CHARGE_RECORD t set
       t.state = -1,t.UNPAY_PAYMENT_ID=#{unpayPaymentId},
       t.UNPAY_OTHER_PAYMENT_ID=#{unpayOtherPaymentId}
     where

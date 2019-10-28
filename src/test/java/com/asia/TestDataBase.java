@@ -53,10 +53,10 @@ public class TestDataBase {
         }
     }
 
-    @Test
+    /*@Test
     public void TestDymTable() {
         String servId = "12312";
         String tableName = "mobile_call_event_0431_11707";
        List<Map<String, Object>> infoOverList=  infoOverAccuFeeMapperDao.selectMobileDataEvent(servId,tableName);
-    }
+    }*/
 }

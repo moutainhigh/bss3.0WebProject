@@ -823,12 +823,12 @@ public class LocalSeviceImpl implements IlocalService {
             result.setDueCharge("0");
         } else {
             JSONObject obj2 = new JSONObject();
-            obj.put("billQueryType", "2");
-            obj.put("destinationAccount", accNumType + accNum);
-            obj.put("destinationAttr", accNumType);
-            obj.put("queryFla", "1");
-            obj.put("feeQueryFlag", "0");
-            obj.put("operAttrStruct", operAttrStructMap);
+            obj2.put("billQueryType", "2");
+            obj2.put("destinationAccount",  accNum);
+            obj2.put("destinationAttr", accNumType);
+            obj2.put("queryFlag", "1");
+            obj2.put("feeQueryFlag", "0");
+            obj2.put("operAttrStruct", operAttrStructMap);
             String oweQry = obj2.toString();
 
             Map<String, String> object2 = new HashMap<String, String>();

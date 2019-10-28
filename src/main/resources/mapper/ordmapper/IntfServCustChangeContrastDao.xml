@@ -7,8 +7,9 @@
   </sql>
   <select id="selectIntfServCustChangeContrast" parameterType="java.util.HashMap" resultType="java.util.Map">
     select 
-    max(DATE_FORMAT(CHANGE_DATE,'%Y%m%d')) changeDate
+    DATE_FORMAT(CHANGE_DATE,'%Y%m%d') changeDate
     from intf_serv_cust_change_contrast
     where SERV_ID = #{servId,jdbcType=BIGINT}
+    order by CHANGE_DATE DESC;
   </select>
 </mapper>

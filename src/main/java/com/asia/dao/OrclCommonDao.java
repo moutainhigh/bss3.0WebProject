@@ -222,7 +222,7 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(ErrorCodePublicEnum.CHANNEL_ID_NO_FOUND);
             return resultInfo;
         }
-        String channelId = operAttrStruct.getOperOrgId().toString();
+        String channelId = rechargeBalanceReq.getSystemId();
         String tableName = "";
         long cnt=0;
         long flowId = Long.parseLong(rechargeBalanceReq.getFlowId());
@@ -249,7 +249,7 @@ public class OrclCommonDao {
      * @Param [rechargeBalanceReq]
      * @return com.asia.internal.common.ResultInfo
     */
-    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId,String lanId) {
+    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId,String lanId,String productId,String paymentFlag) {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
@@ -264,7 +264,7 @@ public class OrclCommonDao {
             resultInfo.setResultInfo(ErrorCodePublicEnum.CHANNEL_ID_NO_FOUND);
             return resultInfo;
         }
-        String channelId = operAttrStruct.getOperOrgId().toString();
+        String channelId = rechargeBalanceReq.getSystemId();
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
         //外围流水
@@ -294,6 +294,8 @@ public class OrclCommonDao {
             vcChargeRecord.setPaymentId(paymentId);
             vcChargeRecord.setSoRegionCode("431");
             vcChargeRecord.setIsRegionCode(lanId);
+            vcChargeRecord.setUserType(Integer.parseInt(productId));
+            vcChargeRecord.setBillType(Integer.parseInt(paymentFlag));
             LogUtil.info("[VC入库信息]" + vcChargeRecord.toString(),null, this.getClass());
             cnt = vcChargeRecordMapperDao.insertVcChargeRecord(vcChargeRecord);
         } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
@@ -332,6 +334,8 @@ public class OrclCommonDao {
             bussihallChargeRecord.setState(Short.parseShort("0"));
             bussihallChargeRecord.setPaymentId(paymentId);
             bussihallChargeRecord.setIsRegionCode(lanId);
+            bussihallChargeRecord.setUserType(Integer.parseInt(productId));
+            bussihallChargeRecord.setBillType(Integer.parseInt(paymentFlag));
             LogUtil.info("[其他渠道入库信息]" + bussihallChargeRecord.toString(),null, this.getClass());
             cnt = bussihallChargeRecordMapperDao.insertBussihallChargeRecord(bussihallChargeRecord);
         }
@@ -353,7 +357,7 @@ public class OrclCommonDao {
      * @Param [rechargeBalanceReq]
      * @return com.asia.internal.common.ResultInfo
      */
-    public ResultInfo updateSerialnumber(RollRechargeBalanceReq rechargeBalanceReq, long paymentId,String reqServiceId) {
+    public ResultInfo updateSerialnumber(RollRechargeBalanceReq rechargeBalanceReq, String paymentId,String reqServiceId) {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
@@ -364,7 +368,7 @@ public class OrclCommonDao {
 
         operAttrStruct = rechargeBalanceReq.getOperAttrStruct();
 
-        String channelId = operAttrStruct.getOperOrgId().toString();
+        String channelId = rechargeBalanceReq.getSystemId();
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
         //源外围流水
@@ -385,7 +389,7 @@ public class OrclCommonDao {
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             vcChargeRecord.setOtherPaymentId(otherPaymentId);
             vcChargeRecord.setUnpayOtherPaymentId(reqServiceId);
-            vcChargeRecord.setUnpayPaymentId(String.valueOf(paymentId));
+            vcChargeRecord.setUnpayPaymentId(paymentId);
             cnt = vcChargeRecordMapperDao.updateVcChargeRecord(vcChargeRecord);
         } /*else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setOtherPaymentId(otherPaymentId);
