@@ -861,13 +861,15 @@ public class LocalSeviceImpl implements IlocalService {
 
             JSONObject oweJson = JSON.parseObject(oweResult.getData());
             result.setBalanceAvl("0");
-            float due=Float.parseFloat(oweJson.get("due").toString());
-            String duecharge="0";
-            if(due!=0) {
+            //float due=Float.parseFloat(oweJson.get("due").toString());
+            //String duecharge="0";
+           /* if(due!=0) {
                 duecharge = fnum.format(due / 100);
-            }
+            }*/
+            String duecharge=oweJson.get("due").toString();
             result.setDueCharge(duecharge);
-            String oweCharge=fnum.format((Float.parseFloat(realBalance)*(-1))/100);
+           // String oweCharge=fnum.format((Float.parseFloat(realBalance)*(-1))/100);
+            String oweCharge=String.valueOf(Integer.parseInt(realBalance)*(-1));
             result.setOweCharge(oweCharge);
         }
         result.setIsBalanceInfoSucess("1");
