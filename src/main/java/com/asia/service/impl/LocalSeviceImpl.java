@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -817,6 +818,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         result.setBalanceInfos(infosList);
         result.setBalanceItems(itemsList);
+        DecimalFormat fnum = new DecimalFormat("##0.00");
         //判断是否欠费
         if (Integer.parseInt(realBalance) > 0) {
             result.setBalanceAvl(realBalance);
@@ -859,14 +861,22 @@ public class LocalSeviceImpl implements IlocalService {
 
             JSONObject oweJson = JSON.parseObject(oweResult.getData());
             result.setBalanceAvl("0");
-            result.setDueCharge(oweJson.get("due").toString());
+            //float due=Float.parseFloat(oweJson.get("due").toString());
+            //String duecharge="0";
+           /* if(due!=0) {
+                duecharge = fnum.format(due / 100);
+            }*/
+            String duecharge=oweJson.get("due").toString();
+            result.setDueCharge(duecharge);
+           // String oweCharge=fnum.format((Float.parseFloat(realBalance)*(-1))/100);
+            String oweCharge=String.valueOf(Integer.parseInt(realBalance)*(-1));
+            result.setOweCharge(oweCharge);
         }
         result.setIsBalanceInfoSucess("1");
         result.setIsBalanceItemSucess("1");
         result.setIsOweInfoSucess("1");
         result.setIsSucess("1");
         result.setMsg("成功");
-        result.setOweCharge("0");
         result.setOweInfoMsg("成功");
         return result;
     }
