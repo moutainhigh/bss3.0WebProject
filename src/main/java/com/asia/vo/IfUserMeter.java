@@ -1,12 +1,12 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
 
 /**
  * IF_USER_METER
  * @author 
  */
-public class IfUserMeter implements Serializable {
+public class IfUserMeter extends BaseDomain {
     private String servId;
 
     private String regionCode;

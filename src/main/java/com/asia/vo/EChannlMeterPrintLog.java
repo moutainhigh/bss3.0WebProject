@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.util.Date;
 
 /**
  * E_CHANNL_METER_PRINT_LOG
  * @author 
  */
-public class EChannlMeterPrintLog implements Serializable {
+public class EChannlMeterPrintLog extends BaseDomain {
     private String keyId;
 
     private String phoneId;

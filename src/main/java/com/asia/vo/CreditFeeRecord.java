@@ -1,6 +1,7 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * CREDIT_FEE_RECORD
  * @author 
  */
-public class CreditFeeRecord implements Serializable {
+public class CreditFeeRecord extends BaseDomain {
     private long paymentId;
 
     private String otherPaymentId;

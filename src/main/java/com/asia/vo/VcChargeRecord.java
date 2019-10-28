@@ -1,6 +1,7 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * VC_CHARGE_RECORD
  * @author 
  */
-public class VcChargeRecord implements Serializable {
+public class VcChargeRecord extends BaseDomain {
     private long paymentId;
 
     private String otherPaymentId;

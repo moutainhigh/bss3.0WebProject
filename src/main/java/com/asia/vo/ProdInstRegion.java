@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.util.Date;
 
 /**
  * PROD_INST_REGION
  * @author 
  */
-public class ProdInstRegion implements Serializable {
+public class ProdInstRegion extends BaseDomain {
     private Long prodInstRegionId;
 
     private Long prodInstId;

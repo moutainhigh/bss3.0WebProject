@@ -128,10 +128,10 @@
         #{billType,jdbcType=DECIMAL},
       </if>
       <if test="createdDate != null">
-        #{createdDate,jdbcType=DATE},
+        #{createdDate,jdbcType=TIMESTAMP},
       </if>
       <if test="paymentDate != null">
-        #{paymentDate,jdbcType=DATE},
+        #{paymentDate,jdbcType=TIMESTAMP},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},

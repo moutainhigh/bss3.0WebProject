@@ -2,18 +2,13 @@ package com.asia;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class OpenApiTest{
 	public static void main(String[] args) throws ParseException {
-		String month = "201908";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");// 格式化为年月
-		Calendar calendar = Calendar.getInstance();
-		Date date = null;
-		date = sdf.parse(month);
-		calendar.setTime(date);
-		calendar.add(Calendar.MONTH, -6);
+		Date date1 = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");// 格式化为年月
+		System.out.println(sdf.parse(sdf.format(date1)));
 		/*String before_six = String.valueOf(calendar.get(Calendar.YEAR)) + calendar.get(Calendar.MONTH);//六个月前
 		ArrayList<String> resultMonth = new ArrayList<String>();
 		Calendar min = Calendar.getInstance();
@@ -27,10 +22,5 @@ public class OpenApiTest{
 			resultMonth.add(sdf.format(curr.getTime()));
 			curr.add(Calendar.MONTH, 1);
 		}*/
-		for (int i = 0; i < 6; i++) {
-			calendar.add(Calendar.MONTH, 1);
-			String date1 = sdf.format(calendar.getTime());
-
-		}
 	}
 }

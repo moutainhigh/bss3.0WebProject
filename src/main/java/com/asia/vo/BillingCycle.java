@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.util.Date;
 
 /**
  * BILLING_CYCLE_0615
  * @author 
  */
-public class BillingCycle implements Serializable {
+public class BillingCycle extends BaseDomain {
     private Integer billingCycleId;
 
     private Integer billingCycleTypeId;

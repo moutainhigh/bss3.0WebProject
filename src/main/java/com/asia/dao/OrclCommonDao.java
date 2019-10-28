@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -249,7 +250,7 @@ public class OrclCommonDao {
      * @Param [rechargeBalanceReq]
      * @return com.asia.internal.common.ResultInfo
     */
-    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId,String lanId,String productId,String paymentFlag) {
+    public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId,String lanId,String productId,String paymentFlag,String acctId) throws ParseException {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
@@ -321,6 +322,7 @@ public class OrclCommonDao {
             creditFeeRecord.setCreatedDate(new Date());
             creditFeeRecord.setState(Short.parseShort("0"));
             creditFeeRecord.setPaymentId(paymentId);
+            creditFeeRecord.setAcctId(acctId);
             LogUtil.info("[CRM入库信息]" + creditFeeRecord.toString(),null, this.getClass());
             cnt = creditFeeRecordMapperDao.insertCreditFeeRecord(creditFeeRecord);
         } else {//bussihall_charge_record

@@ -1,6 +1,7 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * INFO_HD_USER_FEE
  * @author 
  */
-public class InfoHdUserFee implements Serializable {
+public class InfoHdUserFee extends BaseDomain {
     private Long offerId;
 
     private Long prodId;

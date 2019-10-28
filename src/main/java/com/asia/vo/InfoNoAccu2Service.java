@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.math.BigDecimal;
 
 /**
  * INFO_NO_ACCU_2_SERVICE
  * @author 
  */
-public class InfoNoAccu2Service implements Serializable {
+public class InfoNoAccu2Service extends BaseDomain {
     private Long servId;
 
     private String accNbr;

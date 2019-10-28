@@ -1,12 +1,12 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
 
 /**
  * INFO_3M_EXE_FEE
  * @author 
  */
-public class Info3mExeFee implements Serializable {
+public class Info3mExeFee extends BaseDomain {
     private Long servId;
 
     private String accNbr;

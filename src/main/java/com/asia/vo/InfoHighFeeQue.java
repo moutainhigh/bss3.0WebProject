@@ -1,12 +1,12 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
 
 /**
  * INFO_HIGH_FEE_QUE
  * @author 
  */
-public class InfoHighFeeQue implements Serializable {
+public class InfoHighFeeQue extends BaseDomain {
     private Long servId;
 
     private String accNbr;

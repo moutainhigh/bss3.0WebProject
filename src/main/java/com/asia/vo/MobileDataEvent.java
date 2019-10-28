@@ -1,6 +1,7 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * MOBILE_DATA_EVENT_0431_11801
  * @author 
  */
-public class MobileDataEvent implements Serializable {
+public class MobileDataEvent extends BaseDomain {
     private String imsi;
 
     private String nai;

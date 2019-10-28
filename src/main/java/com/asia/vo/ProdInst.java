@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.util.Date;
 
 /**
  * PROD_INST
  * @author 
  */
-public class ProdInst implements Serializable {
+public class ProdInst extends BaseDomain {
     private Long prodInstId;
 
     private Integer prodId;

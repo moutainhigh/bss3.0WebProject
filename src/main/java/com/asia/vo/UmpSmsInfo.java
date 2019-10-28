@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.util.Date;
 
 /**
  * UMP_SMS_INFO
  * @author 
  */
-public class UmpSmsInfo implements Serializable {
+public class UmpSmsInfo extends BaseDomain {
     private Long id;
 
     private String msisdn;

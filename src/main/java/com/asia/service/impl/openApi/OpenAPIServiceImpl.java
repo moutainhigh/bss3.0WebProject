@@ -341,7 +341,7 @@ public class OpenAPIServiceImpl {
      * @since V1.0.0
      */
     public RechargeBalanceRes rechargeBalance(RechargeBalanceReq body, Map<String, String> headers)
-            throws ClientProtocolException, IOException, BillException {
+            throws ClientProtocolException, IOException, BillException, ParseException {
         // TODO: 2019/9/3 判断计费流水是否重复
         ResultInfo resultInfo = new ResultInfo();
         resultInfo = orclCommonDao.checkSerialnumberExist(body);
@@ -387,8 +387,9 @@ public class OpenAPIServiceImpl {
             //插入充值记录
             rechargeBalanceRes = JSON.parseObject(result.getData(), RechargeBalanceRes.class);
             long paymentId = rechargeBalanceRes.getPaymentId();
+            String acctId = rechargeBalanceRes.getAcctId();
             if ("0".equals(rechargeBalanceRes.getResultCode())) {
-                resultInfo = orclCommonDao.insertSerialnumber(body, paymentId, localNet,productName,paymentFlag);
+                resultInfo = orclCommonDao.insertSerialnumber(body, paymentId, localNet,productName,paymentFlag,acctId);
                 if (!"0".equals(resultInfo.getCode())) {
                     throw new BillException(ErrorCodeCompEnum.INSERT_CHARGE_BALANCE_ERR);
                 }

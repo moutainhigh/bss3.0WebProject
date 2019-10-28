@@ -1,13 +1,14 @@
 package com.asia.vo;
 
-import java.io.Serializable;
+import com.asia.common.baseObj.BaseDomain;
+
 import java.math.BigDecimal;
 
 /**
  * REMIND_KD_REMAIN
  * @author 
  */
-public class RemindKdRemain implements Serializable {
+public class RemindKdRemain extends BaseDomain {
     private Long servId;
 
     private Long acctId;
