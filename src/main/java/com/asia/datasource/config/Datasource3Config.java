@@ -74,7 +74,7 @@ public class Datasource3Config {
     @Value("${ds3.datasource.druid.filter.stat.slow-sql-millis}")
     private long fileterStatSlowSqlMillis;
     @Bean(name = "ds3DataSource")
-    public DataSource ds3DataSource() {
+    public DataSource ds3DataSource() throws SQLException {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
@@ -104,11 +104,12 @@ public class Datasource3Config {
         }
         dataSource.setConnectionProperties(connectionProperties);
         //dataSource.setProxyFilters(Arrays.asList(statDuridFilter(),logFilter()));
+        dataSource.init();
         return dataSource;
     }
 
     @Bean(name = "ds3TransactionManager")
-    public DataSourceTransactionManager ds3TransactionManager() {
+    public DataSourceTransactionManager ds3TransactionManager() throws SQLException {
         return new DataSourceTransactionManager(ds3DataSource());
     }
 

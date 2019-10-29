@@ -71,7 +71,7 @@ public class Datasource1Config {
     private String publicKey;
     @Bean(name = "ds1DataSource")
     @Primary
-    public DataSource ds1DataSource() {
+    public DataSource ds1DataSource() throws SQLException {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
@@ -101,6 +101,7 @@ public class Datasource1Config {
         }
         dataSource.setConnectionProperties(connectionProperties);
         dataSource.setProxyFilters(Arrays.asList(statDuridFilter(),logFilter()));
+        dataSource.init();
         return dataSource;
     }
     @Bean
@@ -118,7 +119,7 @@ public class Datasource1Config {
     }
     @Bean(name = "ds1TransactionManager")
     @Primary
-    public DataSourceTransactionManager ds1TransactionManager() {
+    public DataSourceTransactionManager ds1TransactionManager() throws SQLException {
         return new DataSourceTransactionManager(ds1DataSource());
     }
 

@@ -86,10 +86,10 @@
         #{accNbr,jdbcType=VARCHAR},
       </if>
       <if test="createdDate != null">
-        #{createdDate,jdbcType=Date},
+        #{createdDate},
       </if>
       <if test="paymentDate != null">
-        #{paymentDate,jdbcType=Date},
+        #{paymentDate},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=DECIMAL},
