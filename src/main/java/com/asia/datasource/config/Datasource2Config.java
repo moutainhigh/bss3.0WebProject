@@ -66,7 +66,7 @@ public class Datasource2Config {
     @Value("${ds2.datasource.druid.filter.stat.slow-sql-millis}")
     private long fileterStatSlowSqlMillis;
     @Bean(name = "ds2DataSource")
-    public DataSource ds2DataSource() {
+    public DataSource ds2DataSource() throws SQLException {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
@@ -96,11 +96,12 @@ public class Datasource2Config {
         }
         dataSource.setConnectionProperties(connectionProperties);
         //dataSource.setProxyFilters(Arrays.asList(statDuridFilter(),logFilter()));
+        dataSource.init();
         return dataSource;
     }
 
     @Bean(name = "ds2TransactionManager")
-    public DataSourceTransactionManager ds2TransactionManager() {
+    public DataSourceTransactionManager ds2TransactionManager() throws SQLException {
         return new DataSourceTransactionManager(ds2DataSource());
     }
 
