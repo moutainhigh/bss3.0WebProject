@@ -809,6 +809,50 @@ public class LocalController {
             }
         }
     }
+
+    //补贴信息查询
+    @PostMapping("/querySubsidies")
+    public String querySubsidies(@RequestBody QuerySubsidiesReq querySubsidiesReq,
+                                   @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        LogUtil.debug("START [querySubsidies] SERVICE...", null, this.getClass());
+        LogUtil.debug("/local/querySubsidies" +" body>>"+JSON.toJSONString(querySubsidiesReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers),null, this.getClass());
+        QuerySubsidiesRes info=new QuerySubsidiesRes();
+        try {
+            //系统id
+            if (StringUtil.isEmpty(querySubsidiesReq.getSearchInfo().getSystemId())) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+            //用户号码
+            if (StringUtil.isEmpty(querySubsidiesReq.getSearchInfo().getAccNbr())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
+            //返还规则id
+            if (StringUtil.isEmpty(querySubsidiesReq.getSearchInfo().getReturnRoleId())) {
+                throw new BillException(ErrorCodeCompEnum.RETURN_ROLE_ID_NOT_DATA);
+            }
+            info = localSevice.querySubsidies(querySubsidiesReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        }catch (BillException err) {
+            LogUtil.error("/local/querySubsidies服务调用失败"+ "body>>"+JSON.toJSONString(querySubsidiesReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), err,this.getClass());
+            info.setResultCode(err.getErrCode());
+            info.setResultMsg(err.getMessage());
+            LogUtil.error("输出参数[QuerySubsidiesRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        } catch (Exception e) {
+            LogUtil.error("/local/querySubsidies服务调用失败"+ "body>>"+JSON.toJSONString(querySubsidiesReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+            info.setResultCode(Constant.ResultCode.ERROR);
+            info.setResultMsg(e.getMessage());
+            LogUtil.error("输出参数[QuerySubsidiesRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        LogUtil.debug("输出参数 QuerySubsidiesRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.debug("END [querySubsidies] SERVICE...", null, this.getClass());
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
     /**
      * qryOverAccuFee校验
      *

@@ -1211,7 +1211,8 @@ public enum ErrorCodeCompEnum implements IErrorCodeEnum {
     QURY_TYPE_IS_EMPTY("100032", "查询类型为空"),
     BALANCE_TYPE_IS_ILLEGAL("100033", "渠道对应的余额类型不合法"),
     BALANCE_TYPE_IS_EMPTY("100034", "余额类型为空"),
-    SYSTEM_ID_NOT_EQUAL_RECHARGESOURCE("100035", "系统标示和充值来源不一致");
+    SYSTEM_ID_NOT_EQUAL_RECHARGESOURCE("100035", "系统标示和充值来源不一致"),
+    RETURN_ROLE_ID_NOT_DATA("100036", "返还规则id不能为空");
 
 
 

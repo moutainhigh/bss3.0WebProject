@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.billingmapper.ABestPayReturnInfoMapper">
+  <select id="queryBestPayReturnId"  resultType="java.lang.String">
+    select a.best_pay_return_id
+    from a_best_pay_return_info a
+     where a.acct_id=#{acct_id} and a.return_rule_id=#{returnRoleId}
+     and a.acc_num= #{accNbr} AND a.STATUS_CD=1
+  </select>
+</mapper>

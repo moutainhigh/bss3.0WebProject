@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.billingmapper.AReturnRuleInstanceMapper">
+  <select id="queryAReturnRuleInstance"  resultType="java.lang.String">
+    select a.instance_id
+    from a_return_rule_instance a
+    where a.acct_id=#{acct_id}  and a.return_rule_id=#{return_rule_id}
+    AND a.state='RIA'
+  </select>
+</mapper>

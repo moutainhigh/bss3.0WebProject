@@ -2,11 +2,15 @@ package com.asia.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.common.AcctApiUrl;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
 import com.asia.common.utils.LogUtil;
 import com.asia.dao.OrclCommonDao;
+import com.asia.domain.bon3.SearchAcctInfoReq;
+import com.asia.domain.bon3.SearchAcctInfoReq.StdCcrQueryAcct;
+import com.asia.domain.bon3.SearchAcctInfoRes;
 import com.asia.domain.bon3.StdCcrQueryServRes.StdCcaQueryServResBean.StdCcaQueryServListBean;
 import com.asia.domain.localApi.*;
 import com.asia.domain.localApi.UserByPhoneQueryServiceRes.UserByPhoneQueryServiceResBean;
@@ -16,7 +20,12 @@ import com.asia.internal.common.BillException;
 import com.asia.internal.common.CommonUserInfo;
 import com.asia.internal.common.ResultInfo;
 import com.asia.internal.errcode.ErrorCodeCompEnum;
+import com.asia.mapper.billingmapper.ABalanceReturnLogMapper;
+import com.asia.mapper.billingmapper.ABestPayReturnInfoDetailMapper;
+import com.asia.mapper.billingmapper.ABestPayReturnInfoMapper;
+import com.asia.mapper.billingmapper.AReturnRuleInstanceMapper;
 import com.asia.mapper.billmapper.BillInstMappper;
+import com.asia.mapper.cpcpmapper.POfferPayPlanInfoMapper;
 import com.asia.mapper.orclmapper.*;
 import com.asia.service.IlocalService;
 import com.asia.vo.*;
@@ -26,6 +35,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.asia.domain.localApi.QuerySubsidiesRes.SubsidiesInfo;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -74,6 +84,18 @@ public class LocalSeviceImpl implements IlocalService {
     BillInstMappper billInstMappperDao;
     @Autowired
     HeadRegionMapper headRegionMapperDao;
+    @Autowired
+    POfferPayPlanInfoMapper pOfferPayPlanInfoDao;
+    @Autowired
+    AReturnRuleInstanceMapper aReturnRuleInstanceDao;
+    @Autowired
+    ABalanceReturnLogMapper aBalanceReturnLogDao;
+    @Autowired
+    NfoHDUserFeeMapper nfoHDUserFeeDao;
+    @Autowired
+    ABestPayReturnInfoMapper aBestPayReturnInfoDao;
+    @Autowired
+    ABestPayReturnInfoDetailMapper aBestPayReturnInfoDetailDao;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -1019,6 +1041,160 @@ public class LocalSeviceImpl implements IlocalService {
             String errorMsg = "找不到用户或帐户档案";
             LogUtil.error(errorMsg,null,this.getClass());
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
+        }
+    }
+
+    //补贴信息查询
+    public QuerySubsidiesRes querySubsidies(QuerySubsidiesReq querySubsidiesReq, Map<String, String> headers)
+            throws IOException, BillException {
+        String returnRoleId=querySubsidiesReq.getSearchInfo().getReturnRoleId();
+        String accNbr=querySubsidiesReq.getSearchInfo().getAccNbr();
+        QuerySubsidiesRes returnResult=new QuerySubsidiesRes();
+        HttpResult result = null;
+        SearchAcctInfoReq searchAcctInfoReq=new SearchAcctInfoReq();
+        StdCcrQueryAcct stdCcrQueryAcct=new StdCcrQueryAcct();
+        searchAcctInfoReq.setSystemId(querySubsidiesReq.getSearchInfo().getSystemId());
+        stdCcrQueryAcct.setAreaCode("0431");
+        stdCcrQueryAcct.setQueryType("1");
+        stdCcrQueryAcct.setValue(querySubsidiesReq.getSearchInfo().getAccNbr());
+        stdCcrQueryAcct.setValueType("1");
+        searchAcctInfoReq.setStdCcrQueryAcct(stdCcrQueryAcct);
+        LogUtil.debug("[开始调用远程服务 账户信息查询]"+ acctApiUrl.searchAcctInfo(),null, this.getClass());
+        LogUtil.debug("输入参数[searchAcctInfoReq]="+searchAcctInfoReq.toString(),null, this.getClass());
+        try {
+            result = HttpUtil.doPostJson(acctApiUrl.searchAcctInfo(),
+                    JSON.toJSONString(searchAcctInfoReq, SerializerFeature.WriteMapNullValue), headers);
+            LogUtil.debug("[调用远程服务 账户信息查询]"+acctApiUrl.searchAcctInfo()+"输出结果[result]="
+                    +JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());
+        } catch (ClientProtocolException e) {
+            LogUtil.error("连接错误", e, this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        } catch (IOException e) {
+            LogUtil.error("IO流错误", e, this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
+        }
+        //状态码为请求成功
+        if(result.getCode() == HttpStatus.SC_OK){
+            SearchAcctInfoRes searchAcctInfoRes=JSON.parseObject(result.getData(), SearchAcctInfoRes.class);
+            String acct_id=searchAcctInfoRes.getStdCcaQueryAcct().getQueryAcctInfo().get(0).getAcctId();
+            List<Map<String,Object>> list=pOfferPayPlanInfoDao.queryPOfferPayPlanInfo(returnRoleId);
+            if(list.size()==0){
+                returnResult.setResultCode("0");
+                returnResult.setResultMsg("cpcp查询数据为空！");
+                return  returnResult;
+            }else{
+                Map<String,Object> pOfferPayPlanInfo=list.get(0);
+                String conferflag=pOfferPayPlanInfo.get("CONFER_FLAG").toString();
+                String oneTimeSubsidies=pOfferPayPlanInfo.get("TOTAL_MONEY").toString();//一次性补贴
+                String totalSubsidies="";
+                String realPerformMonth="";
+                String subsidiesAvg="";
+                if(conferflag.equals("1")){//普通返还
+                    String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRoleId);
+                    if(instance_id==null||instance_id.equals("")){
+                        returnResult.setResultCode("0");
+                        //returnResult.setResultMsg("无返还记录！");
+                        //return  returnResult;
+                    }else{
+                        totalSubsidies=aBalanceReturnLogDao.queryTotalSubsidies(instance_id);//用户实际补贴总额
+                        if(totalSubsidies==null||totalSubsidies.equals("")){
+                            totalSubsidies="0";
+                        }
+                        realPerformMonth=aBalanceReturnLogDao.queryRealPerformMonth(instance_id);//用户实际履约月份数
+                        if(realPerformMonth==null||realPerformMonth.equals("")){
+                            realPerformMonth="0";
+                        }
+                        if(totalSubsidies!=""&&realPerformMonth!="") {
+                            int avg = Integer.parseInt(totalSubsidies) / Integer.parseInt(realPerformMonth);//用户每月享受补贴平均值
+                            subsidiesAvg=String.valueOf(avg);
+                        }
+                        returnResult.setResultCode("0");
+                        returnResult.setResultMsg("SUCCESS");
+                    }
+                    StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
+                    //调账务服务查询用户信息
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+                    //查询用户是否存在
+                    try {
+                        checkServExist(stdCcaQueryServ);
+                    }catch (BillException b){
+                        throw new BillException(b);
+                    }
+                    String servId = stdCcaQueryServ.getServId();
+                    String totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
+                    if(totalConsumed==null||totalConsumed.equals("")){
+                        totalConsumed="";
+                    }
+                    SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
+                    subsidiesInfo.setOneTimeSubsidies(oneTimeSubsidies);
+                    subsidiesInfo.setRealPerformMonth(realPerformMonth);
+                    subsidiesInfo.setSubsidiesAvg(String.valueOf(subsidiesAvg));
+                    subsidiesInfo.setTotalConsumed(totalConsumed);
+                    subsidiesInfo.setTotalSubsidies(totalSubsidies);
+                    returnResult.setSubsidiesInfo(subsidiesInfo);
+
+                }else if(conferflag.equals("2")){//翼支付反还
+                    String bestPayReturnId= aBestPayReturnInfoDao.queryBestPayReturnId(acct_id,returnRoleId,accNbr);
+                    if(bestPayReturnId==null||bestPayReturnId.equals("")){
+                        returnResult.setResultCode("0");
+                        //returnResult.setResultMsg("无返还记录！");
+                        //return  returnResult;
+                    }else{
+                        totalSubsidies=aBestPayReturnInfoDetailDao.queryTotalSubsidies(bestPayReturnId);//用户实际补贴总额
+                        if(totalSubsidies==null||totalSubsidies.equals("")){
+                            totalSubsidies="";
+                        }
+                        realPerformMonth=aBestPayReturnInfoDetailDao.queryRealPerformMonth(bestPayReturnId);//用户实际履约月份数
+                        if(realPerformMonth==null||realPerformMonth.equals("")){
+                            realPerformMonth="";
+                        }
+                        if(totalSubsidies!=""&&realPerformMonth!="") {
+                            int avg = Integer.parseInt(totalSubsidies) / Integer.parseInt(realPerformMonth);//用户每月享受补贴平均值
+                            subsidiesAvg=String.valueOf(avg);
+                        }
+                        returnResult.setResultCode("0");
+                        returnResult.setResultMsg("SUCCESS");
+                    }
+                    StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
+                    //调账务服务查询用户信息
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+                    //查询用户是否存在
+                    try {
+                        checkServExist(stdCcaQueryServ);
+                    }catch (BillException b){
+                        throw new BillException(b);
+                    }
+                    String servId = stdCcaQueryServ.getServId();
+                    String totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
+                    if(totalConsumed==null||totalConsumed.equals("")){
+                        totalConsumed="";
+                    }
+                    SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
+                    subsidiesInfo.setOneTimeSubsidies(oneTimeSubsidies);
+                    subsidiesInfo.setRealPerformMonth(realPerformMonth);
+                    subsidiesInfo.setSubsidiesAvg(String.valueOf(subsidiesAvg));
+                    subsidiesInfo.setTotalConsumed(totalConsumed);
+                    subsidiesInfo.setTotalSubsidies(totalSubsidies);
+                    returnResult.setSubsidiesInfo(subsidiesInfo);
+
+                }else{
+                    SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
+                    subsidiesInfo.setOneTimeSubsidies("");
+                    subsidiesInfo.setRealPerformMonth("");
+                    subsidiesInfo.setSubsidiesAvg("");
+                    subsidiesInfo.setTotalConsumed("");
+                    subsidiesInfo.setTotalSubsidies("");
+                    returnResult.setSubsidiesInfo(subsidiesInfo);
+                    returnResult.setResultCode("0");
+                    returnResult.setResultMsg("无返还记录！");
+                }
+            }
+
+            return returnResult;
+        }else{
+            String errorMsg=getHttpErrorInfo(acctApiUrl.searchAcctInfo(),result);
+            LogUtil.error(errorMsg,null,this.getClass());
+            throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
     }
 }
