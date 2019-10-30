@@ -1093,7 +1093,7 @@ public class LocalSeviceImpl implements IlocalService {
                     String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRoleId);
                     if(instance_id==null||instance_id.equals("")){
                         returnResult.setResultCode("0");
-                        //returnResult.setResultMsg("无返还记录！");
+                        returnResult.setResultMsg("");
                         //return  returnResult;
                     }else{
                         totalSubsidies=aBalanceReturnLogDao.queryTotalSubsidies(instance_id);//用户实际补贴总额
@@ -1137,7 +1137,7 @@ public class LocalSeviceImpl implements IlocalService {
                     String bestPayReturnId= aBestPayReturnInfoDao.queryBestPayReturnId(acct_id,returnRoleId,accNbr);
                     if(bestPayReturnId==null||bestPayReturnId.equals("")){
                         returnResult.setResultCode("0");
-                        //returnResult.setResultMsg("无返还记录！");
+                        returnResult.setResultMsg("");
                         //return  returnResult;
                     }else{
                         totalSubsidies=aBestPayReturnInfoDetailDao.queryTotalSubsidies(bestPayReturnId);//用户实际补贴总额
