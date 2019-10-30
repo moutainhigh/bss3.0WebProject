@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.asia.mapper.cpcpmapper.POfferPayPlanInfoMapper">
+  <select id="queryPOfferPayPlanInfo" resultType="java.util.Map">
+    select a.TOTAL_MONEY,a.CONFER_FLAG
+    from p_offer_payplan_info a
+    where a.OFFER_ID = #{offer_id}
+  </select>
+</mapper>
