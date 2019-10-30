@@ -226,7 +226,7 @@ public class OrclCommonDao {
         String channelId = rechargeBalanceReq.getSystemId();
         String tableName = "";
         long cnt=0;
-        long flowId = Long.parseLong(rechargeBalanceReq.getFlowId());
+        String flowId = rechargeBalanceReq.getFlowId();
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             cnt = vcChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
         } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
@@ -269,13 +269,11 @@ public class OrclCommonDao {
         //工号
         String staffId = operAttrStruct.getStaffId().toString();
         //外围流水
-        String otherPaymentId = String.valueOf(rechargeBalanceReq.getFlowId());
+        String otherPaymentId = rechargeBalanceReq.getFlowId();
         //号码
         String acctNbr = svcObjectStruct.getObjValue();
         //号码类型
         String valueType = svcObjectStruct.getObjAttr();
-        //缴费流水
-        long flowId = Long.parseLong(rechargeBalanceReq.getFlowId());
         //充值金额
         long amount = rechargeBalanceReq.getRechargeAmount();
         String tableName = "";
@@ -380,7 +378,7 @@ public class OrclCommonDao {
         //号码类型
         String valueType = svcObjectStruct.getObjAttr();
         //缴费流水
-        long flowId = Long.parseLong(rechargeBalanceReq.getReqServiceId());
+        String flowId = rechargeBalanceReq.getReqServiceId();
         //充值金额
         //long amount = rechargeBalanceReq.getRechargeAmount();
         String tableName = "";

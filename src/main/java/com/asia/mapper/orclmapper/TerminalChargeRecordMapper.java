@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 @Repository
 public interface TerminalChargeRecordMapper {
-    long getCntFromOtherPaymentId(@Param("otherPayMentId") long otherPayMentId,
+    long getCntFromOtherPaymentId(@Param("otherPayMentId") String otherPayMentId,
                                   @Param("busiCode") String busiCode);
 
     int insertTerminalChargeRecord(TerminalChargeRecord record);
