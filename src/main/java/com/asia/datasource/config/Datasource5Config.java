@@ -1,7 +1,5 @@
 package com.asia.datasource.config;
 
-import com.alibaba.druid.filter.logging.Slf4jLogFilter;
-import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
@@ -12,13 +10,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 @Configuration
 //扫描 Mapper 接口并容器管理
@@ -72,7 +68,7 @@ public class Datasource5Config {
     @Bean(name = "ds5DataSource")
    
 
-    public DataSource ds5DataSource() {
+    public DataSource ds5DataSource() throws SQLException {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
@@ -102,11 +98,12 @@ public class Datasource5Config {
         }
         dataSource.setConnectionProperties(connectionProperties);
         //dataSource.setProxyFilters(Arrays.asList(statDuridFilter(),logFilter()));
+        dataSource.init();
         return dataSource;
     }
 
     @Bean(name = "ds5TransactionManager")
-    public DataSourceTransactionManager ds5TransactionManager() {
+    public DataSourceTransactionManager ds5TransactionManager() throws SQLException {
         return new DataSourceTransactionManager(ds5DataSource());
     }
 
