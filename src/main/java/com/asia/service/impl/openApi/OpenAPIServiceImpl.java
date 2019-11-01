@@ -41,9 +41,10 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import  com.asia.domain.openApi.QryJTBillInfoRes.DataBean.ArrearsBean;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -665,10 +666,76 @@ public class OpenAPIServiceImpl {
         LogUtil.info("输出参数[qryJTBillInfoRes]=" + JSON.toJSONString(custBill), null, this.getClass());
         if (custBill.getCode() == HttpStatus.SC_OK) {
             JSONObject custBilljson = JSON.parseObject(custBill.getData());
+            DecimalFormat df1=new DecimalFormat("#.#");
             QryForeignBillRes qryForeignBillRes1 = JSON.parseObject(custBill.getData(),QryForeignBillRes.class);
             String userResourceQuery =  custBilljson.getString("data");
             arrears = qryForeignBillRes1.getData().getArrears();
+            String billedFee =df1.format(Double.parseDouble(arrears.getBilledFee())*100);
+            String cashDeduct = df1.format(Double.parseDouble(arrears.getCashDeduct())*100);
+            String consumeAmount=df1.format(Double.parseDouble(arrears.getConsumeAmount())*100);
+            String corpusDeduct=df1.format(Double.parseDouble(arrears.getCorpusDeduct())*100);
+            String curDeposit=df1.format(Double.parseDouble(arrears.getCurDeposit())*100);
+            String needPay=df1.format(Double.parseDouble(arrears.getNeedPay())*100);
+            String returnBalance=df1.format(Double.parseDouble(arrears.getReturnBalance())*100);
+            String returnBalancePayed=df1.format(Double.parseDouble(arrears.getReturnBalancePayed())*100);
+            arrears.setBilledFee(billedFee);
+            arrears.setCashDeduct(cashDeduct);
+            arrears.setConsumeAmount(consumeAmount);
+            arrears.setCorpusDeduct(corpusDeduct);
+            arrears.setCurDeposit(curDeposit);
+            arrears.setNeedPay(needPay);
+            arrears.setReturnBalance(returnBalance);
+            arrears.setReturnBalancePayed(returnBalancePayed);
             billsBean = JSON.parseObject(userResourceQuery,BillsBean.class);
+
+            List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX> list=billsBean.getBillItems();
+            List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX> list2=new ArrayList<>();
+            if(list.size()>0){
+                for(int i=0;i<list.size();i++){
+                    String amount=df1.format(Double.parseDouble(list.get(i).getAmount())*100);
+                    QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX billItemsBeanXXXX=list.get(i);
+                    billItemsBeanXXXX.setAmount(amount);
+                    List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX> billItemsBeanXXXList=billItemsBeanXXXX.getBillItems();
+                    List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX> billItemsBeanXXXList2=new ArrayList<>();
+                    for(int m=0;m<billItemsBeanXXXList.size();m++){
+                        String amount2=df1.format(Double.parseDouble(billItemsBeanXXXList.get(m).getAmount())*100);
+                        QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX billItemsBeanXXX=billItemsBeanXXXList.get(m);
+                        billItemsBeanXXX.setAmount(amount2);
+                        List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX> billItemsBeanXXList=billItemsBeanXXXList.get(m).getBillItems();
+                        List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX> billItemsBeanXXList2=new ArrayList<>();
+                        for(int n=0;n<billItemsBeanXXList.size();n++){
+                            String amount3=df1.format(Double.parseDouble(billItemsBeanXXList.get(n).getAmount())*100);
+                            QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX billItemsBeanXX=billItemsBeanXXList.get(n);
+                            billItemsBeanXX.setAmount(amount3);
+                            List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX> billItemsBeanXList=billItemsBeanXXList.get(n).getBillItems();
+                            List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX> billItemsBeanXList2=new ArrayList<>();
+                            for(int x=0;x<billItemsBeanXList.size();x++){
+                                String amount4=df1.format(Double.parseDouble(billItemsBeanXList.get(x).getAmount())*100);
+                                QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX billItemsBeanX=billItemsBeanXList.get(x);
+                                billItemsBeanX.setAmount(amount4);
+                                List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX.BillItemsBean> billItemsBeanList=billItemsBeanXList.get(x).getBillItems();
+                                List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX.BillItemsBean> billItemsBeanList2=
+                                        new ArrayList<>();
+                                for(int y=0;y<billItemsBeanList.size();y++){
+                                    String amount5=df1.format(Double.parseDouble(billItemsBeanList.get(y).getAmount())*100);
+                                    QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX.BillItemsBean billItemsBean=billItemsBeanList.get(y);
+                                    billItemsBean.setAmount(amount5);
+                                    billItemsBeanList2.add(billItemsBean);
+                                }
+                                billItemsBeanX.setBillItems(billItemsBeanList2);
+                                billItemsBeanXList2.add(billItemsBeanX);
+                            }
+                            billItemsBeanXX.setBillItems(billItemsBeanXList2);
+                            billItemsBeanXXList2.add(billItemsBeanXX);
+                        }
+                        billItemsBeanXXX.setBillItems(billItemsBeanXXList2);
+                        billItemsBeanXXXList2.add(billItemsBeanXXX);
+                    }
+                    billItemsBeanXXXX.setBillItems(billItemsBeanXXXList2);
+                    list2.add(billItemsBeanXXXX);
+                }
+                billsBean.setBillItems(list2);
+            }
             billsBeanList.add(billsBean);
         }
         //历史账单查询开始
@@ -833,6 +900,75 @@ public class OpenAPIServiceImpl {
             headers.clear();
             headers.putAll(result.getHeaders());
             qryJTBillInfoRes = JSON.parseObject(result.getData(), QryJTBillInfoRes.class);
+            DecimalFormat df1=new DecimalFormat("#.#");
+            QryJTBillInfoRes.DataBean dataBean= qryJTBillInfoRes.getData();
+            ArrearsBean arrearsBean=dataBean.getArrears();
+            String billedFee =df1.format(Integer.parseInt(arrearsBean.getBilledFee())*100);
+            String cashDeduct = df1.format(Integer.parseInt(arrearsBean.getCashDeduct())*100);
+            String consumeAmount=df1.format(Double.parseDouble(arrearsBean.getConsumeAmount())*100);
+            String corpusDeduct=df1.format(Integer.parseInt(arrearsBean.getCorpusDeduct())*100);
+            String curDeposit=df1.format(Integer.parseInt(arrearsBean.getCurDeposit())*100);
+            String needPay=df1.format(Double.parseDouble(arrearsBean.getNeedPay())*100);
+            String returnBalance=df1.format(Integer.parseInt(arrearsBean.getReturnBalance())*100);
+            String returnBalancePayed=df1.format(Integer.parseInt(arrearsBean.getReturnBalancePayed())*100);
+             arrearsBean.setBilledFee(billedFee);
+             arrearsBean.setCashDeduct(cashDeduct);
+             arrearsBean.setConsumeAmount(consumeAmount);
+             arrearsBean.setCorpusDeduct(corpusDeduct);
+             arrearsBean.setCurDeposit(curDeposit);
+             arrearsBean.setNeedPay(needPay);
+             arrearsBean.setReturnBalance(returnBalance);
+             arrearsBean.setReturnBalancePayed(returnBalancePayed);
+             dataBean.setArrears(arrearsBean);
+            List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX> list=dataBean.getBillItems();
+            List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX> list2=new ArrayList<>();
+            if(list.size()>0){
+                for(int i=0;i<list.size();i++){
+                    String amount=df1.format(Double.parseDouble(list.get(i).getAmount())*100);
+                    QryJTBillInfoRes.DataBean.BillItemsBeanXXXX billItemsBeanXXXX=list.get(i);
+                    billItemsBeanXXXX.setAmount(amount);
+                    List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX> billItemsBeanXXXList=billItemsBeanXXXX.getBillItems();
+                    List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX> billItemsBeanXXXList2=new ArrayList<>();
+                    for(int m=0;m<billItemsBeanXXXList.size();m++){
+                        String amount2=df1.format(Double.parseDouble(billItemsBeanXXXList.get(m).getAmount())*100);
+                        QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX billItemsBeanXXX=billItemsBeanXXXList.get(m);
+                        billItemsBeanXXX.setAmount(amount2);
+                        List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX> billItemsBeanXXList=billItemsBeanXXXList.get(m).getBillItems();
+                        List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX> billItemsBeanXXList2=new ArrayList<>();
+                        for(int n=0;n<billItemsBeanXXList.size();n++){
+                            String amount3=df1.format(Double.parseDouble(billItemsBeanXXList.get(n).getAmount())*100);
+                            QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX billItemsBeanXX=billItemsBeanXXList.get(n);
+                            billItemsBeanXX.setAmount(amount3);
+                            List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX> billItemsBeanXList=billItemsBeanXXList.get(n).getBillItems();
+                            List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX> billItemsBeanXList2=new ArrayList<>();
+                            for(int x=0;x<billItemsBeanXList.size();x++){
+                                String amount4=df1.format(Double.parseDouble(billItemsBeanXList.get(x).getAmount())*100);
+                                QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX billItemsBeanX=billItemsBeanXList.get(x);
+                                billItemsBeanX.setAmount(amount4);
+                                List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX.BillItemsBean> billItemsBeanList=billItemsBeanXList.get(x).getBillItems();
+                                List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX.BillItemsBean> billItemsBeanList2=
+                                        new ArrayList<>();
+                                for(int y=0;y<billItemsBeanList.size();y++){
+                                    String amount5=df1.format(Double.parseDouble(billItemsBeanList.get(y).getAmount())*100);
+                                    QryJTBillInfoRes.DataBean.BillItemsBeanXXXX.BillItemsBeanXXX.BillItemsBeanXX.BillItemsBeanX.BillItemsBean billItemsBean=billItemsBeanList.get(y);
+                                    billItemsBean.setAmount(amount5);
+                                    billItemsBeanList2.add(billItemsBean);
+                                }
+                                billItemsBeanX.setBillItems(billItemsBeanList2);
+                                billItemsBeanXList2.add(billItemsBeanX);
+                            }
+                            billItemsBeanXX.setBillItems(billItemsBeanXList2);
+                            billItemsBeanXXList2.add(billItemsBeanXX);
+                        }
+                        billItemsBeanXXX.setBillItems(billItemsBeanXXList2);
+                        billItemsBeanXXXList2.add(billItemsBeanXXX);
+                    }
+                    billItemsBeanXXXX.setBillItems(billItemsBeanXXXList2);
+                    list2.add(billItemsBeanXXXX);
+                }
+                dataBean.setBillItems(list2);
+            }
+            qryJTBillInfoRes.setData(dataBean);
             qryJTBillInfoRes.getData().setUserName(custName);
             return qryJTBillInfoRes;
         } else {

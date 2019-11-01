@@ -90,76 +90,76 @@ public class QryJTBillInfoRes {
              * returnBalancePayed : 0
              */
 
-            private int billedFee;
-            private int cashDeduct;
-            private double consumeAmount;
-            private int corpusDeduct;
-            private int curDeposit;
-            private double needPay;
-            private int returnBalance;
-            private int returnBalancePayed;
+            private String billedFee;
+            private String cashDeduct;
+            private String consumeAmount;
+            private String corpusDeduct;
+            private String curDeposit;
+            private String needPay;
+            private String returnBalance;
+            private String returnBalancePayed;
 
-            public int getBilledFee() {
+            public String getBilledFee() {
                 return billedFee;
             }
 
-            public void setBilledFee(int billedFee) {
+            public void setBilledFee(String billedFee) {
                 this.billedFee = billedFee;
             }
 
-            public int getCashDeduct() {
+            public String getCashDeduct() {
                 return cashDeduct;
             }
 
-            public void setCashDeduct(int cashDeduct) {
+            public void setCashDeduct(String cashDeduct) {
                 this.cashDeduct = cashDeduct;
             }
 
-            public double getConsumeAmount() {
+            public String getConsumeAmount() {
                 return consumeAmount;
             }
 
-            public void setConsumeAmount(double consumeAmount) {
+            public void setConsumeAmount(String consumeAmount) {
                 this.consumeAmount = consumeAmount;
             }
 
-            public int getCorpusDeduct() {
+            public String getCorpusDeduct() {
                 return corpusDeduct;
             }
 
-            public void setCorpusDeduct(int corpusDeduct) {
+            public void setCorpusDeduct(String corpusDeduct) {
                 this.corpusDeduct = corpusDeduct;
             }
 
-            public int getCurDeposit() {
+            public String getCurDeposit() {
                 return curDeposit;
             }
 
-            public void setCurDeposit(int curDeposit) {
+            public void setCurDeposit(String curDeposit) {
                 this.curDeposit = curDeposit;
             }
 
-            public double getNeedPay() {
+            public String getNeedPay() {
                 return needPay;
             }
 
-            public void setNeedPay(double needPay) {
+            public void setNeedPay(String needPay) {
                 this.needPay = needPay;
             }
 
-            public int getReturnBalance() {
+            public String getReturnBalance() {
                 return returnBalance;
             }
 
-            public void setReturnBalance(int returnBalance) {
+            public void setReturnBalance(String returnBalance) {
                 this.returnBalance = returnBalance;
             }
 
-            public int getReturnBalancePayed() {
+            public String getReturnBalancePayed() {
                 return returnBalancePayed;
             }
 
-            public void setReturnBalancePayed(int returnBalancePayed) {
+            public void setReturnBalancePayed(String returnBalancePayed) {
                 this.returnBalancePayed = returnBalancePayed;
             }
         }
@@ -174,7 +174,7 @@ public class QryJTBillInfoRes {
              */
 
             private String acctId;
-            private double amount;
+            private String amount;
             private String billItemName;
             private String billItemTypeId;
             private List<BillItemsBeanXXX> billItems;
@@ -187,11 +187,11 @@ public class QryJTBillInfoRes {
                 this.acctId = acctId;
             }
 
-            public double getAmount() {
+            public String getAmount() {
                 return amount;
             }
 
-            public void setAmount(double amount) {
+            public void setAmount(String amount) {
                 this.amount = amount;
             }
 
@@ -228,17 +228,17 @@ public class QryJTBillInfoRes {
                  * parentId : 0
                  */
 
-                private double amount;
+                private String amount;
                 private String billItemName;
                 private String billItemTypeId;
                 private String parentId;
                 private List<BillItemsBeanXX> billItems;
 
-                public double getAmount() {
+                public String getAmount() {
                     return amount;
                 }
 
-                public void setAmount(double amount) {
+                public void setAmount(String amount) {
                     this.amount = amount;
                 }
 
@@ -285,7 +285,7 @@ public class QryJTBillInfoRes {
                      * typeId : 2401
                      */
 
-                    private double amount;
+                    private String amount;
                     private String billItemName;
                     private String billItemTypeId;
                     private String parentId;
@@ -293,11 +293,11 @@ public class QryJTBillInfoRes {
                     private String typeId;
                     private List<BillItemsBeanX> billItems;
 
-                    public double getAmount() {
+                    public String getAmount() {
                         return amount;
                     }
 
-                    public void setAmount(double amount) {
+                    public void setAmount(String amount) {
                         this.amount = amount;
                     }
 
@@ -360,7 +360,7 @@ public class QryJTBillInfoRes {
                          * typeId : 2004
                          */
 
-                        private double amount;
+                        private String amount;
                         private String billItemName;
                         private String billItemTypeId;
                         private String parentId;
@@ -368,11 +368,11 @@ public class QryJTBillInfoRes {
                         private String typeId;
                         private List<BillItemsBean> billItems;
 
-                        public double getAmount() {
+                        public String getAmount() {
                             return amount;
                         }
 
-                        public void setAmount(double amount) {
+                        public void setAmount(String amount) {
                             this.amount = amount;
                         }
 
@@ -437,7 +437,7 @@ public class QryJTBillInfoRes {
                              * typeId : 2065
                              */
 
-                            private double amount;
+                            private String amount;
                             private String billItemName;
                             private String billItemTypeId;
                             private String offerId;
@@ -447,11 +447,11 @@ public class QryJTBillInfoRes {
                             private String typeId;
                             private List<?> billItems;
 
-                            public double getAmount() {
+                            public String getAmount() {
                                 return amount;
                             }
 
-                            public void setAmount(double amount) {
+                            public void setAmount(String amount) {
                                 this.amount = amount;
                             }
 

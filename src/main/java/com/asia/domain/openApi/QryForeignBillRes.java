@@ -109,76 +109,76 @@ public class QryForeignBillRes {
         }
 
         public static class Arrears {
-                private Double billedFee;
-                private Double cashDeduct;
-                private Double consumeAmount;
-                private Double corpusDeduct;
-                private Double curDeposit;
-                private Double needPay;
-                private Double returnBalance;
-                private Double returnBalancePayed;
+                private String billedFee;
+                private String cashDeduct;
+                private String consumeAmount;
+                private String corpusDeduct;
+                private String curDeposit;
+                private String needPay;
+                private String returnBalance;
+                private String returnBalancePayed;
 
-            public Double getBilledFee() {
+            public String getBilledFee() {
                 return billedFee;
             }
 
-            public void setBilledFee(Double billedFee) {
+            public void setBilledFee(String billedFee) {
                 this.billedFee = billedFee;
             }
 
-            public Double getCashDeduct() {
+            public String getCashDeduct() {
                 return cashDeduct;
             }
 
-            public void setCashDeduct(Double cashDeduct) {
+            public void setCashDeduct(String cashDeduct) {
                 this.cashDeduct = cashDeduct;
             }
 
-            public Double getConsumeAmount() {
+            public String getConsumeAmount() {
                 return consumeAmount;
             }
 
-            public void setConsumeAmount(Double consumeAmount) {
+            public void setConsumeAmount(String consumeAmount) {
                 this.consumeAmount = consumeAmount;
             }
 
-            public Double getCorpusDeduct() {
+            public String getCorpusDeduct() {
                 return corpusDeduct;
             }
 
-            public void setCorpusDeduct(Double corpusDeduct) {
+            public void setCorpusDeduct(String corpusDeduct) {
                 this.corpusDeduct = corpusDeduct;
             }
 
-            public Double getCurDeposit() {
+            public String getCurDeposit() {
                 return curDeposit;
             }
 
-            public void setCurDeposit(Double curDeposit) {
+            public void setCurDeposit(String curDeposit) {
                 this.curDeposit = curDeposit;
             }
 
-            public Double getNeedPay() {
+            public String getNeedPay() {
                 return needPay;
             }
 
-            public void setNeedPay(Double needPay) {
+            public void setNeedPay(String needPay) {
                 this.needPay = needPay;
             }
 
-            public Double getReturnBalance() {
+            public String getReturnBalance() {
                 return returnBalance;
             }
 
-            public void setReturnBalance(Double returnBalance) {
+            public void setReturnBalance(String returnBalance) {
                 this.returnBalance = returnBalance;
             }
 
-            public Double getReturnBalancePayed() {
+            public String getReturnBalancePayed() {
                 return returnBalancePayed;
             }
 
-            public void setReturnBalancePayed(Double returnBalancePayed) {
+            public void setReturnBalancePayed(String returnBalancePayed) {
                 this.returnBalancePayed = returnBalancePayed;
             }
         }
@@ -489,87 +489,53 @@ public class QryForeignBillRes {
         }
 
         public static class BillsBean {
-            /**
-             * acctId : 313019150712
-             * billFormatId : 998
-             * billItems : [{"billItemName":"套餐及叠加包月基本费","billItemTypeId":"2400","billItems":[{"billItemName":"月基本费","billItemTypeId":"2001","billItems":[{"amount":99,"billItemName":"包月费","billItemTypeId":"2012","billItems":[],"offerId":"87001187","parentId":"2001","printOrder":"2012","servId":"5002972168","typeId":"2012"}],"parentId":"2400","printOrder":"2001","typeId":"2001"}],"printOrder":"2400","typeId":"2400"},{"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.4,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"5002972168","typeId":"2065"},{"amount":0.2,"billItemName":"SP短信信息费","billItemTypeId":"2136","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2136","servId":"5002972168","typeId":"2136"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"printOrder":"2401","typeId":"2401"}]
-             * name : 基本商品
-             * offerConsumerInfos : [{"details":[{"iAccuType":60000400,"iBillingCycleID":11909,"iOrgID":1,"lCustID":313019150712,"lCycleBeginTime":20190901000000,"lCycleEndTime":20191001000000,"lCycleTypeID":1,"lInstMemberID":0,"lOfferID":40304770,"lOfferInstID":270455016,"lServID":0,"lastMonAmount":0,"offerAmount":1024,"ratableResourceId":"331100","realUsedAmount":320,"sAccuName":"(共享)国内流量","sOfferName":"[40304770]0元包1G国内手机上网流量包","sOfferType":"11","sUnitName":"M","servTypeId":2,"shareFlag":1},{"iAccuType":60010060,"iBillingCycleID":11909,"iOrgID":1,"lCustID":313019150712,"lCycleBeginTime":20190901000000,"lCycleEndTime":20191001000000,"lCycleTypeID":1,"lInstMemberID":0,"lOfferID":87001187,"lOfferInstID":315376820325,"lServID":0,"lastMonAmount":0,"offerAmount":300,"ratableResourceId":"131100","realUsedAmount":149,"sAccuName":"(共享)国内通话时长","sOfferName":"[87001187]天翼畅享20GB（99元）套餐201802","sOfferType":"11","sUnitName":"分钟","servTypeId":2,"shareFlag":1},{"iAccuType":94444444,"iBillingCycleID":11909,"iOrgID":1,"lCustID":313019150712,"lCycleBeginTime":20190901000000,"lCycleEndTime":20191001000000,"lCycleTypeID":1,"lInstMemberID":0,"lOfferID":87001187,"lOfferInstID":315376820325,"lServID":0,"lastMonAmount":0,"offerAmount":20480,"ratableResourceId":"331101","realUsedAmount":0,"sAccuName":"(共享)畅享国内流量","sOfferName":"[87001187]天翼畅享20GB（99元）套餐201802","sOfferType":"11","sUnitName":"M","servTypeId":2,"shareFlag":1}],"prodName":"CDMA：18946593727"}]
-             * preferTypeId : \N
-             * prodInstId : CDMA：18946593727
-             * total : 99.6
-             */
 
-            private List<BillItemsBeanXX> billItems;
-
-            public List<BillItemsBeanXX> getBillItems() {
-                return billItems;
-            }
-
-            public void setBillItems(List<BillItemsBeanXX> billItems) {
-                this.billItems = billItems;
-            }
-
-
-            public static class BillItemsBeanXX {
                 /**
-                 * billItemName : 套餐及叠加包月基本费
-                 * billItemTypeId : 2400
-                 * billItems : [{"billItemName":"月基本费","billItemTypeId":"2001","billItems":[{"amount":99,"billItemName":"包月费","billItemTypeId":"2012","billItems":[],"offerId":"87001187","parentId":"2001","printOrder":"2012","servId":"5002972168","typeId":"2012"}],"parentId":"2400","printOrder":"2001","typeId":"2001"}]
-                 * printOrder : 2400
-                 * typeId : 2400
+                 * arrears : {"billedFee":0,"cashDeduct":0,"consumeAmount":150.4,"corpusDeduct":0,"curDeposit":0,"needPay":150.4,"returnBalance":0,"returnBalancePayed":0}
+                 * billItems : [{"acctId":"313014336138","amount":0.1,"billItemName":"基本商品","billItemTypeId":"0","billItems":[{"amount":0.1,"billItemName":"CDMA：17390026402","billItemTypeId":"1","billItems":[{"amount":0.1,"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"amount":0.1,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.1,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"313040326593","typeId":"2065"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"parentId":"1","printOrder":"2401","typeId":"2401"}],"parentId":"0"}]},{"acctId":"313014336138","amount":150.3,"billItemName":"基本商品","billItemTypeId":"0","billItems":[{"amount":150.3,"billItemName":"CDMA：17390026401","billItemTypeId":"1","billItems":[{"amount":150,"billItemName":"套餐及叠加包月基本费","billItemTypeId":"2400","billItems":[{"amount":150,"billItemName":"月基本费","billItemTypeId":"2001","billItems":[{"amount":150,"billItemName":"包月费","billItemTypeId":"2012","billItems":[],"offerId":"87001182","parentId":"2001","printOrder":"2012","servId":"313040326592","typeId":"2012"}],"parentId":"2400","printOrder":"2001","typeId":"2001"}],"parentId":"1","printOrder":"2400","typeId":"2400"},{"amount":0.3,"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"amount":0.3,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.3,"billItemName":"SP短信信息费","billItemTypeId":"2136","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2136","servId":"313040326592","typeId":"2136"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"parentId":"1","printOrder":"2401","typeId":"2401"}],"parentId":"0"}]}]
                  */
-                private String amount;
-                private String billItemName;
-                private String billItemTypeId;
-                private List<BillItemsBeanX> billItems;
+                private List<BillItemsBeanXXXX> billItems;
 
-                public String getBillItemName() {
-                    return billItemName;
-                }
-
-                public void setBillItemName(String billItemName) {
-                    this.billItemName = billItemName;
-                }
-
-                public String getBillItemTypeId() {
-                    return billItemTypeId;
-                }
-
-                public void setBillItemTypeId(String billItemTypeId) {
-                    this.billItemTypeId = billItemTypeId;
-                }
-
-                public List<BillItemsBeanX> getBillItems() {
+                public List<BillItemsBeanXXXX> getBillItems() {
                     return billItems;
                 }
 
-                public void setBillItems(List<BillItemsBeanX> billItems) {
+                public void setBillItems(List<BillItemsBeanXXXX> billItems) {
                     this.billItems = billItems;
                 }
 
-                public String getAmount() {
-                    return amount;
-                }
 
-                public void setAmount(String amount) {
-                    this.amount = amount;
-                }
 
-                public static class BillItemsBeanX {
+                public static class BillItemsBeanXXXX {
                     /**
-                     * billItemName : 月基本费
-                     * billItemTypeId : 2001
-                     * billItems : [{"amount":99,"billItemName":"包月费","billItemTypeId":"2012","billItems":[],"offerId":"87001187","parentId":"2001","printOrder":"2012","servId":"5002972168","typeId":"2012"}]
-                     * parentId : 2400
-                     * printOrder : 2001
-                     * typeId : 2001
+                     * acctId : 313014336138
+                     * amount : 0.1
+                     * billItemName : 基本商品
+                     * billItemTypeId : 0
+                     * billItems : [{"amount":0.1,"billItemName":"CDMA：17390026402","billItemTypeId":"1","billItems":[{"amount":0.1,"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"amount":0.1,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.1,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"313040326593","typeId":"2065"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"parentId":"1","printOrder":"2401","typeId":"2401"}],"parentId":"0"}]
                      */
 
+                    private String acctId;
+                    private String amount;
                     private String billItemName;
                     private String billItemTypeId;
-                    private String amount;
-                    private List<BillItemsBean> billItems;
+                    private List<BillItemsBeanXXX> billItems;
+
+                    public String getAcctId() {
+                        return acctId;
+                    }
+
+                    public void setAcctId(String acctId) {
+                        this.acctId = acctId;
+                    }
+
+                    public String getAmount() {
+                        return amount;
+                    }
+
+                    public void setAmount(String amount) {
+                        this.amount = amount;
+                    }
 
                     public String getBillItemName() {
                         return billItemName;
@@ -587,50 +553,34 @@ public class QryForeignBillRes {
                         this.billItemTypeId = billItemTypeId;
                     }
 
-                    public List<BillItemsBean> getBillItems() {
+                    public List<BillItemsBeanXXX> getBillItems() {
                         return billItems;
                     }
 
-                    public void setBillItems(List<BillItemsBean> billItems) {
+                    public void setBillItems(List<BillItemsBeanXXX> billItems) {
                         this.billItems = billItems;
                     }
 
-                    public String getAmount() {
-                        return amount;
-                    }
-
-                    public void setAmount(String amount) {
-                        this.amount = amount;
-                    }
-
-                    public static class BillItemsBean {
+                    public static class BillItemsBeanXXX {
                         /**
-                         * amount : 99
-                         * billItemName : 包月费
-                         * billItemTypeId : 2012
-                         * billItems : []
-                         * offerId : 87001187
-                         * parentId : 2001
-                         * printOrder : 2012
-                         * servId : 5002972168
-                         * typeId : 2012
+                         * amount : 0.1
+                         * billItemName : CDMA：17390026402
+                         * billItemTypeId : 1
+                         * billItems : [{"amount":0.1,"billItemName":"套餐及叠加包超出费用","billItemTypeId":"2401","billItems":[{"amount":0.1,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.1,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"313040326593","typeId":"2065"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}],"parentId":"1","printOrder":"2401","typeId":"2401"}]
+                         * parentId : 0
                          */
 
-                        private int amount;
+                        private String amount;
                         private String billItemName;
                         private String billItemTypeId;
-                        private String offerId;
                         private String parentId;
-                        private String printOrder;
-                        private String servId;
-                        private String typeId;
-                        private List<?> billItems;
+                        private List<BillItemsBeanXX> billItems;
 
-                        public int getAmount() {
+                        public String getAmount() {
                             return amount;
                         }
 
-                        public void setAmount(int amount) {
+                        public void setAmount(String amount) {
                             this.amount = amount;
                         }
 
@@ -650,14 +600,6 @@ public class QryForeignBillRes {
                             this.billItemTypeId = billItemTypeId;
                         }
 
-                        public String getOfferId() {
-                            return offerId;
-                        }
-
-                        public void setOfferId(String offerId) {
-                            this.offerId = offerId;
-                        }
-
                         public String getParentId() {
                             return parentId;
                         }
@@ -666,40 +608,265 @@ public class QryForeignBillRes {
                             this.parentId = parentId;
                         }
 
-                        public String getPrintOrder() {
-                            return printOrder;
-                        }
-
-                        public void setPrintOrder(String printOrder) {
-                            this.printOrder = printOrder;
-                        }
-
-                        public String getServId() {
-                            return servId;
-                        }
-
-                        public void setServId(String servId) {
-                            this.servId = servId;
-                        }
-
-                        public String getTypeId() {
-                            return typeId;
-                        }
-
-                        public void setTypeId(String typeId) {
-                            this.typeId = typeId;
-                        }
-
-                        public List<?> getBillItems() {
+                        public List<BillItemsBeanXX> getBillItems() {
                             return billItems;
                         }
 
-                        public void setBillItems(List<?> billItems) {
+                        public void setBillItems(List<BillItemsBeanXX> billItems) {
                             this.billItems = billItems;
+                        }
+
+                        public static class BillItemsBeanXX {
+                            /**
+                             * amount : 0.1
+                             * billItemName : 套餐及叠加包超出费用
+                             * billItemTypeId : 2401
+                             * billItems : [{"amount":0.1,"billItemName":"短信彩信费","billItemTypeId":"2004","billItems":[{"amount":0.1,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"313040326593","typeId":"2065"}],"parentId":"2401","printOrder":"2004","typeId":"2004"}]
+                             * parentId : 1
+                             * printOrder : 2401
+                             * typeId : 2401
+                             */
+
+                            private String amount;
+                            private String billItemName;
+                            private String billItemTypeId;
+                            private String parentId;
+                            private String printOrder;
+                            private String typeId;
+                            private List<BillItemsBeanX> billItems;
+
+                            public String getAmount() {
+                                return amount;
+                            }
+
+                            public void setAmount(String amount) {
+                                this.amount = amount;
+                            }
+
+                            public String getBillItemName() {
+                                return billItemName;
+                            }
+
+                            public void setBillItemName(String billItemName) {
+                                this.billItemName = billItemName;
+                            }
+
+                            public String getBillItemTypeId() {
+                                return billItemTypeId;
+                            }
+
+                            public void setBillItemTypeId(String billItemTypeId) {
+                                this.billItemTypeId = billItemTypeId;
+                            }
+
+                            public String getParentId() {
+                                return parentId;
+                            }
+
+                            public void setParentId(String parentId) {
+                                this.parentId = parentId;
+                            }
+
+                            public String getPrintOrder() {
+                                return printOrder;
+                            }
+
+                            public void setPrintOrder(String printOrder) {
+                                this.printOrder = printOrder;
+                            }
+
+                            public String getTypeId() {
+                                return typeId;
+                            }
+
+                            public void setTypeId(String typeId) {
+                                this.typeId = typeId;
+                            }
+
+                            public List<BillItemsBeanX> getBillItems() {
+                                return billItems;
+                            }
+
+                            public void setBillItems(List<BillItemsBeanX> billItems) {
+                                this.billItems = billItems;
+                            }
+
+                            public static class BillItemsBeanX {
+                                /**
+                                 * amount : 0.1
+                                 * billItemName : 短信彩信费
+                                 * billItemTypeId : 2004
+                                 * billItems : [{"amount":0.1,"billItemName":"短信费","billItemTypeId":"2065","billItems":[],"offerId":"610000","parentId":"2004","printOrder":"2065","servId":"313040326593","typeId":"2065"}]
+                                 * parentId : 2401
+                                 * printOrder : 2004
+                                 * typeId : 2004
+                                 */
+
+                                private String amount;
+                                private String billItemName;
+                                private String billItemTypeId;
+                                private String parentId;
+                                private String printOrder;
+                                private String typeId;
+                                private List<BillItemsBean> billItems;
+
+                                public String getAmount() {
+                                    return amount;
+                                }
+
+                                public void setAmount(String amount) {
+                                    this.amount = amount;
+                                }
+
+                                public String getBillItemName() {
+                                    return billItemName;
+                                }
+
+                                public void setBillItemName(String billItemName) {
+                                    this.billItemName = billItemName;
+                                }
+
+                                public String getBillItemTypeId() {
+                                    return billItemTypeId;
+                                }
+
+                                public void setBillItemTypeId(String billItemTypeId) {
+                                    this.billItemTypeId = billItemTypeId;
+                                }
+
+                                public String getParentId() {
+                                    return parentId;
+                                }
+
+                                public void setParentId(String parentId) {
+                                    this.parentId = parentId;
+                                }
+
+                                public String getPrintOrder() {
+                                    return printOrder;
+                                }
+
+                                public void setPrintOrder(String printOrder) {
+                                    this.printOrder = printOrder;
+                                }
+
+                                public String getTypeId() {
+                                    return typeId;
+                                }
+
+                                public void setTypeId(String typeId) {
+                                    this.typeId = typeId;
+                                }
+
+                                public List<BillItemsBean> getBillItems() {
+                                    return billItems;
+                                }
+
+                                public void setBillItems(List<BillItemsBean> billItems) {
+                                    this.billItems = billItems;
+                                }
+
+                                public static class BillItemsBean {
+                                    /**
+                                     * amount : 0.1
+                                     * billItemName : 短信费
+                                     * billItemTypeId : 2065
+                                     * billItems : []
+                                     * offerId : 610000
+                                     * parentId : 2004
+                                     * printOrder : 2065
+                                     * servId : 313040326593
+                                     * typeId : 2065
+                                     */
+
+                                    private String amount;
+                                    private String billItemName;
+                                    private String billItemTypeId;
+                                    private String offerId;
+                                    private String parentId;
+                                    private String printOrder;
+                                    private String servId;
+                                    private String typeId;
+                                    private List<?> billItems;
+
+                                    public String getAmount() {
+                                        return amount;
+                                    }
+
+                                    public void setAmount(String amount) {
+                                        this.amount = amount;
+                                    }
+
+                                    public String getBillItemName() {
+                                        return billItemName;
+                                    }
+
+                                    public void setBillItemName(String billItemName) {
+                                        this.billItemName = billItemName;
+                                    }
+
+                                    public String getBillItemTypeId() {
+                                        return billItemTypeId;
+                                    }
+
+                                    public void setBillItemTypeId(String billItemTypeId) {
+                                        this.billItemTypeId = billItemTypeId;
+                                    }
+
+                                    public String getOfferId() {
+                                        return offerId;
+                                    }
+
+                                    public void setOfferId(String offerId) {
+                                        this.offerId = offerId;
+                                    }
+
+                                    public String getParentId() {
+                                        return parentId;
+                                    }
+
+                                    public void setParentId(String parentId) {
+                                        this.parentId = parentId;
+                                    }
+
+                                    public String getPrintOrder() {
+                                        return printOrder;
+                                    }
+
+                                    public void setPrintOrder(String printOrder) {
+                                        this.printOrder = printOrder;
+                                    }
+
+                                    public String getServId() {
+                                        return servId;
+                                    }
+
+                                    public void setServId(String servId) {
+                                        this.servId = servId;
+                                    }
+
+                                    public String getTypeId() {
+                                        return typeId;
+                                    }
+
+                                    public void setTypeId(String typeId) {
+                                        this.typeId = typeId;
+                                    }
+
+                                    public List<?> getBillItems() {
+                                        return billItems;
+                                    }
+
+                                    public void setBillItems(List<?> billItems) {
+                                        this.billItems = billItems;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
+
+
     }
 }
