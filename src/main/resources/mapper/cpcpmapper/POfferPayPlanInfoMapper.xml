@@ -4,6 +4,6 @@
   <select id="queryPOfferPayPlanInfo" resultType="java.util.Map">
     select a.TOTAL_MONEY,a.CONFER_FLAG
     from p_offer_payplan_info a
-    where a.OFFER_ID = #{offer_id}
+    where a.OFFER_ID = #{offer_id} and a.CONFER_FLAG in(1,2)
   </select>
 </mapper>
