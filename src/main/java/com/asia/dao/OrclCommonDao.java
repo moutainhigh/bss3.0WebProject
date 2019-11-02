@@ -54,6 +54,8 @@ public class OrclCommonDao {
     @Autowired
     VcChargeRecordMapper vcChargeRecordMapperDao;
     @Autowired
+    YmChargeRecordMapper ymChargeRecordMapperDao;
+    @Autowired
     TerminalChargeRecordMapper terminalChargeRecordMapperDao;
     @Autowired
     CreditFeeRecordMapper creditFeeRecordMapperDao;
@@ -229,7 +231,9 @@ public class OrclCommonDao {
         String flowId = rechargeBalanceReq.getFlowId();
         if ("4102".equals(channelId)) {//VC充值 vc_charge_record
             cnt = vcChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
-        } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
+        }else if ("3005".equals(channelId)) {//翼米充值 ym_charge_record
+            cnt = ymChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
+        }else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             cnt = terminalChargeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
         } else if ("9".equals(channelId)) {//crm credit_fee_record
             cnt = creditFeeRecordMapperDao.getCntFromOtherPaymentId(flowId, channelId);
@@ -253,6 +257,7 @@ public class OrclCommonDao {
     public ResultInfo insertSerialnumber(RechargeBalanceReq rechargeBalanceReq, long paymentId,String lanId,String productId,String paymentFlag,String acctId) throws ParseException {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
+        YmChargeRecord ymChargeRecord = new YmChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
         BussihallChargeRecord bussihallChargeRecord = new BussihallChargeRecord();
         CreditFeeRecord creditFeeRecord = new CreditFeeRecord();
@@ -297,7 +302,25 @@ public class OrclCommonDao {
             vcChargeRecord.setBillType(Integer.parseInt(paymentFlag));
             LogUtil.info("[VC入库信息]" + vcChargeRecord.toString(),null, this.getClass());
             cnt = vcChargeRecordMapperDao.insertVcChargeRecord(vcChargeRecord);
-        } else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
+        }else if("3005".equals(channelId)){//翼米充值
+            ymChargeRecord.setAccNbr(acctNbr);
+            ymChargeRecord.setBusiCode(channelId);
+            ymChargeRecord.setCardnumber(cardNo);
+            ymChargeRecord.setOtherPaymentId(otherPaymentId);
+            ymChargeRecord.setStaffId(staffId);
+            ymChargeRecord.setPaymentDate(new Date());
+            ymChargeRecord.setCreatedDate(new Date());
+            ymChargeRecord.setState(Short.parseShort("0"));
+            ymChargeRecord.setAmount(BigDecimal.valueOf(amount));
+            ymChargeRecord.setPaymentId(paymentId);
+            ymChargeRecord.setSoRegionCode("431");
+            ymChargeRecord.setIsRegionCode(lanId);
+            ymChargeRecord.setUserType(Integer.parseInt(productId));
+            ymChargeRecord.setBillType(Integer.parseInt(paymentFlag));
+            LogUtil.info("[翼米入库信息]" + ymChargeRecord.toString(),null, this.getClass());
+            cnt = ymChargeRecordMapperDao.insertYmChargeRecord(ymChargeRecord);
+            
+        }else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setAccNbr(acctNbr);
             terminalChargeRecord.setBusiCode(channelId);
             terminalChargeRecord.setOtherPaymentId(otherPaymentId);
@@ -360,6 +383,7 @@ public class OrclCommonDao {
     public ResultInfo updateSerialnumber(RollRechargeBalanceReq rechargeBalanceReq, String paymentId,String reqServiceId) {
         ResultInfo resultInfo = new ResultInfo();
         VcChargeRecord vcChargeRecord = new VcChargeRecord();
+        YmChargeRecord ymChargeRecord = new YmChargeRecord();
         TerminalChargeRecord terminalChargeRecord = new TerminalChargeRecord();
         BussihallChargeRecord bussihallChargeRecord = new BussihallChargeRecord();
         CreditFeeRecord creditFeeRecord = new CreditFeeRecord();
@@ -386,11 +410,16 @@ public class OrclCommonDao {
         LogUtil.info("[修改冲正流水记录]----------------",null, this.getClass());
         LogUtil.info("源流水号：" + otherPaymentId + "请求流水号" + reqServiceId
                 + "",null, this.getClass());
-        if ("4102".equals(channelId)) {//VC充值 vc_charge_record
+        if ("4102".equals(channelId)) {//VC充值回退 vc_charge_record
             vcChargeRecord.setOtherPaymentId(otherPaymentId);
             vcChargeRecord.setUnpayOtherPaymentId(reqServiceId);
             vcChargeRecord.setUnpayPaymentId(paymentId);
             cnt = vcChargeRecordMapperDao.updateVcChargeRecord(vcChargeRecord);
+        } else if ("3005".equals(channelId)) {//翼米充值回退 ym_charge_record
+            ymChargeRecord.setOtherPaymentId(otherPaymentId);
+            ymChargeRecord.setUnpayOtherPaymentId(reqServiceId);
+            ymChargeRecord.setUnpayPaymentId(paymentId);
+            cnt = ymChargeRecordMapperDao.updateYmChargeRecord(ymChargeRecord);
         } /*else if ("3001".equals(channelId)) { //自助终端 terminal_charge_record
             terminalChargeRecord.setOtherPaymentId(otherPaymentId);
             terminalChargeRecord.setUnpayOtherPaymentId(reqServiceId);
