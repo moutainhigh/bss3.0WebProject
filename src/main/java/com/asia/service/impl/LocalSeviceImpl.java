@@ -1075,34 +1075,58 @@ public class LocalSeviceImpl implements IlocalService {
         }
         //状态码为请求成功
         if(result.getCode() == HttpStatus.SC_OK){
+            String totalSubsidies="";
+            String realPerformMonth="";
+            String subsidiesAvg="";
+            String oneTimeSubsidies="";
             SearchAcctInfoRes searchAcctInfoRes=JSON.parseObject(result.getData(), SearchAcctInfoRes.class);
             String acct_id=searchAcctInfoRes.getStdCcaQueryAcct().getQueryAcctInfo().get(0).getAcctId();
             List<Map<String,Object>> list=pOfferPayPlanInfoDao.queryPOfferPayPlanInfo(returnRoleId);
             if(list.size()==0){
                 returnResult.setResultCode("0");
-                returnResult.setResultMsg("cpcp查询数据为空！");
+                returnResult.setResultMsg("");
+                StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
+                //调账务服务查询用户信息
+                stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+                //查询用户是否存在
+                try {
+                    checkServExist(stdCcaQueryServ);
+                }catch (BillException b){
+                    throw new BillException(b);
+                }
+                String servId = stdCcaQueryServ.getServId();
+                String totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
+                if(totalConsumed==null||totalConsumed.equals("")){
+                    totalConsumed="";
+                }
+                SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
+                subsidiesInfo.setOneTimeSubsidies(oneTimeSubsidies);
+                subsidiesInfo.setRealPerformMonth(realPerformMonth);
+                subsidiesInfo.setSubsidiesAvg(String.valueOf(subsidiesAvg));
+                subsidiesInfo.setTotalConsumed(totalConsumed);
+                subsidiesInfo.setTotalSubsidies(totalSubsidies);
+                returnResult.setSubsidiesInfo(subsidiesInfo);
                 return  returnResult;
             }else{
                 Map<String,Object> pOfferPayPlanInfo=list.get(0);
                 String conferflag=pOfferPayPlanInfo.get("CONFER_FLAG").toString();
-                String oneTimeSubsidies=pOfferPayPlanInfo.get("TOTAL_MONEY").toString();//一次性补贴
-                String totalSubsidies="";
-                String realPerformMonth="";
-                String subsidiesAvg="";
+                oneTimeSubsidies=pOfferPayPlanInfo.get("TOTAL_MONEY").toString();//一次性补贴
+
                 if(conferflag.equals("1")){//普通返还
                     String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRoleId);
                     if(instance_id==null||instance_id.equals("")){
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("");
+
                         //return  returnResult;
                     }else{
                         totalSubsidies=aBalanceReturnLogDao.queryTotalSubsidies(instance_id);//用户实际补贴总额
                         if(totalSubsidies==null||totalSubsidies.equals("")){
-                            totalSubsidies="0";
+                            totalSubsidies="";
                         }
                         realPerformMonth=aBalanceReturnLogDao.queryRealPerformMonth(instance_id);//用户实际履约月份数
                         if(realPerformMonth==null||realPerformMonth.equals("")){
-                            realPerformMonth="0";
+                            realPerformMonth="";
                         }
                         if(totalSubsidies!=""&&realPerformMonth!="") {
                             int avg = Integer.parseInt(totalSubsidies) / Integer.parseInt(realPerformMonth);//用户每月享受补贴平均值
