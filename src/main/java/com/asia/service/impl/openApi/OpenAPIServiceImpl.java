@@ -581,7 +581,7 @@ public class OpenAPIServiceImpl {
             String paymentId=rechargeBalanceRes.getReversePaymentId();
             System.out.println(body.getOperAttrStruct().getOperOrgId());
             //VC更新缴费历史表记录
-            if ("4102".equals(body.getSystemId())) {
+            if ("4102".equals(body.getSystemId())||"3005".equals(body.getSystemId())) {
                 String reqServiceId = rechargeBalanceRes.getReqServiceId();
                 resultInfo = orclCommonDao.updateSerialnumber(body, paymentId, reqServiceId);
                 if (!"0".equals(resultInfo.getCode())) {
