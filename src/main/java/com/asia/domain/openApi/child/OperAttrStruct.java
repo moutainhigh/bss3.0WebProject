@@ -11,7 +11,7 @@ import com.asia.common.baseObj.BaseDomain;
 public class OperAttrStruct extends BaseDomain{
 	private static final long serialVersionUID = 676567141613097287L;
 	//操作工号标识 
-	private Integer staffId;
+	private String staffId;
 	//操作组织标识 
 	private Integer operOrgId;
 	//操作时间 
@@ -23,11 +23,11 @@ public class OperAttrStruct extends BaseDomain{
 	//本地网标识 
 	private Integer lanId;
 
-	public Integer getStaffId() {
+	public String getStaffId() {
 		return staffId;
 	}
 
-	public void setStaffId(Integer staffId) {
+	public void setStaffId(String staffId) {
 		this.staffId = staffId;
 	}
 
