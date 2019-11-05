@@ -358,6 +358,17 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		private String feeType;
 		//费用
 		private Integer fee;
+
+		private String endDate;
+
+		public String getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(String endDate) {
+			this.endDate = endDate;
+		}
+
 		public String getSpCode() {
 			return spCode;
 		}
