@@ -18,14 +18,15 @@ public class RtBillItemRes  extends BaseApiResDomain{
 	//话单类型
 	private String cdrType;
 	//总记录数
-	private Integer totalRecord;
+	private long totalRecord;
 	private Integer startDate;
 	private Integer endDate;
 	private String provinceCode;
-	private Integer page;
-	private Integer row;
-	private Integer totalFee;
-	private Integer totalVolume;
+	private long pag;
+	private long row;
+	private long totalFee;
+	private long totalVolume;
+	private long totalDuration;
 
 	//语音详单
 	private List<VoiceBillItem> voiceBillItems;
@@ -50,6 +51,22 @@ public class RtBillItemRes  extends BaseApiResDomain{
 
 	public void setSvcObjectStruct(SvcObjectStruct svcObjectStruct) {
 		this.svcObjectStruct = svcObjectStruct;
+	}
+
+	public long getTotalDuration() {
+		return totalDuration;
+	}
+
+	public void setTotalDuration(long totalDuration) {
+		this.totalDuration = totalDuration;
+	}
+
+	public long getPag() {
+		return pag;
+	}
+
+	public void setPag(long pag) {
+		this.pag = pag;
 	}
 
 	/**
@@ -79,7 +96,8 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		private String calledAreaCode;
 		//计费方拜访地
         private String billingVisitAreaCode;
-
+		//结束时间
+		private String endDate;
 
 		public String getChargeNo() {
 			return chargeNo;
@@ -153,7 +171,15 @@ public class RtBillItemRes  extends BaseApiResDomain{
         public void setBillingVisitAreaCode(String billingVisitAreaCode) {
             this.billingVisitAreaCode = billingVisitAreaCode;
         }
-    }
+
+		public String getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(String endDate) {
+			this.endDate = endDate;
+		}
+	}
 	/**
 	 * 数据清单
 	 */
@@ -185,7 +211,9 @@ public class RtBillItemRes  extends BaseApiResDomain{
         private String billingNbr;
         //上网类型
         private String volumeType;
-
+		//结束时间
+		private String endDate;
+		//上网类型
 		public String getNai() {
 			return nai;
 		}
@@ -276,7 +304,15 @@ public class RtBillItemRes  extends BaseApiResDomain{
         public void setRoamTypeId(String roamTypeId) {
             this.roamTypeId = roamTypeId;
         }
-    }
+
+		public String getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(String endDate) {
+			this.endDate = endDate;
+		}
+	}
 	/**
 	 * 短信清单
 	 */
@@ -294,6 +330,8 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		private String smsType;
 		//收发类型
 		private String callType;
+		//结束时间
+		private String endDate;
 
 		public String getCalledNo() {
 			return calledNo;
@@ -340,7 +378,15 @@ public class RtBillItemRes  extends BaseApiResDomain{
         public void setSmsType(String smsType) {
             this.smsType = smsType;
         }
-    }
+
+		public String getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(String endDate) {
+			this.endDate = endDate;
+		}
+	}
 	/**
 	 * 增值清单
 	 */
@@ -358,6 +404,8 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		private String feeType;
 		//费用
 		private Integer fee;
+		//结束时间
+		private String endDate;
 		public String getSpCode() {
 			return spCode;
 		}
@@ -404,6 +452,14 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		public void setFee(Integer fee) {
 			this.fee = fee;
 		}
+
+		public String getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(String endDate) {
+			this.endDate = endDate;
+		}
 	}
 	public String getCdrType() {
 		return cdrType;
@@ -411,10 +467,10 @@ public class RtBillItemRes  extends BaseApiResDomain{
 	public void setCdrType(String cdrType) {
 		this.cdrType = cdrType;
 	}
-	public Integer getTotalRecord() {
+	public long getTotalRecord() {
 		return totalRecord;
 	}
-	public void setTotalRecord(Integer totalRecord) {
+	public void setTotalRecord(long totalRecord) {
 		this.totalRecord = totalRecord;
 	}
 	public List<VoiceBillItem> getVoiceBillItems() {
@@ -466,23 +522,15 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		this.provinceCode = provinceCode;
 	}
 
-	public Integer getPage() {
-		return page;
-	}
-
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-
-	public Integer getRow() {
+	public long getRow() {
 		return row;
 	}
 
-	public void setRow(Integer row) {
+	public void setRow(long row) {
 		this.row = row;
 	}
 
-	public Integer getTotalFee() {
+	public long getTotalFee() {
 		return totalFee;
 	}
 
@@ -490,7 +538,7 @@ public class RtBillItemRes  extends BaseApiResDomain{
 		this.totalFee = totalFee;
 	}
 
-	public Integer getTotalVolume() {
+	public long getTotalVolume() {
 		return totalVolume;
 	}
 

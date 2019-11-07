@@ -22,6 +22,8 @@ import com.asia.domain.openApi.*;
 import com.asia.domain.openApi.QryForeignBillRes.DataBean;
 import com.asia.domain.openApi.QryForeignBillRes.DataBean.*;
 import com.asia.domain.openApi.QryForeignBillRes.DataBean.BillConsumeInfo.EchartsDataBeanBean;
+import com.asia.domain.openApi.QryJTBillInfoRes.DataBean.ArrearsBean;
+import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.domain.plcaApi.OtherRemindReq;
@@ -41,14 +43,13 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import  com.asia.domain.openApi.QryJTBillInfoRes.DataBean.ArrearsBean;
+import com.asia.domain.openApi.RtBillItemRes.DataBillItem;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 /**
  * 服务调用层,但本处不涉及事务
  * ClassName: OpenAPIServiceImpl <br/>
@@ -415,7 +416,8 @@ public class OpenAPIServiceImpl {
      * @since V1.0.0
      */
     public RtBillItemRes rtBillItem(RtBillItemReq body, Map<String, String> headers, boolean isSms)
-            throws BillException, IOException {
+            throws BillException, IOException, ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
         // TODO: 2019/7/30 过户增加判断
         String accNbr = body.getSvcObjectStruct().getObjValue();
         String objAttr = body.getSvcObjectStruct().getObjAttr();
@@ -461,6 +463,37 @@ public class OpenAPIServiceImpl {
         //状态码为请求成功
         if (result.getCode() == HttpStatus.SC_OK) {
             // TODO: 2019/9/14 插入短信通知表
+            RtBillItemRes res =  JSON.parseObject(result.getData(), RtBillItemRes.class);
+            //增加详单查询结束时间返回
+            List<VoiceBillItem> voiceBillItems = new ArrayList<>();
+            List<DataBillItem> dataBillItems = new ArrayList<>();
+            if (!StringUtil.isEmpty(res.getVoiceBillItems())) {
+                voiceBillItems = res.getVoiceBillItems();
+                for (VoiceBillItem voiceBillItem : voiceBillItems) {
+                    String startDate = voiceBillItem.getBeginTime();
+                    long duration = voiceBillItem.getDuration();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(sdf.parse(startDate));
+                    Date curentDate = calendar.getTime();
+                    long l = curentDate.getTime();
+                    Date date = new Date( l+duration*1000 );
+                    voiceBillItem.setEndDate(sdf.format(date));
+                }
+            }
+            if (!StringUtil.isEmpty(res.getDataBillItems())) {
+                dataBillItems = res.getDataBillItems();
+                for (RtBillItemRes.DataBillItem dataBillItem : dataBillItems) {
+                    String startDate = dataBillItem.getStartTime();
+                    long duration = dataBillItem.getDuration();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(sdf.parse(startDate));
+                    Date curentDate = calendar.getTime();
+                    long l = curentDate.getTime();
+                    Date date = new Date( l+duration*1000 );
+                    dataBillItem.setEndDate(sdf.format(date));
+                }
+            }
+
             if (isSms) {
                 if (doSendRemindMsg(body, headers, accNbr) < 0) {
                     LogUtil.error("短信推送到plca失败", null, this.getClass());
@@ -469,7 +502,7 @@ public class OpenAPIServiceImpl {
             }
             headers.clear();
             headers.putAll(result.getHeaders());
-            return JSON.parseObject(result.getData(), RtBillItemRes.class);
+            return res;
         } else {
             String errorMsg = getHttpErrorInfo(acctApiUrl.getSearchServInfo(), result);
             LogUtil.error(errorMsg, null, this.getClass());

@@ -80,7 +80,7 @@ public class OrclCommonDao {
             billingCycle = billingCycleList.get(0);
             long billingCycleId = billingCycle.getBillingCycleId();
             LogUtil.debug("[数据库读取账期] " + billingCycleId,null,this.getClass());
-            String strTableName = "mobile_data_event_" + areaCode + "_" + billingCycleId;
+            String strTableName = "billdetail.mobile_data_event_" + areaCode + "_" + billingCycleId;
             LogUtil.debug("[begin 数据库读取累积量超出量]-------------------------------",null,this.getClass());
             List<Map<String, Object>> overFeeAccuList = infoOverAccuFeeMapperDao.selectMobileDataEvent(prodInstId, strTableName);
             LogUtil.debug("[数据库读取累积量超出量] " + overFeeAccuList.toString(),null,this.getClass());

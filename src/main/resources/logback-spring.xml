@@ -6,7 +6,7 @@
     <!-- 用来设置上下文名称，每个logger都关联到logger上下文，默认上下文名称为default -->
     <contextName>${PROJECT_NAME}</contextName>
     <!-- 定义日志文件 输入位置 -->
-    <property name="LOG_HOME" value="logs/${PROJECT_NAME}/" />
+    <property name="LOG_HOME" value="logs/${PROJECT_NAME}/8029/" />
     <!-- 活动文件的大小，默认值是10MB -->
     <property name="FILE_SIZE" value="100MB" />
     <!-- 日志最大的历史 100天,自动去除旧的日志文件 -->
