@@ -1090,8 +1090,8 @@ public class OpenApiConroller{
         }
 
         //操作工号标识
-        Integer staffId =operAttrStruct.getStaffId();
-        if(staffId==null){
+        String staffId =operAttrStruct.getStaffId();
+        if(staffId==null&&StringUtil.isEmpty(staffId)){
             result[0]="1002";
             result[1]="操作工号标识[staffId]字段不能为空，请重新输入";
             return result;
