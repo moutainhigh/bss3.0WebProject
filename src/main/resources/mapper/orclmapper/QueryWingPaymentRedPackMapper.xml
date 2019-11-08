@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.asia.mapper.orclmapper.QueryWingPaymentRedPackMapper">
   <select id="QueryWingPaymentRedPack" resultType="java.util.Map">
-    select  a.serv_id,amount, a.out_flag,a.return_cycle_id
+    select  a.serv_id "servId",amount "amount", a.out_flag "outFlag",a.return_cycle_id "returnCycleId"
     FROM YZF_best_return a
     where a.serv_id=#{servId}
   </select>

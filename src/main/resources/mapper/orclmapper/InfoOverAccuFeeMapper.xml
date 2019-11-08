@@ -28,5 +28,10 @@
     where SERV_ID in ${servId}
     and offer_id4 > 0
   </select>
-
+    <select id="selectBillingCyleFromCyleId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from BILLING_CYCLE
+        where billing_cycle_id = ${billingCycleId}
+    </select>
 </mapper>

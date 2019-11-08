@@ -98,7 +98,8 @@ public class LocalSeviceImpl implements IlocalService {
     ABestPayReturnInfoDetailMapper aBestPayReturnInfoDetailDao;
     @Autowired
     QueryWingPaymentRedPackMapper queryWingPaymentRedPackDao;
-
+    @Autowired
+    InfoOverAccuFeeMapper infoOverAccuFeeMapperDao;
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //月账话费高额
@@ -294,7 +295,7 @@ public class LocalSeviceImpl implements IlocalService {
 
     //累积量超出提醒
     @Override
-    public QryMonthHighFeeRes qryAccuOverFlow(QryMonthHighFeeReq body, Map<String, String> headers)
+    public QryMonthHighFeeRes  qryAccuOverFlow(QryMonthHighFeeReq body, Map<String, String> headers)
             throws ClientProtocolException, IOException, BillException {
         QryMonthHighFeeRes qryMonthHighFeeRes = new QryMonthHighFeeRes();
         InfoAccu2Service infoAccu2ServiceMap = new InfoAccu2Service();
@@ -1278,6 +1279,7 @@ public class LocalSeviceImpl implements IlocalService {
      * */
     public QueryWingPaymentRedPackRes queryWingPaymentRedPack(QueryWingPaymentRedPackReq queryWingPaymentRedPackReq, Map<String, String> headers)
             throws IOException, BillException{
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         QueryWingPaymentRedPackRes returnResult=new QueryWingPaymentRedPackRes();
         String accNbr=queryWingPaymentRedPackReq.getValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
@@ -1296,10 +1298,14 @@ public class LocalSeviceImpl implements IlocalService {
             for(int i=0;i<list.size();i++){
                 WingPaymentRedPackSetType wingPaymentRedPackSetType=new WingPaymentRedPackSetType();
                 Map<String,Object> map=list.get(i);
-                String amount=map.get("amount").toString();
-                String outFlag=map.get("out_flag").toString();
-                String returnCycleId=map.get("return_cycle_id").toString();
-                wingPaymentRedPackSetType.setReturnCycleId(returnCycleId);
+                String amount=String.valueOf(map.get("amount"));
+                String outFlag=String.valueOf(map.get("outFlag"));
+                String returnCycleId=String.valueOf(map.get("returnCycleId"));
+                List<BillingCycle> billingCycles = infoOverAccuFeeMapperDao.selectBillingCyleFromCyleId(returnCycleId);
+                if (billingCycles.size() > 0) {
+                    BillingCycle billingCycle = billingCycles.get(0);
+                    wingPaymentRedPackSetType.setReturnCycleId(df.format(billingCycle.getCycleBeginDate()));
+                }
                 wingPaymentRedPackSetType.setEachrewardsAmt(amount);
                 wingPaymentRedPackSetType.setProdInstId(servId);
                 wingPaymentRedPackSetType.setReserved3(outFlag);

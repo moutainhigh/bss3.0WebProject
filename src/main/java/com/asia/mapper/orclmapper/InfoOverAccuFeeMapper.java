@@ -13,5 +13,6 @@ public interface InfoOverAccuFeeMapper {
     List<BillingCycle> selectBillingCyle(@Param("queryMonth") String queryMonth);
     List<Map<String, Object>> selectMobileDataEvent(@Param("servId") String servId,
                                                     @Param("tableName") String tableName);
+    List<BillingCycle> selectBillingCyleFromCyleId(@Param("billingCycleId") String billingCycleId);
 
 }
