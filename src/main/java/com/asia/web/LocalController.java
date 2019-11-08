@@ -853,6 +853,50 @@ public class LocalController {
         LogUtil.debug("END [querySubsidies] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
+
+
+    //翼支付红包返还
+    @PostMapping("/queryWingPaymentRedPack")
+    public String queryWingPaymentRedPack(@RequestBody QueryWingPaymentRedPackReq queryWingPaymentRedPackReq,
+                                 @RequestHeader Map<String,String> headers, HttpServletResponse response){
+        //记录业务日志
+        LogUtil.debug("START [queryWingPaymentRedPack] SERVICE...", null, this.getClass());
+        LogUtil.debug("/local/queryWingPaymentRedPack" +" body>>"+JSON.toJSONString(queryWingPaymentRedPackReq,SerializerFeature.WriteMapNullValue)
+                +" header>>"+JSON.toJSONString(headers),null, this.getClass());
+        QueryWingPaymentRedPackRes info=new QueryWingPaymentRedPackRes();
+        try {
+            //系统id
+            if (StringUtil.isEmpty(queryWingPaymentRedPackReq.getSystemID())) {
+                throw new BillException(ErrorCodeCompEnum.SYSTEM_ID_ERROR);
+            }
+            //用户号码
+            if (StringUtil.isEmpty(queryWingPaymentRedPackReq.getValue())) {
+                throw new BillException(ErrorCodeCompEnum.QUERY_VALUE_IS_EMPTY);
+            }
+
+            info = localSevice.queryWingPaymentRedPack(queryWingPaymentRedPackReq,headers);
+            headers.forEach((key,val)->{response.setHeader(key, val);});
+        }catch (BillException err) {
+            LogUtil.error("/local/queryWingPaymentRedPack服务调用失败"+ "body>>"+JSON.toJSONString(queryWingPaymentRedPackReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), err,this.getClass());
+            info.setResult("1");
+            info.setCode(err.getErrCode());
+            info.setMsg(err.getMessage());
+            LogUtil.error("输出参数[QueryWingPaymentRedPackRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        } catch (Exception e) {
+            LogUtil.error("/local/queryWingPaymentRedPack服务调用失败"+ "body>>"+JSON.toJSONString(queryWingPaymentRedPackReq,SerializerFeature.WriteMapNullValue)
+                    +" header>>"+JSON.toJSONString(headers), e,this.getClass());
+            info.setResult("1");
+            info.setCode(Constant.ResultCode.ERROR);
+            info.setMsg(e.getMessage());
+            LogUtil.error("输出参数[QueryWingPaymentRedPackRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+            return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+        }
+        LogUtil.debug("输出参数 QuerySubsidiesRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.debug("END [queryWingPaymentRedPack] SERVICE...", null, this.getClass());
+        return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
+    }
     /**
      * qryOverAccuFee校验
      *

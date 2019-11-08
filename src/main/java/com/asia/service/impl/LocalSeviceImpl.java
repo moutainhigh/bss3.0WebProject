@@ -36,7 +36,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.asia.domain.localApi.QuerySubsidiesRes.SubsidiesInfo;
-
+import com.asia.domain.localApi.QueryWingPaymentRedPackRes.WingPaymentRedPackSetType;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -96,6 +96,8 @@ public class LocalSeviceImpl implements IlocalService {
     ABestPayReturnInfoMapper aBestPayReturnInfoDao;
     @Autowired
     ABestPayReturnInfoDetailMapper aBestPayReturnInfoDetailDao;
+    @Autowired
+    QueryWingPaymentRedPackMapper queryWingPaymentRedPackDao;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -115,7 +117,11 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
 
 
         String custName = stdCcaQueryServ.getCustName();
@@ -168,7 +174,11 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -241,7 +251,11 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -295,7 +309,11 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
                 "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -349,7 +367,11 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
                 "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -405,7 +427,11 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
                 "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -453,7 +479,11 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
                 "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String accNbr = String.valueOf(accNumb);
         String servId = stdCcaQueryServ.getServId();
@@ -518,7 +548,11 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
                 "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String custName = stdCcaQueryServ.getCustName();
         String servId = stdCcaQueryServ.getServId();
         String areaCode = stdCcaQueryServ.getHomeAreaCode();
@@ -558,7 +592,11 @@ public class LocalSeviceImpl implements IlocalService {
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
                 "", headers);
         //查询用户是否存在
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         //访问数据库
         resultInfo = orclCommonDao.preserveMeterPrintLog(body);
         if ("0".equals(resultInfo.getCode())) {
@@ -584,7 +622,11 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
         //查询用户
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String servId = stdCcaQueryServ.getServId();
 
         String areaCode = stdCcaQueryServ.getHomeAreaCode();
@@ -623,7 +665,11 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
         //用户信息查询
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String servId = stdCcaQueryServ.getServId();
         queryAgreementConsumptionRes.setResult("0");
         List<InfoHdUserFee> infoHdUserFeeList = infoHdUserFeeMapperDao.selectInfoHdUserFee(servId);
@@ -708,7 +754,11 @@ public class LocalSeviceImpl implements IlocalService {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
                 "", headers);
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         MobileNumberQueryRes mobileNumberQueryRes=orclCommonDao.moBileNumberQuery(mobileNumberQueryReq, headers);
         return mobileNumberQueryRes;
     }
@@ -1220,5 +1270,51 @@ public class LocalSeviceImpl implements IlocalService {
             LogUtil.error(errorMsg,null,this.getClass());
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
+    }
+
+    /**
+     * 翼支付红包返还
+     *
+     * */
+    public QueryWingPaymentRedPackRes queryWingPaymentRedPack(QueryWingPaymentRedPackReq queryWingPaymentRedPackReq, Map<String, String> headers)
+            throws IOException, BillException{
+        QueryWingPaymentRedPackRes returnResult=new QueryWingPaymentRedPackRes();
+        String accNbr=queryWingPaymentRedPackReq.getValue();
+        StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
+        //调账务服务查询用户信息
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+        //查询用户是否存在
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
+        String servId = stdCcaQueryServ.getServId();
+        List<Map<String,Object>> list=queryWingPaymentRedPackDao.QueryWingPaymentRedPack(servId);
+        List<WingPaymentRedPackSetType> wingPaymentRedPackSet=new ArrayList<>();
+        if(list.size()!=0){
+            for(int i=0;i<list.size();i++){
+                WingPaymentRedPackSetType wingPaymentRedPackSetType=new WingPaymentRedPackSetType();
+                Map<String,Object> map=list.get(i);
+                String amount=map.get("amount").toString();
+                String outFlag=map.get("out_flag").toString();
+                String returnCycleId=map.get("return_cycle_id").toString();
+                wingPaymentRedPackSetType.setReturnCycleId(returnCycleId);
+                wingPaymentRedPackSetType.setEachrewardsAmt(amount);
+                wingPaymentRedPackSetType.setProdInstId(servId);
+                wingPaymentRedPackSetType.setReserved3(outFlag);
+                wingPaymentRedPackSet.add(wingPaymentRedPackSetType);
+                returnResult.setResult("0");
+                returnResult.setCode("");
+                returnResult.setMsg("SUCCESS");
+            }
+        }else{
+            returnResult.setResult("0");
+            returnResult.setCode("");
+            returnResult.setMsg("记录为空！");
+        }
+
+        returnResult.setWingPaymentRedPackSet(wingPaymentRedPackSet);
+        return  returnResult;
     }
 }
