@@ -1296,9 +1296,9 @@ public class LocalSeviceImpl implements IlocalService {
             for(int i=0;i<list.size();i++){
                 WingPaymentRedPackSetType wingPaymentRedPackSetType=new WingPaymentRedPackSetType();
                 Map<String,Object> map=list.get(i);
-                String amount=map.get("amount").toString();
-                String outFlag=map.get("out_flag").toString();
-                String returnCycleId=map.get("return_cycle_id").toString();
+                String amount=map.get("AMOUNT").toString();
+                String outFlag=map.get("OUT_FLAG").toString();
+                String returnCycleId=map.get("RETURN_CYCLE_ID").toString();
                 wingPaymentRedPackSetType.setReturnCycleId(returnCycleId);
                 wingPaymentRedPackSetType.setEachrewardsAmt(amount);
                 wingPaymentRedPackSetType.setProdInstId(servId);
