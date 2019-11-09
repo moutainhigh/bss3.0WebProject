@@ -50,6 +50,10 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import com.asia.domain.openApi.PointInfoQryFroBillApiRes.ContractRootClass.ResponseMess;
+import  com.asia.domain.openApi.PointInfoQryFroBillApiReq.ContractRootClass;
+import  com.asia.domain.openApi.PointInfoQryFroBillApiReq.ContractRootClass.TcpContClass;
+import  com.asia.domain.openApi.PointInfoQryFroBillApiReq.ContractRootClass.RequestMess;
 /**
  * 服务调用层,但本处不涉及事务
  * ClassName: OpenAPIServiceImpl <br/>
@@ -870,6 +874,19 @@ public class OpenAPIServiceImpl {
         dataBean.setBillConsumeInfo(billConsumeInfo);
         dataBean.setOfferConsumerInfos(offerConsumerInfosBean);
         dataBean.setUserInfo(userInfoBean);
+        ResponseMess responseMess=this.pointInfoQryFroBillApi(body,headers);
+        if(responseMess!=null){
+             long lastCoin=Long.parseLong(responseMess.getLastMonthPoint());
+             long thisAddCoin=Long.parseLong(responseMess.getAddPointValue());
+             long thisUserCoin=Long.parseLong(responseMess.getUesdPointValue());
+             long currentCoin= lastCoin+thisAddCoin;
+             //long yearUnvalidCoin=Long.parseLong(responseMess.getExpirePointValue());
+             billCionInfo.setCurrentCoin(currentCoin);
+             billCionInfo.setLastCoin(lastCoin);
+             billCionInfo.setThisAddCoin(thisAddCoin);
+             billCionInfo.setThisUserCoin(thisUserCoin);
+             //billCionInfo.setYearUnvalidCoin(yearUnvalidCoin);
+        }
         dataBean.setBillCionInfo(billCionInfo);
         qryForeignBillRes.setData(dataBean);
         qryForeignBillRes.setResultCode("0");
@@ -1108,5 +1125,67 @@ public class OpenAPIServiceImpl {
             LogUtil.error(errorMsg, null, this.getClass());
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }
+    }
+
+    /**
+     * 积分查询
+     *
+     * */
+    public  ResponseMess pointInfoQryFroBillApi(QryForeignBillReq body,Map<String, String> headers)throws IOException{
+        ResponseMess responseMess=new ResponseMess();
+
+        //PointInfoQryFroBillApiReq pointInfoQryFroBillApiReq=new PointInfoQryFroBillApiReq();
+        String qryNbr=body.getQryValue();
+        String pointMonth=body.getCycleId();
+        Date now=new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String reqTime=dateFormat.format(now);
+        String transactionId=reqTime.substring(4,reqTime.length());
+        //ContractRootClass contractRootClass=new ContractRootClass();
+
+       /* TcpContClass tcpContClass =new TcpContClass();
+        tcpContClass.setReqTime(reqTime);
+        tcpContClass.setTransactionId(transactionId);*/
+
+       /* RequestMess requestMess=new RequestMess();
+        requestMess.setQryNbr(qryNbr);
+        requestMess.setPointMonth(pointMonth);
+
+        contractRootClass.setRequestMess(requestMess);
+        contractRootClass.setTcpCont(tcpContClass);*/
+
+        //pointInfoQryFroBillApiReq.setContractRoot(contractRootClass);
+
+        String pointInfoQryFroBillApiReq="{" +
+                "  \"ContractRoot\": {" +
+                "    \"TcpCont\": {" +
+                "      \"EventType\": \"SYNC\"," +
+                "      \"BusCode\": \"BUS\"," +
+                "      \"ServiceCode\": \"QRY1001\"," +
+                "      \"TransactionId\": "+transactionId+"," +
+                "      \"AreaCode\": \"0431\"," +
+                "      \"ChannelId\": \"1003\"," +
+                "      \"StaffCode\": \"4\"," +
+                "      \"ReqTime\":"+reqTime+"," +
+                "      \"EncryptStr\": \"N\"" +
+                "    }," +
+                "    \"requestMess\": {" +
+                "      \"nbrType\": \"1\"," +
+                "      \"qryNbr\": "+qryNbr+"," +
+                "      \"pointMonth\":"+pointMonth +
+                "    }" +
+                "  }" +
+                "}";
+
+        LogUtil.info("[开始调用远程服务 积分查询]" + acctApiUrl.getPointInfoQryFroBillApi(), null, this.getClass());
+        LogUtil.info("输入参数[pointInfoQryFroBillApiReq]=" + pointInfoQryFroBillApiReq.toString(), null, this.getClass());
+        HttpResult info = HttpUtil.doPostJson(acctApiUrl.getPointInfoQryFroBillApi(), pointInfoQryFroBillApiReq, headers);
+        LogUtil.info("输出参数[pointInfoQryFroBillApiRes]=" + JSON.parseObject(info.getData(), StdCcrQueryServRes.class), null, this.getClass());
+        PointInfoQryFroBillApiRes pointInfoQryFroBillApiRes= JSON.parseObject(info.getData(),PointInfoQryFroBillApiRes.class);
+        if (pointInfoQryFroBillApiRes!= null){
+            responseMess=pointInfoQryFroBillApiRes.getContractRoot().getResponseMess();
+        }
+        return responseMess;
+
     }
 }

@@ -64,7 +64,16 @@ public class AcctApiUrl {
     private String qryForeignBill;
     @Value("${api.QryJTBillInfo}")
     private String qryJTBillInfo;
+    @Value("${api.pointInfoQryFroBillApi}")
+    private String pointInfoQryFroBillApi;
 
+    public String getPointInfoQryFroBillApi() {
+        return pointInfoQryFroBillApi;
+    }
+
+    public void setPointInfoQryFroBillApi(String pointInfoQryFroBillApi) {
+        this.pointInfoQryFroBillApi = pointInfoQryFroBillApi;
+    }
 
     public String getSearchServInfo() {
         return searchServInfo;
