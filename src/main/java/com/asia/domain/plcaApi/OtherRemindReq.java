@@ -39,6 +39,7 @@ public class OtherRemindReq {
         private String remindText;
         private String channelId;
         private String businessId;
+        private String remindServId;
 
         public String getAccNbr() {
             return accNbr;
@@ -94,6 +95,14 @@ public class OtherRemindReq {
 
         public void setBusinessId(String businessId) {
             this.businessId = businessId;
+        }
+
+        public String getRemindServId() {
+            return remindServId;
+        }
+
+        public void setRemindServId(String remindServId) {
+            this.remindServId = remindServId;
         }
     }
 }

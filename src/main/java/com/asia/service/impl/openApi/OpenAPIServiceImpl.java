@@ -495,7 +495,7 @@ public class OpenAPIServiceImpl {
             }
 
             if (isSms) {
-                if (doSendRemindMsg(body, headers, accNbr) < 0) {
+                if (doSendRemindMsg(body, headers, accNbr,servId) < 0) {
                     LogUtil.error("短信推送到plca失败", null, this.getClass());
                 }
                 LogUtil.info("短信推送到plca成功", null, this.getClass());
@@ -517,7 +517,7 @@ public class OpenAPIServiceImpl {
      * @Date 15:22 2019/10/6
      * @Param [body, headers, accNbr]
      */
-    private int doSendRemindMsg(RtBillItemReq body, Map<String, String> headers, String accNbr) throws IOException, BillException {
+    private int doSendRemindMsg(RtBillItemReq body, Map<String, String> headers, String accNbr,String servId) throws IOException, BillException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         HttpResult resultSms = null;
         OtherRemindReq otherRemindReq = new OtherRemindReq();
@@ -561,6 +561,7 @@ public class OpenAPIServiceImpl {
             msgInfoBean.setRemindCode("JLJF000042");
             msgInfoBean.setChannelId(body.getSystemId());
             msgInfoBean.setRemindText(sendMsgInfo);
+            msgInfoBean.setRemindServId(servId);
             msgInfoBeanList.add(msgInfoBean);
             otherRemindReq.setMsgInfo(msgInfoBeanList);
             LogUtil.info("[开始调用远程服务 短信发送提醒]" + acctApiUrl.getOtheRemind(), null, this.getClass());
