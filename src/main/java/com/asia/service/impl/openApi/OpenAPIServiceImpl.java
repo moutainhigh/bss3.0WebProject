@@ -153,7 +153,27 @@ public class OpenAPIServiceImpl {
         if (result.getCode() == HttpStatus.SC_OK) {
             headers.clear();
             headers.putAll(result.getHeaders());
-            return JSON.parseObject(result.getData(), QryPaymentRes.class);
+            QryPaymentRes qryPaymentRes=JSON.parseObject(result.getData(), QryPaymentRes.class);
+            List<QryPaymentRes.PaymentInfo> paymentInfoList= qryPaymentRes.getPaymentInfoList();
+            List<QryPaymentRes.PaymentInfo> list=new ArrayList<>();
+            for(int i=0;i<paymentInfoList.size();i++){
+                QryPaymentRes.PaymentInfo paymentInfo=paymentInfoList.get(i);
+                int paymentMethod=paymentInfo.getPaymentMethod();
+                if(paymentMethod==11){//现金
+                    paymentInfo.setPaymentMethod(100000);
+                }else if(paymentMethod==13){//信用卡缴费
+                    paymentInfo.setPaymentMethod(110100);
+                }else if(paymentMethod==17){//银行托收
+                    paymentInfo.setPaymentMethod(110300);
+                }else if(paymentMethod==12){//转帐
+                    paymentInfo.setPaymentMethod(110400);
+                }else if(paymentMethod==14){//代缴
+                    paymentInfo.setPaymentMethod(170000);
+                }
+                list.add(paymentInfo);
+            }
+            qryPaymentRes.setPaymentInfoList(list);
+            return qryPaymentRes;
         } else {
             String errorMsg = getHttpErrorInfo(acctApiUrl.getQryPayment(), result);
             LogUtil.error(errorMsg, null, this.getClass());

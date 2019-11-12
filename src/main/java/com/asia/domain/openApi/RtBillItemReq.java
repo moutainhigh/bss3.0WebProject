@@ -17,7 +17,7 @@ public class RtBillItemReq extends BaseDomain{
 	//查询帐期 
 	private Integer billingCycleId ;
 	//话单类型
-	private Integer cdrType ;
+	private Integer rtType ;
 	//查询类型
 	private Integer qryType ;
 	//页码
@@ -59,12 +59,12 @@ public class RtBillItemReq extends BaseDomain{
 		this.billingCycleId = billingCycleId;
 	}
 
-	public Integer getCdrType() {
-		return cdrType;
+	public Integer getRtType() {
+		return rtType;
 	}
 
 	public void setCdrType(Integer cdrType) {
-		this.cdrType = cdrType;
+		this.rtType = cdrType;
 	}
 
 	public Integer getQryType() {
