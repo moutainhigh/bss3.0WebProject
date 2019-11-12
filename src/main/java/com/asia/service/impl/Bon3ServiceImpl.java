@@ -158,7 +158,7 @@ public class Bon3ServiceImpl {
 		LogUtil.debug("输入参数[stdCcrQueryUnitedBalance]="+stdCcrQueryUnitedBalance.toString(),null, this.getClass());
 		HttpResult result = null;
 		try {
-			result = HttpUtil.doPostJson(Constant.Bon3.getUnitedBalance,
+			result = HttpUtil.doPostJson(acctApiUrl.getGetUnitedBalance(),
 					JSON.toJSONString(stdCcrQueryUnitedBalance,SerializerFeature.WriteMapNullValue), headers);
 			LogUtil.debug("[调用远程服务 余额查询]"+acctApiUrl.getGetUnitedBalance()+"\n输出结果[result]="
 					+JSON.toJSONString(result,SerializerFeature.WriteMapNullValue),null,this.getClass());

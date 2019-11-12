@@ -19,10 +19,12 @@ import com.asia.domain.bon3.StdCcrUserResourceQuery;
 import com.asia.domain.bon3.StdCcrUserResourceQuery.StdCcrUserResourceQueryBean;
 import com.asia.domain.bon3.StdCcrUserResourceQuery.StdCcrUserResourceQueryBean.ResourceInformationBean;
 import com.asia.domain.openApi.*;
+import com.asia.domain.openApi.PointInfoQryFroBillApiRes.ContractRootClass.ResponseMess;
 import com.asia.domain.openApi.QryForeignBillRes.DataBean;
 import com.asia.domain.openApi.QryForeignBillRes.DataBean.*;
 import com.asia.domain.openApi.QryForeignBillRes.DataBean.BillConsumeInfo.EchartsDataBeanBean;
 import com.asia.domain.openApi.QryJTBillInfoRes.DataBean.ArrearsBean;
+import com.asia.domain.openApi.RtBillItemRes.DataBillItem;
 import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
 import com.asia.domain.openApi.child.SvcObjectStruct;
@@ -43,17 +45,13 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.asia.domain.openApi.RtBillItemRes.DataBillItem;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import com.asia.domain.openApi.PointInfoQryFroBillApiRes.ContractRootClass.ResponseMess;
-import  com.asia.domain.openApi.PointInfoQryFroBillApiReq.ContractRootClass;
-import  com.asia.domain.openApi.PointInfoQryFroBillApiReq.ContractRootClass.TcpContClass;
-import  com.asia.domain.openApi.PointInfoQryFroBillApiReq.ContractRootClass.RequestMess;
 /**
  * 服务调用层,但本处不涉及事务
  * ClassName: OpenAPIServiceImpl <br/>
@@ -1179,7 +1177,20 @@ public class OpenAPIServiceImpl {
 
         LogUtil.info("[开始调用远程服务 积分查询]" + acctApiUrl.getPointInfoQryFroBillApi(), null, this.getClass());
         LogUtil.info("输入参数[pointInfoQryFroBillApiReq]=" + pointInfoQryFroBillApiReq.toString(), null, this.getClass());
-        HttpResult info = HttpUtil.doPostJson(acctApiUrl.getPointInfoQryFroBillApi(), pointInfoQryFroBillApiReq, headers);
+        HttpResult info = null;
+        try {
+            info = HttpUtil.doPostJson(acctApiUrl.getPointInfoQryFroBillApi(), pointInfoQryFroBillApiReq, headers);
+        } catch (IOException e) {
+            LogUtil.error("输入参数[pointInfoQryFroBillApiReq]=" + JSON.toJSONString(pointInfoQryFroBillApiReq), null, this.getClass());
+            LogUtil.error("IO流错误", e, this.getClass());
+            return responseMess;
+        }
+        if (info.getCode() != HttpStatus.SC_OK) {
+            String errMsg = "调用远程服务：" + acctApiUrl.getOtheRemind() + "异常，HTTP状态码：" + info.getCode() + "，响应内容：" + info.getData();
+            LogUtil.error("输入参数[pointInfoQryFroBillApiReq]=" + JSON.toJSONString(pointInfoQryFroBillApiReq), null, this.getClass());
+            LogUtil.error(errMsg, null, this.getClass());
+            return responseMess;
+        }
         LogUtil.info("输出参数[pointInfoQryFroBillApiRes]=" + JSON.parseObject(info.getData(), StdCcrQueryServRes.class), null, this.getClass());
         PointInfoQryFroBillApiRes pointInfoQryFroBillApiRes= JSON.parseObject(info.getData(),PointInfoQryFroBillApiRes.class);
         if (pointInfoQryFroBillApiRes!= null){
