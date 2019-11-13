@@ -732,14 +732,14 @@ public class OpenAPIServiceImpl {
             QryForeignBillRes qryForeignBillRes1 = JSON.parseObject(custBill.getData(),QryForeignBillRes.class);
             String userResourceQuery =  custBilljson.getString("data");
             arrears = qryForeignBillRes1.getData().getArrears();
-            String billedFee =df1.format(Double.parseDouble(arrears.getBilledFee())*100);
-            String cashDeduct = df1.format(Double.parseDouble(arrears.getCashDeduct())*100);
-            String consumeAmount=df1.format(Double.parseDouble(arrears.getConsumeAmount())*100);
-            String corpusDeduct=df1.format(Double.parseDouble(arrears.getCorpusDeduct())*100);
-            String curDeposit=df1.format(Double.parseDouble(arrears.getCurDeposit())*100);
-            String needPay=df1.format(Double.parseDouble(arrears.getNeedPay())*100);
-            String returnBalance=df1.format(Double.parseDouble(arrears.getReturnBalance())*100);
-            String returnBalancePayed=df1.format(Double.parseDouble(arrears.getReturnBalancePayed())*100);
+            String billedFee =df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getBilledFee())?"0":arrears.getBilledFee())*100);
+            String cashDeduct = df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getCashDeduct())?"0":arrears.getCashDeduct())*100);
+            String consumeAmount=df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getConsumeAmount())?"0":arrears.getConsumeAmount())*100);
+            String corpusDeduct=df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getCorpusDeduct())?"0":arrears.getCorpusDeduct())*100);
+            String curDeposit=df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getCurDeposit())?"0":arrears.getCurDeposit())*100);
+            String needPay=df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getNeedPay())?"0":arrears.getNeedPay())*100);
+            String returnBalance=df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getReturnBalance())?"0":arrears.getReturnBalance())*100);
+            String returnBalancePayed=df1.format(Double.parseDouble(StringUtil.isEmpty(arrears.getReturnBalancePayed())?"0":arrears.getReturnBalancePayed())*100);
             arrears.setBilledFee(billedFee);
             arrears.setCashDeduct(cashDeduct);
             arrears.setConsumeAmount(consumeAmount);
@@ -898,10 +898,10 @@ public class OpenAPIServiceImpl {
         dataBean.setOfferConsumerInfos(offerConsumerInfosBean);
         dataBean.setUserInfo(userInfoBean);
         ResponseMess responseMess=this.pointInfoQryFroBillApi(body,headers);
-        if(responseMess!=null){
-             long lastCoin=Long.parseLong(responseMess.getLastMonthPoint());
-             long thisAddCoin=Long.parseLong(responseMess.getAddPointValue());
-             long thisUserCoin=Long.parseLong(responseMess.getUesdPointValue());
+        if(!StringUtil.isEmpty(responseMess)){
+             long lastCoin=Long.parseLong(StringUtil.isEmpty(responseMess.getLastMonthPoint())?"0":responseMess.getLastMonthPoint());
+             long thisAddCoin=Long.parseLong(StringUtil.isEmpty(responseMess.getAddPointValue())?"0":responseMess.getAddPointValue());
+             long thisUserCoin=Long.parseLong(StringUtil.isEmpty(responseMess.getUesdPointValue())?"0":responseMess.getUesdPointValue());
              long currentCoin= lastCoin+thisAddCoin;
              //long yearUnvalidCoin=Long.parseLong(responseMess.getExpirePointValue());
              billCionInfo.setCurrentCoin(currentCoin);
