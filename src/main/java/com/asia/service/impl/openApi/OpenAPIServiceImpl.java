@@ -161,14 +161,20 @@ public class OpenAPIServiceImpl {
                 int paymentMethod=paymentInfo.getPaymentMethod();
                 if(paymentMethod==11){//现金
                     paymentInfo.setPaymentMethod(100000);
-                }else if(paymentMethod==13){//信用卡缴费
-                    paymentInfo.setPaymentMethod(110100);
-                }else if(paymentMethod==17){//银行托收
-                    paymentInfo.setPaymentMethod(110300);
                 }else if(paymentMethod==12){//转帐
                     paymentInfo.setPaymentMethod(110400);
+                }else if(paymentMethod==13){//信用卡缴费
+                    paymentInfo.setPaymentMethod(110100);
                 }else if(paymentMethod==14){//代缴
                     paymentInfo.setPaymentMethod(170000);
+                }else if(paymentMethod==15){//退费转预存
+                    paymentInfo.setPaymentMethod(140200);
+                }else if(paymentMethod==16){//翼支付
+                    paymentInfo.setPaymentMethod(120100);
+                }else if(paymentMethod==17){//充值卡
+                    paymentInfo.setPaymentMethod(110300);
+                }else if(paymentMethod==20){//充值卡
+                    paymentInfo.setPaymentMethod(150400);
                 }
                 list.add(paymentInfo);
             }
@@ -743,7 +749,6 @@ public class OpenAPIServiceImpl {
             arrears.setReturnBalance(returnBalance);
             arrears.setReturnBalancePayed(returnBalancePayed);
             billsBean = JSON.parseObject(userResourceQuery,BillsBean.class);
-
             List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX> list=billsBean.getBillItems();
             List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX> list2=new ArrayList<>();
             if(list.size()>0){
@@ -972,14 +977,14 @@ public class OpenAPIServiceImpl {
             DecimalFormat df1=new DecimalFormat("#.#");
             QryJTBillInfoRes.DataBean dataBean= qryJTBillInfoRes.getData();
             ArrearsBean arrearsBean=dataBean.getArrears();
-            String billedFee =df1.format(Double.parseDouble(arrearsBean.getBilledFee())*100);
-            String cashDeduct = df1.format(Double.parseDouble(arrearsBean.getCashDeduct())*100);
-            String consumeAmount=df1.format(Double.parseDouble(arrearsBean.getConsumeAmount())*100);
-            String corpusDeduct=df1.format(Double.parseDouble(arrearsBean.getCorpusDeduct())*100);
-            String curDeposit=df1.format(Double.parseDouble(arrearsBean.getCurDeposit())*100);
-            String needPay=df1.format(Double.parseDouble(arrearsBean.getNeedPay())*100);
-            String returnBalance=df1.format(Double.parseDouble(arrearsBean.getReturnBalance())*100);
-            String returnBalancePayed=df1.format(Double.parseDouble(arrearsBean.getReturnBalancePayed())*100);
+            String billedFee =df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getBilledFee())?"0":arrearsBean.getBilledFee())*100);
+            String cashDeduct = df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getCashDeduct())?"0":arrearsBean.getCashDeduct())*100);
+            String consumeAmount=df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getConsumeAmount())?"0":arrearsBean.getConsumeAmount())*100);
+            String corpusDeduct=df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getCorpusDeduct())?"0":arrearsBean.getCorpusDeduct())*100);
+            String curDeposit=df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getCurDeposit())?"0":arrearsBean.getCurDeposit())*100);
+            String needPay=df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getNeedPay())?"0":arrearsBean.getNeedPay())*100);
+            String returnBalance=df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getReturnBalance())?"0":arrearsBean.getReturnBalance())*100);
+            String returnBalancePayed=df1.format(Double.parseDouble(StringUtil.isEmpty(arrearsBean.getReturnBalancePayed())?"0":arrearsBean.getReturnBalancePayed())*100);
              arrearsBean.setBilledFee(billedFee);
              arrearsBean.setCashDeduct(cashDeduct);
              arrearsBean.setConsumeAmount(consumeAmount);
