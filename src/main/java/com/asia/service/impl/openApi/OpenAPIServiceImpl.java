@@ -380,7 +380,12 @@ public class OpenAPIServiceImpl {
         stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "0431", "2",
                 "1", headers);
         //用户校验
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
+        //checkServExist(stdCcaQueryServ);
         String localNet = stdCcaQueryServ.getHomeAreaCode();
         String productName = stdCcaQueryServ.getProductId();
         String paymentFlag = stdCcaQueryServ.getPaymentFlag();
@@ -449,7 +454,12 @@ public class OpenAPIServiceImpl {
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNbr), "", objType, objAttr, headers);
         //用户校验
-        checkServExist(stdCcaQueryServ);
+        //checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
+            throw new BillException(b);
+        }
         String servId = stdCcaQueryServ.getServId();
         //增加详单禁查功能
         long iCount = ifUserMeterMapperDao.selectcountUserMeter(servId);
