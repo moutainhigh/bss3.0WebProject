@@ -736,22 +736,35 @@ public class OpenAPIServiceImpl {
             QryForeignBillRes qryForeignBillRes1 = JSON.parseObject(custBill.getData(),QryForeignBillRes.class);
             String userResourceQuery =  custBilljson.getString("data");
             arrears = qryForeignBillRes1.getData().getArrears();
-            String billedFee =df1.format(Double.parseDouble(arrears.getBilledFee())*100);
-            String cashDeduct = df1.format(Double.parseDouble(arrears.getCashDeduct())*100);
-            String consumeAmount=df1.format(Double.parseDouble(arrears.getConsumeAmount())*100);
-            String corpusDeduct=df1.format(Double.parseDouble(arrears.getCorpusDeduct())*100);
-            String curDeposit=df1.format(Double.parseDouble(arrears.getCurDeposit())*100);
-            String needPay=df1.format(Double.parseDouble(arrears.getNeedPay())*100);
-            String returnBalance=df1.format(Double.parseDouble(arrears.getReturnBalance())*100);
-            String returnBalancePayed=df1.format(Double.parseDouble(arrears.getReturnBalancePayed())*100);
-            arrears.setBilledFee(billedFee);
-            arrears.setCashDeduct(cashDeduct);
-            arrears.setConsumeAmount(consumeAmount);
-            arrears.setCorpusDeduct(corpusDeduct);
-            arrears.setCurDeposit(curDeposit);
-            arrears.setNeedPay(needPay);
-            arrears.setReturnBalance(returnBalance);
-            arrears.setReturnBalancePayed(returnBalancePayed);
+            String billedFee =arrears.getBilledFee();
+            String cashDeduct = arrears.getCashDeduct();
+            String consumeAmount=arrears.getConsumeAmount();
+            String corpusDeduct=arrears.getCorpusDeduct();
+            String curDeposit=arrears.getCurDeposit();
+            String needPay=arrears.getNeedPay();
+            String returnBalance=arrears.getReturnBalance();
+            String returnBalancePayed=arrears.getReturnBalancePayed();
+            if(billedFee!=null&&!billedFee.equals("")&&cashDeduct!=null&&!cashDeduct.equals("")
+                    &&consumeAmount!=null&&!consumeAmount.equals("")&&corpusDeduct!=null&&!corpusDeduct.equals("")
+                    &&curDeposit!=null&&!curDeposit.equals("")&&needPay!=null&&!needPay.equals("")
+                    &&returnBalance!=null&&!returnBalance.equals("")&&returnBalancePayed!=null&&!returnBalancePayed.equals("")) {
+                 billedFee = df1.format(Double.parseDouble(arrears.getBilledFee()) * 100);
+                 cashDeduct = df1.format(Double.parseDouble(arrears.getCashDeduct()) * 100);
+                 consumeAmount = df1.format(Double.parseDouble(arrears.getConsumeAmount()) * 100);
+                 corpusDeduct = df1.format(Double.parseDouble(arrears.getCorpusDeduct()) * 100);
+                 curDeposit = df1.format(Double.parseDouble(arrears.getCurDeposit()) * 100);
+                 needPay = df1.format(Double.parseDouble(arrears.getNeedPay()) * 100);
+                 returnBalance = df1.format(Double.parseDouble(arrears.getReturnBalance()) * 100);
+                 returnBalancePayed = df1.format(Double.parseDouble(arrears.getReturnBalancePayed()) * 100);
+                arrears.setBilledFee(billedFee);
+                arrears.setCashDeduct(cashDeduct);
+                arrears.setConsumeAmount(consumeAmount);
+                arrears.setCorpusDeduct(corpusDeduct);
+                arrears.setCurDeposit(curDeposit);
+                arrears.setNeedPay(needPay);
+                arrears.setReturnBalance(returnBalance);
+                arrears.setReturnBalancePayed(returnBalancePayed);
+            }
             billsBean = JSON.parseObject(userResourceQuery,BillsBean.class);
 
             List<QryForeignBillRes.DataBean.BillsBean.BillItemsBeanXXXX> list=billsBean.getBillItems();
@@ -982,23 +995,36 @@ public class OpenAPIServiceImpl {
             DecimalFormat df1=new DecimalFormat("#.#");
             QryJTBillInfoRes.DataBean dataBean= qryJTBillInfoRes.getData();
             ArrearsBean arrearsBean=dataBean.getArrears();
-            String billedFee =df1.format(Double.parseDouble(arrearsBean.getBilledFee())*100);
-            String cashDeduct = df1.format(Double.parseDouble(arrearsBean.getCashDeduct())*100);
-            String consumeAmount=df1.format(Double.parseDouble(arrearsBean.getConsumeAmount())*100);
-            String corpusDeduct=df1.format(Double.parseDouble(arrearsBean.getCorpusDeduct())*100);
-            String curDeposit=df1.format(Double.parseDouble(arrearsBean.getCurDeposit())*100);
-            String needPay=df1.format(Double.parseDouble(arrearsBean.getNeedPay())*100);
-            String returnBalance=df1.format(Double.parseDouble(arrearsBean.getReturnBalance())*100);
-            String returnBalancePayed=df1.format(Double.parseDouble(arrearsBean.getReturnBalancePayed())*100);
-             arrearsBean.setBilledFee(billedFee);
-             arrearsBean.setCashDeduct(cashDeduct);
-             arrearsBean.setConsumeAmount(consumeAmount);
-             arrearsBean.setCorpusDeduct(corpusDeduct);
-             arrearsBean.setCurDeposit(curDeposit);
-             arrearsBean.setNeedPay(needPay);
-             arrearsBean.setReturnBalance(returnBalance);
-             arrearsBean.setReturnBalancePayed(returnBalancePayed);
-             dataBean.setArrears(arrearsBean);
+            String billedFee =arrearsBean.getBilledFee();
+            String cashDeduct = arrearsBean.getCashDeduct();
+            String consumeAmount=arrearsBean.getConsumeAmount();
+            String corpusDeduct=arrearsBean.getCorpusDeduct();
+            String curDeposit=arrearsBean.getCurDeposit();
+            String needPay=arrearsBean.getNeedPay();
+            String returnBalance=arrearsBean.getReturnBalance();
+            String returnBalancePayed=arrearsBean.getReturnBalancePayed();
+            if(billedFee!=null&&!billedFee.equals("")&&cashDeduct!=null&&!cashDeduct.equals("")
+                    &&consumeAmount!=null&&!consumeAmount.equals("")&&corpusDeduct!=null&&!corpusDeduct.equals("")
+                    &&curDeposit!=null&&!curDeposit.equals("")&&needPay!=null&&!needPay.equals("")
+                    &&returnBalance!=null&&!returnBalance.equals("")&&returnBalancePayed!=null&&!returnBalancePayed.equals("")) {
+                 billedFee = df1.format(Double.parseDouble(arrearsBean.getBilledFee()) * 100);
+                 cashDeduct = df1.format(Double.parseDouble(arrearsBean.getCashDeduct()) * 100);
+                 consumeAmount = df1.format(Double.parseDouble(arrearsBean.getConsumeAmount()) * 100);
+                 corpusDeduct = df1.format(Double.parseDouble(arrearsBean.getCorpusDeduct()) * 100);
+                 curDeposit = df1.format(Double.parseDouble(arrearsBean.getCurDeposit()) * 100);
+                 needPay = df1.format(Double.parseDouble(arrearsBean.getNeedPay()) * 100);
+                 returnBalance = df1.format(Double.parseDouble(arrearsBean.getReturnBalance()) * 100);
+                 returnBalancePayed = df1.format(Double.parseDouble(arrearsBean.getReturnBalancePayed()) * 100);
+                arrearsBean.setBilledFee(billedFee);
+                arrearsBean.setCashDeduct(cashDeduct);
+                arrearsBean.setConsumeAmount(consumeAmount);
+                arrearsBean.setCorpusDeduct(corpusDeduct);
+                arrearsBean.setCurDeposit(curDeposit);
+                arrearsBean.setNeedPay(needPay);
+                arrearsBean.setReturnBalance(returnBalance);
+                arrearsBean.setReturnBalancePayed(returnBalancePayed);
+                dataBean.setArrears(arrearsBean);
+            }
             List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX> list=dataBean.getBillItems();
             List<QryJTBillInfoRes.DataBean.BillItemsBeanXXXX> list2=new ArrayList<>();
             if(list.size()>0){

@@ -664,11 +664,11 @@ public class LocalSeviceImpl implements IlocalService {
         String userType = body.getUserType();
         String valueType = body.getValueType();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
-        //用户信息查询
-        try {
-            checkServExist(stdCcaQueryServ);
-        }catch (BillException b){
+            stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+            //用户信息查询
+            try {
+                checkServExist(stdCcaQueryServ);
+            }catch (BillException b){
             throw new BillException(b);
         }
         String servId = stdCcaQueryServ.getServId();
