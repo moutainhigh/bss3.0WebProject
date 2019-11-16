@@ -1,5 +1,8 @@
 package com.asia;
 
+import com.asia.domain.openApi.QryJTBillInfoRes;
+
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +12,10 @@ public class OpenApiTest{
 		Date date1 = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");// 格式化为年月
 		System.out.println(sdf.parse(sdf.format(date1)));
+		DecimalFormat df1=new DecimalFormat("#.#");
+		QryJTBillInfoRes.DataBean.ArrearsBean arrearsBean = new QryJTBillInfoRes.DataBean.ArrearsBean();
+		String billedFee =df1.format(Double.parseDouble(arrearsBean.getBilledFee())*100);
+		System.out.println(billedFee);
 		/*String before_six = String.valueOf(calendar.get(Calendar.YEAR)) + calendar.get(Calendar.MONTH);//六个月前
 		ArrayList<String> resultMonth = new ArrayList<String>();
 		Calendar min = Calendar.getInstance();

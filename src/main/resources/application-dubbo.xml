@@ -10,7 +10,6 @@
     <dubbo:config-center address="zookeeper://136.160.161.31:2181"/>
     <dubbo:registry address="zookeeper://136.160.161.31:2181"/>
     <dubbo:metadata-report address="zookeeper://136.160.161.31:2181"/>
-
     <dubbo:reference id="RtQueryService" check="false"
                      interface="com.asiainfo.account.api.RtQueryService"
                      group="CoreService" version="1.0.0" timeout="20000"/>
