@@ -1301,6 +1301,7 @@ public class LocalSeviceImpl implements IlocalService {
                 String amount=String.valueOf(map.get("amount"));
                 String outFlag=String.valueOf(map.get("outFlag"));
                 String returnCycleId=String.valueOf(map.get("returnCycleId"));
+                String rebateCycle = String.valueOf(map.get("rebateCycle"));
                 List<BillingCycle> billingCycles = infoOverAccuFeeMapperDao.selectBillingCyleFromCyleId(returnCycleId);
                 if (billingCycles.size() > 0) {
                     BillingCycle billingCycle = billingCycles.get(0);
@@ -1309,6 +1310,7 @@ public class LocalSeviceImpl implements IlocalService {
                 wingPaymentRedPackSetType.setEachrewardsAmt(amount);
                 wingPaymentRedPackSetType.setProdInstId(servId);
                 wingPaymentRedPackSetType.setReserved3(outFlag);
+                wingPaymentRedPackSetType.setRebateCycle(rebateCycle);
                 wingPaymentRedPackSet.add(wingPaymentRedPackSetType);
                 returnResult.setResult("0");
                 returnResult.setCode("");

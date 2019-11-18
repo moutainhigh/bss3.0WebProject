@@ -375,6 +375,7 @@ public class OpenAPIServiceImpl {
         // TODO: 2019/9/3 判断计费流水是否重复
         ResultInfo resultInfo = new ResultInfo();
         resultInfo = orclCommonDao.checkSerialnumberExist(body);
+        String accNum = "";
         RechargeBalanceRes rechargeBalanceRes = new RechargeBalanceRes();
         if (!"0".equals(resultInfo.getCode())) {
             throw new BillException(ErrorCodePublicEnum.PAY_SERIALNUMBER_IS_EXIST);
@@ -382,8 +383,13 @@ public class OpenAPIServiceImpl {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+        accNum = svcObjectStruct.getObjValue();
+        if ("3".equals(svcObjectStruct.getObjAttr())) {
+            String iptvNum = svcObjectStruct.getObjValue();
+            accNum = iptvNum.substring(4);
+        }
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(svcObjectStruct.getObjValue(), "0431", "2",
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNum, "0431", "2",
                 "1", headers);
         //用户校验
         checkServExist(stdCcaQueryServ);

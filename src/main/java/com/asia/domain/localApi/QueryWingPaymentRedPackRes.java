@@ -1,8 +1,5 @@
 package com.asia.domain.localApi;
 
-import com.asia.common.baseObj.BaseBonResDomain;
-import com.asia.domain.localApi.child.MobileNumberQueryServiceListTypeBean;
-
 import java.util.List;
 
 /**
@@ -31,6 +28,7 @@ public class QueryWingPaymentRedPackRes  {
         private String  prodInstId;
         private String  reserved3;
         private String  returnCycleId;
+        private String  rebateCycle;
 
         public String getEachrewardsAmt() {
             return eachrewardsAmt;
@@ -62,6 +60,14 @@ public class QueryWingPaymentRedPackRes  {
 
         public void setReturnCycleId(String returnCycleId) {
             this.returnCycleId = returnCycleId;
+        }
+
+        public String getRebateCycle() {
+            return rebateCycle;
+        }
+
+        public void setRebateCycle(String rebateCycle) {
+            this.rebateCycle = rebateCycle;
         }
     }
 
