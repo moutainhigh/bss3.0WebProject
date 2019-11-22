@@ -21,11 +21,11 @@ public class DubboController{
 	private DubboServiceImpl acctService;
 	/*@Autowired
 	SystemSwitchService systemSwitchService;*/
-	@PostMapping("/test")
+
+@PostMapping("/test")
 	public String searchServInfo(@RequestBody String str,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		acctService.doProductNameCheck("310669383","3104402572");
 		return null;
 	}
-
 }

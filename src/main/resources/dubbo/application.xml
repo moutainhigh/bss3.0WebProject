@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application  name="bill_srv"/>
+
+
+    <!--<dubbo:config-center   protocol="zookeeper" address="136.160.147.106:25000"/>-->
+    <dubbo:registry id="centerService" protocol="zookeeper" address="136.160.147.106:25000"/>
+    <dubbo:registry id="query" protocol="zookeeper" address="136.160.161.31:2181"/>
+
+    <!--<dubbo:protocol name="dubbo" port="20880" />-->
+    <!--<dubbo:application registry="query" name="bill_srv"/>-->
+
+   <!-- <dubbo:metadata-report  address="zookeeper://136.160.147.106:25000"/>-->
+
+    <dubbo:reference  registry="query" id="RtQueryService" check="false"
+                      interface="com.asiainfo.account.api.RtQueryService"
+                      group="CoreService" version="1.0.0" timeout="20000"/>
+    <dubbo:reference registry="query" id="ServInfoService" check="false"
+                     interface="com.asiainfo.account.api.ServInfoService"
+                     group="CoreService" version="1.0.0" timeout="20000"/>
+
+   <dubbo:reference  registry="centerService" id="QueryCenterService" check="false"
+                      interface="com.prd.asiainfo.abm.provider.facade.service.QueryCenterService"
+                     version="1.0.0" timeout="20000"/>
+</beans>
