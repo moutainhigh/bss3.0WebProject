@@ -116,7 +116,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
 
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1", "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -173,7 +173,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1", "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -250,7 +250,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1", "1", "1",headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -307,8 +307,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
-                "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -366,7 +366,7 @@ public class LocalSeviceImpl implements IlocalService {
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
-                "1", "2",headers);
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -477,8 +477,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "","",
-                "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "0431", "1",
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -546,8 +546,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "","",
-                "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -590,8 +590,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         String accNumb = body.getAccNbr();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "","",
-                "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -621,7 +621,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
         String action = body.getAction();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1", "1", "1",headers);
         //查询用户
         try {
             checkServExist(stdCcaQueryServ);
@@ -664,11 +664,12 @@ public class LocalSeviceImpl implements IlocalService {
         String userType = body.getUserType();
         String valueType = body.getValueType();
         //调账务服务查询用户信息
-            stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
-            //用户信息查询
-            try {
-                checkServExist(stdCcaQueryServ);
-            }catch (BillException b){
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
+                "1","1", headers);
+        //用户信息查询
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch (BillException b){
             throw new BillException(b);
         }
         String servId = stdCcaQueryServ.getServId();
@@ -753,8 +754,8 @@ public class LocalSeviceImpl implements IlocalService {
         MobileNumberQueryRes info = new MobileNumberQueryRes();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
-                "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "0431", "1",
+                "1","1", headers);
         try {
             checkServExist(stdCcaQueryServ);
         }catch (BillException b){
@@ -1138,7 +1139,8 @@ public class LocalSeviceImpl implements IlocalService {
                 returnResult.setResultMsg("");
                 StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                 //调账务服务查询用户信息
-                stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "","", headers);
+                stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
+                        "1","1", headers);
                 //查询用户是否存在
                 try {
                     checkServExist(stdCcaQueryServ);
@@ -1162,9 +1164,9 @@ public class LocalSeviceImpl implements IlocalService {
                 Map<String,Object> pOfferPayPlanInfo=list.get(0);
                 String conferflag=pOfferPayPlanInfo.get("CONFER_FLAG").toString();
                 oneTimeSubsidies=pOfferPayPlanInfo.get("TOTAL_MONEY").toString();//一次性补贴
-                String returnRuleId=pOfferPayPlanInfo.get("RETURN_RULE_ID").toString();
+
                 if(conferflag.equals("1")){//普通返还
-                    String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRuleId);
+                    String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRoleId);
                     if(instance_id==null||instance_id.equals("")){
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("");
@@ -1188,7 +1190,8 @@ public class LocalSeviceImpl implements IlocalService {
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                     //调账务服务查询用户信息
-                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "","", headers);
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
+                            "1","1", headers);
                     //查询用户是否存在
                     try {
                         checkServExist(stdCcaQueryServ);
@@ -1209,7 +1212,7 @@ public class LocalSeviceImpl implements IlocalService {
                     returnResult.setSubsidiesInfo(subsidiesInfo);
 
                 }else if(conferflag.equals("2")){//翼支付反还
-                    String bestPayReturnId= aBestPayReturnInfoDao.queryBestPayReturnId(acct_id,returnRuleId,accNbr);
+                    String bestPayReturnId= aBestPayReturnInfoDao.queryBestPayReturnId(acct_id,returnRoleId,accNbr);
                     if(bestPayReturnId==null||bestPayReturnId.equals("")){
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("");
@@ -1232,7 +1235,8 @@ public class LocalSeviceImpl implements IlocalService {
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                     //调账务服务查询用户信息
-                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "2", "1","", headers);
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
+                            "1","1", headers);
                     //查询用户是否存在
                     try {
                         checkServExist(stdCcaQueryServ);
@@ -1281,10 +1285,12 @@ public class LocalSeviceImpl implements IlocalService {
             throws IOException, BillException{
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         QueryWingPaymentRedPackRes returnResult=new QueryWingPaymentRedPackRes();
-        String accNbr=queryWingPaymentRedPackReq.getValue();
+        String offerId = queryWingPaymentRedPackReq.getValue();
+        /*String accNbr=queryWingPaymentRedPackReq.getValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "","", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -1292,9 +1298,38 @@ public class LocalSeviceImpl implements IlocalService {
             throw new BillException(b);
         }
         String servId = stdCcaQueryServ.getServId();
-        List<Map<String,Object>> list=queryWingPaymentRedPackDao.QueryWingPaymentRedPack(servId);
+        List<Map<String,Object>> list=queryWingPaymentRedPackDao.QueryWingPaymentRedPack(servId);*/
         List<WingPaymentRedPackSetType> wingPaymentRedPackSet=new ArrayList<>();
-        if(list.size()!=0){
+        List<Map<String, Object>> list = pOfferPayPlanInfoDao.selectPOfferPayPlanInfo(offerId);
+        if (list.size() > 0) {
+            for (Map<String, Object> pOfferPayInfoMap : list) {
+                WingPaymentRedPackSetType wingPaymentRedPackSetType=new WingPaymentRedPackSetType();
+                String returnRuleId = String.valueOf(pOfferPayInfoMap.get("returnRuleId"));
+                List<Map<String, Object>>  returnStepList =  aReturnRuleInstanceDao.queryAReturnRuleStep(returnRuleId);
+                if (returnStepList.size() == 1) {
+                    Map returnStepMap = returnStepList.get(0);
+                    if ("1".equals(String.valueOf(returnStepMap.get("defCalcMethod")))) {
+                        wingPaymentRedPackSetType.setEachrewardsAmt(String.valueOf(returnStepMap.get("defReturnValue")));
+                    } else {
+                        wingPaymentRedPackSetType.setEachrewardsAmt("0");
+                    }
+                } else {
+                    wingPaymentRedPackSetType.setEachrewardsAmt("0");
+                }
+                wingPaymentRedPackSetType.setProdInstId(offerId);
+                wingPaymentRedPackSetType.setReserved3("1");
+                wingPaymentRedPackSetType.setRebateCycle("360");
+                wingPaymentRedPackSet.add(wingPaymentRedPackSetType);
+                returnResult.setResult("0");
+                returnResult.setCode("");
+                returnResult.setMsg("SUCCESS");
+            }
+        }else{
+            returnResult.setResult("1");
+            returnResult.setCode("");
+            returnResult.setMsg("记录为空！");
+        }
+        /*if(list.size()!=0){
             for(int i=0;i<list.size();i++){
                 WingPaymentRedPackSetType wingPaymentRedPackSetType=new WingPaymentRedPackSetType();
                 Map<String,Object> map=list.get(i);
@@ -1320,7 +1355,7 @@ public class LocalSeviceImpl implements IlocalService {
             returnResult.setResult("0");
             returnResult.setCode("");
             returnResult.setMsg("记录为空！");
-        }
+        }*/
 
         returnResult.setWingPaymentRedPackSet(wingPaymentRedPackSet);
         return  returnResult;

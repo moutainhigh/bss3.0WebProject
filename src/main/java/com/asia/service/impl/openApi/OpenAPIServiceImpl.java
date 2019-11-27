@@ -213,7 +213,7 @@ public class OpenAPIServiceImpl {
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
         //状态码为请求成功
-        if (result.getCode() == HttpStatus.SC_OK) {
+        if (result.getCode() == HttpStatus.SC_OK||result.getCode() == HttpStatus.SC_BAD_REQUEST) {
             headers.clear();
             headers.putAll(result.getHeaders());
             return JSON.parseObject(result.getData(), QryCustBillRes.class);
@@ -376,6 +376,11 @@ public class OpenAPIServiceImpl {
         ResultInfo resultInfo = new ResultInfo();
         resultInfo = orclCommonDao.checkSerialnumberExist(body);
         String accNum = "";
+        String objAttr = "";
+        String objType = "";
+        String productName = "";
+        String paymentFlag = "";
+        String localNet = "";
         RechargeBalanceRes rechargeBalanceRes = new RechargeBalanceRes();
         if (!"0".equals(resultInfo.getCode())) {
             throw new BillException(ErrorCodePublicEnum.PAY_SERIALNUMBER_IS_EXIST);
@@ -384,24 +389,25 @@ public class OpenAPIServiceImpl {
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
         accNum = svcObjectStruct.getObjValue();
+        objAttr = svcObjectStruct.getObjAttr();
+        objType = svcObjectStruct.getObjType();
         if ("3".equals(svcObjectStruct.getObjAttr())) {
             String iptvNum = svcObjectStruct.getObjValue();
             accNum = iptvNum.substring(4);
         }
+        if ("3".equals(objType)) {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNum, "0431", "2",
-                "1", headers);
+                "1",objAttr, headers);
         //用户校验
-        try {
-            checkServExist(stdCcaQueryServ);
-        }catch(BillException b){
-            throw  new BillException(b);
+        checkServExist(stdCcaQueryServ);
+        localNet = stdCcaQueryServ.getHomeAreaCode();
+        productName = stdCcaQueryServ.getProductId();
+        paymentFlag = stdCcaQueryServ.getPaymentFlag();
         }
-        String localNet = stdCcaQueryServ.getHomeAreaCode();
-        String productName = stdCcaQueryServ.getProductId();
-        String paymentFlag = stdCcaQueryServ.getPaymentFlag();
-        productName = productName != null ? productName : "379";
-        paymentFlag = paymentFlag != null ? paymentFlag : "1";
+        localNet    = !StringUtil.isEmpty(localNet)? localNet : "0431";
+        productName = !StringUtil.isEmpty(productName) ? productName : "379";
+        paymentFlag = !StringUtil.isEmpty(paymentFlag) ? paymentFlag : "1";
         //特殊业务组的跨地市缴费限制
         if ("3003".equals(body.getSystemId())) {
             if (!"433".equals(localNet)) {
@@ -463,7 +469,8 @@ public class OpenAPIServiceImpl {
         Map map = new HashMap();
         //调用用户信息查询接口 begin
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
-        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNbr), "", objType, objAttr, headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNbr), "", objType,
+                "1", objAttr,headers);
         //用户校验
         checkServExist(stdCcaQueryServ);
         String servId = stdCcaQueryServ.getServId();
