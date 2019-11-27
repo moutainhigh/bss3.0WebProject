@@ -6,4 +6,10 @@
     from p_offer_payplan_info a
     where a.OFFER_ID = #{offer_id} and a.CONFER_FLAG in(1,2)
   </select>
+
+  <select id="selectPOfferPayPlanInfo" resultType="java.util.Map">
+    select TOTAL_MONEY totalMoney,return_rule_id returnRuleId
+    from p_offer_payplan_info
+    where OFFER_ID = #{offer_id} and CONFER_FLAG  = 2
+  </select>
 </mapper>

@@ -7,4 +7,10 @@
     where a.acct_id=#{acct_id}  and a.return_rule_id=#{return_rule_id}
     AND a.state='RIA'
   </select>
+
+  <select id="queryAReturnRuleStep"  resultType="java.util.HashMap">
+    select DEF_CALC_METHOD defCalcMethod,DEF_RETURN_VALUE defReturnValue
+    from a_return_rule_step a
+    where a.return_rule_id=#{return_rule_id}
+  </select>
 </mapper>
