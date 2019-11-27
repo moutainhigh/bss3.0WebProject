@@ -30,7 +30,8 @@ public class CommonUserInfo {
     private Bon3ServiceImpl bon3Service;
     @Autowired
     private AcctApiUrl acctApiUrl;
-    public StdCcaQueryServListBean getUserInfo(String accNum, String areaCode, String QueryType, String valueType, Map<String, String> headers)
+    public StdCcaQueryServListBean getUserInfo(String accNum, String areaCode, String QueryType,
+                                               String valueType,String destinationAttr, Map<String, String> headers)
             throws IOException, BillException {
         //调用用户信息查询接口 begin
         StdCcrQueryServRes info = new StdCcrQueryServRes();
@@ -54,8 +55,24 @@ public class CommonUserInfo {
         if (StringUtil.isEmpty(stdCcaQueryServList)) {
             throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }
+        if (stdCcaQueryServList.size() > 1) {
+            for (StdCcaQueryServListBean servListBean : stdCcaQueryServList) {
+                if ("1".equals(destinationAttr)
+                        &&"2".equals(servListBean.getDestinationAttr())) {
+                    stdCcaQueryServListBean = servListBean;
+                    break;
 
-        stdCcaQueryServListBean = stdCcaQueryServList.get(0);
+                } else if (destinationAttr.equals(servListBean.getDestinationAttr())) {
+                    stdCcaQueryServListBean = servListBean;
+                    break;
+                } else {
+                    stdCcaQueryServListBean = stdCcaQueryServList.get(0);
+                }
+            }
+        } else {
+            stdCcaQueryServListBean = stdCcaQueryServList.get(0);
+        }
+
         return stdCcaQueryServListBean;
     }
 

@@ -116,7 +116,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
 
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -173,7 +173,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -250,7 +250,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -308,7 +308,7 @@ public class LocalSeviceImpl implements IlocalService {
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
-                "", headers);
+                "","", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -365,8 +365,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
-                "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
+                "1", "2",headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -425,8 +425,8 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
-                "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "0431", "1",
+                "1","1", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);
@@ -477,7 +477,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "",
+        stdCcaQueryServ = commonUserInfo.getUserInfo(String.valueOf(accNumb), "", "","",
                 "", headers);
         //查询用户是否存在
         try {
@@ -546,7 +546,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "","",
                 "", headers);
         //查询用户是否存在
         try {
@@ -590,7 +590,7 @@ public class LocalSeviceImpl implements IlocalService {
 
         String accNumb = body.getAccNbr();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "",
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "","",
                 "", headers);
         //查询用户是否存在
         try {
@@ -621,7 +621,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNumb = body.getQueryValue();
         String action = body.getAction();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
         //查询用户
         try {
             checkServExist(stdCcaQueryServ);
@@ -664,7 +664,7 @@ public class LocalSeviceImpl implements IlocalService {
         String userType = body.getUserType();
         String valueType = body.getValueType();
         //调账务服务查询用户信息
-            stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "", headers);
+            stdCcaQueryServ = commonUserInfo.getUserInfo(accNumb, "", "", "","", headers);
             //用户信息查询
             try {
                 checkServExist(stdCcaQueryServ);
@@ -754,7 +754,7 @@ public class LocalSeviceImpl implements IlocalService {
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(mobileNumberQueryReq.getValue(), "", "",
-                "", headers);
+                "","", headers);
         try {
             checkServExist(stdCcaQueryServ);
         }catch (BillException b){
@@ -1138,7 +1138,7 @@ public class LocalSeviceImpl implements IlocalService {
                 returnResult.setResultMsg("");
                 StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                 //调账务服务查询用户信息
-                stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+                stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "","", headers);
                 //查询用户是否存在
                 try {
                     checkServExist(stdCcaQueryServ);
@@ -1188,7 +1188,7 @@ public class LocalSeviceImpl implements IlocalService {
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                     //调账务服务查询用户信息
-                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "","", headers);
                     //查询用户是否存在
                     try {
                         checkServExist(stdCcaQueryServ);
@@ -1232,7 +1232,7 @@ public class LocalSeviceImpl implements IlocalService {
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                     //调账务服务查询用户信息
-                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "2", "1", headers);
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "2", "1","", headers);
                     //查询用户是否存在
                     try {
                         checkServExist(stdCcaQueryServ);
@@ -1284,7 +1284,7 @@ public class LocalSeviceImpl implements IlocalService {
         String accNbr=queryWingPaymentRedPackReq.getValue();
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         //调账务服务查询用户信息
-        stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+        stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "","", headers);
         //查询用户是否存在
         try {
             checkServExist(stdCcaQueryServ);

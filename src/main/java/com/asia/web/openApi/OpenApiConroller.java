@@ -477,7 +477,7 @@ public class OpenApiConroller{
             if (!isSvcObjectStruct[0].equals("0")) {
                 String errinfo = isSvcObjectStruct[1];
                 LogUtil.error(errinfo, null, this.getClass());
-                throw new BillException(isOperAttrStruct[0], isOperAttrStruct[1]);
+                throw new BillException(isSvcObjectStruct[0], isSvcObjectStruct[1]);
             }
             //充值请求流水
             String flowId = body.getFlowId();
@@ -557,7 +557,8 @@ public class OpenApiConroller{
             }
 			if ("3005".equals(systemId)
 					||"1003".equals(systemId)
-					||"3001".equals(systemId)) {
+					||"3001".equals(systemId)
+					||"1004".equals(systemId)) {
 				if (!"0".equals(body.getBalanceItemTypeId())) {
 					throw new BillException(ErrorCodeCompEnum.BALANCE_TYPE_IS_ILLEGAL);
 				}
