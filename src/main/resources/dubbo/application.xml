@@ -25,6 +25,10 @@
                      group="CoreService" version="1.0.0" timeout="20000"/>
 
    <dubbo:reference  registry="centerService" id="QueryCenterService" check="false"
-                      interface="com.prd.asiainfo.abm.provider.facade.service.QueryCenterService"
+                    interface="com.prd.asiainfo.abm.provider.facade.service.QueryCenterService"
                      version="1.0.0" timeout="20000"/>
+
+    <dubbo:reference  registry="centerService" id="AccountingService" check="false"
+                      interface="com.prd.asiainfo.abm.provider.facade.service.AccountingService"
+                      version="1.0.0" timeout="20000"/>
 </beans>

@@ -3,6 +3,7 @@ package com.asia.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.asia.service.impl.CustViewDataImpl;
+import com.asia.service.impl.QueryServInfoImpl;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +19,10 @@ public class CustViewDataControll {
 
     @Autowired
     CustViewDataImpl custViewData;
+    @Autowired
+    QueryServInfoImpl queryServInfo;
     @GetMapping("/custViewData")
-    private String test(@RequestParam(value = "custId") String custId,
+    private String custViewData(@RequestParam(value = "custId") String custId,
                       @RequestParam(value = "viewItemCat") String viewItemCat) throws IOException {
         String info="";
         if(custId.equals("")||viewItemCat.equals("")){
@@ -30,4 +33,29 @@ public class CustViewDataControll {
         return info;
 
     }
+
+    @GetMapping("/queryServInfo")
+    private String queryServInfo(@RequestParam(value = "phoneNum") String phoneNum)
+            throws IOException {
+
+        String info = queryServInfo.queryServInfo(phoneNum);
+        return info;
+
+    }
+
+    /**
+     *根据号码获取这个号码的所有订购
+     *
+     * */
+    @GetMapping("/queryAllOrder")
+    private String queryAllOrder(@RequestParam(value = "servId") String servId,
+                                 @RequestParam(value = "queryType") int queryType,
+                                 @RequestParam(value = "cicleId") String cicleId)
+            throws IOException {
+
+        String info = custViewData.queryAllOrder(servId,queryType,cicleId);
+        return info;
+
+    }
+
 }

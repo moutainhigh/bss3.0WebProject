@@ -11,6 +11,7 @@ import com.asia.domain.openApi.QryBillRes.FeeBillingCycle.AcctItemGroup;
 import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.mapper.orclmapper.CustomerMapper;
 import com.asia.service.impl.openApi.OpenAPIServiceImpl;
+import com.prd.asiainfo.abm.provider.facade.dto.center.QueryAllOrder;
 import com.prd.asiainfo.abm.provider.facade.dto.center.base.Account;
 import com.prd.asiainfo.abm.provider.facade.dto.center.base.BaseParams;
 import com.prd.asiainfo.abm.provider.facade.dto.center.QueryAcctInfoByCustIdOrPaperNoResp;
@@ -175,5 +176,21 @@ public class CustViewDataImpl {
                 "\"NAME\":\"\"" +                        //账目类型名称
                 "}]}";
         return result;
+    }
+
+    /**
+     *根据号码获取这个号码的所有订购
+     *
+     * */
+    public String queryAllOrder(String servId,int queryType,String cicleId){
+        String result="";
+        BaseParams baseParams=new BaseParams();
+        baseParams.setQueryCode(servId);
+        baseParams.setQueryType(queryType);
+        baseParams.setBillPeriods(cicleId);
+        baseParams.setType("");
+        baseParams.setProdId("379");
+        QueryAllOrder queryAllOrder= queryCenterService.queryAllOrder(baseParams);
+        return  result;
     }
 }

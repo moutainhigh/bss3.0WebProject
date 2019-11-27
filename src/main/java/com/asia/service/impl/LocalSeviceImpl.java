@@ -1162,9 +1162,9 @@ public class LocalSeviceImpl implements IlocalService {
                 Map<String,Object> pOfferPayPlanInfo=list.get(0);
                 String conferflag=pOfferPayPlanInfo.get("CONFER_FLAG").toString();
                 oneTimeSubsidies=pOfferPayPlanInfo.get("TOTAL_MONEY").toString();//一次性补贴
-
+                String returnRuleId=pOfferPayPlanInfo.get("RETURN_RULE_ID").toString();
                 if(conferflag.equals("1")){//普通返还
-                    String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRoleId);
+                    String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRuleId);
                     if(instance_id==null||instance_id.equals("")){
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("");
@@ -1209,7 +1209,7 @@ public class LocalSeviceImpl implements IlocalService {
                     returnResult.setSubsidiesInfo(subsidiesInfo);
 
                 }else if(conferflag.equals("2")){//翼支付反还
-                    String bestPayReturnId= aBestPayReturnInfoDao.queryBestPayReturnId(acct_id,returnRoleId,accNbr);
+                    String bestPayReturnId= aBestPayReturnInfoDao.queryBestPayReturnId(acct_id,returnRuleId,accNbr);
                     if(bestPayReturnId==null||bestPayReturnId.equals("")){
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("");
@@ -1232,7 +1232,7 @@ public class LocalSeviceImpl implements IlocalService {
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                     //调账务服务查询用户信息
-                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "", "", "", headers);
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "2", "1", headers);
                     //查询用户是否存在
                     try {
                         checkServExist(stdCcaQueryServ);

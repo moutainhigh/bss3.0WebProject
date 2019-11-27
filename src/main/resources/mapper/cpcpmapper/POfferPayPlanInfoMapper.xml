@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.asia.mapper.cpcpmapper.POfferPayPlanInfoMapper">
   <select id="queryPOfferPayPlanInfo" resultType="java.util.Map">
-    select a.TOTAL_MONEY,a.CONFER_FLAG
+    select a.TOTAL_MONEY,a.CONFER_FLAG,a.RETURN_RULE_ID
     from p_offer_payplan_info a
     where a.OFFER_ID = #{offer_id} and a.CONFER_FLAG in(1,2)
   </select>

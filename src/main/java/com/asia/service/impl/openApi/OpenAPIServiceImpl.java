@@ -392,7 +392,11 @@ public class OpenAPIServiceImpl {
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNum, "0431", "2",
                 "1", headers);
         //用户校验
-        checkServExist(stdCcaQueryServ);
+        try {
+            checkServExist(stdCcaQueryServ);
+        }catch(BillException b){
+            throw  new BillException(b);
+        }
         String localNet = stdCcaQueryServ.getHomeAreaCode();
         String productName = stdCcaQueryServ.getProductId();
         String paymentFlag = stdCcaQueryServ.getPaymentFlag();
