@@ -198,4 +198,16 @@
     </if>
   </update>
 
+  <insert id="insertItemChargeOrder" parameterType="map" >
+    insert into TIF_ITM_CHARGE_ORDER (OTHER_PAYMENT_ID, INPUT_DATE, FLAG,RUN_DATE, BUSI_CODE
+      )
+    values (#{otherPaymentId,jdbcType=VARCHAR}, sysdate, 0,
+      null, #{busiCode,jdbcType=DECIMAL}
+      )
+  </insert>
+  <select id="getAcctIdFromAcctCd"  resultType="java.util.HashMap">
+    select acct_id "acctId" from usr_profile.account@link_to_acct
+   where
+   acct_cd = #{acctCd}
+  </select>
 </mapper>

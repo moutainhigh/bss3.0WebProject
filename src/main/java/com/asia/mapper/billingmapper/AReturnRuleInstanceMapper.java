@@ -11,4 +11,5 @@ public interface AReturnRuleInstanceMapper {
     String queryAReturnRuleInstance(@Param("acct_id") String acct_id,
                                           @Param("return_rule_id") String return_rule_id);
     List<Map<String,Object>> queryAReturnRuleStep(@Param("return_rule_id") String return_rule_id);
+    List<Map<String,Object>> queryLastAReturnRuleStep(@Param("return_rule_id") String return_rule_id);
 }

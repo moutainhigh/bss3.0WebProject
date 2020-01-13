@@ -12,4 +12,5 @@ public interface POfferPayPlanInfoMapper {
 
     List<Map<String,Object>> selectPOfferPayPlanInfo(@Param("offer_id") String offer_id);
 
+    List<Map<String,Object>> selectPOfferPayPlanInfoLh(@Param("offer_id") String offer_id);
 }

@@ -45,8 +45,8 @@ public class Bon3Controller{
 	public String searchServInfo(@RequestBody StdCcrQueryServReq stdCcrQueryServ,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [searchServInfo] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/searchServInfo"+ "body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [searchServInfo] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/searchServInfo"+ "body>>"+JSON.toJSONString(stdCcrQueryServ,SerializerFeature.WriteMapNullValue)
 			+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcrQueryServRes info=new StdCcrQueryServRes();
 		try {
@@ -82,8 +82,8 @@ public class Bon3Controller{
 			LogUtil.error("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), e, this.getClass());
 			return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.debug("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [searchServInfo] SERVICE...", null, this.getClass());
+		LogUtil.info("输出参数[stdCcrQueryServRes]=" + JSON.toJSONString(info, SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [searchServInfo] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -214,8 +214,8 @@ public class Bon3Controller{
 	public String getUnitedBalance(@RequestBody StdCcrQueryUnitedBalance stdCcrQueryUnitedBalance,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [getUnitedAccu] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/getUnitedBalance" +"body>>"+stdCcrQueryUnitedBalance.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
+        LogUtil.info("START [getUnitedAccu] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/getUnitedBalance" +"body>>"+stdCcrQueryUnitedBalance.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaQueryUnitedBalance info=new StdCcaQueryUnitedBalance();
 		try {
 			//查询类型
@@ -257,8 +257,8 @@ public class Bon3Controller{
 			LogUtil.error("输出参数 getUnitedBalanceResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.debug("输出参数 getUnitedBalanceResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-		LogUtil.debug("END [getUnitedBalance] SERVICE...", null, this.getClass());
+		LogUtil.info("输出参数 getUnitedBalanceResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+		LogUtil.info("END [getUnitedBalance] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -275,8 +275,8 @@ public class Bon3Controller{
 	public String getUnitedAccu(@RequestBody StdCcrUserResourceQuery stdCcrUserResourceQuery,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-		LogUtil.debug("START [getUnitedAccu] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/getUnitedAccu"+ " body>>"+stdCcrUserResourceQuery.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
+		LogUtil.info("START [getUnitedAccu] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/getUnitedAccu"+ " body>>"+stdCcrUserResourceQuery.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaUserResourceQueryResponse info=new StdCcaUserResourceQueryResponse();
 		try {
             //查询类型
@@ -315,8 +315,8 @@ public class Bon3Controller{
             LogUtil.error("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.debug("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [getUnitedAccu] SERVICE...", null, this.getClass());
+        LogUtil.info("输出参数 getUnitedAccuResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [getUnitedAccu] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 	
@@ -333,8 +333,8 @@ public class Bon3Controller{
 	public String getUnitedAccuDetail(@RequestBody StdCcrUserResourceQueryDetail stdCcrUserResourceQueryDetail,
 			@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [getUnitedAccuDetail] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/getUnitedAccuDetail"+ " body>>"+stdCcrUserResourceQueryDetail.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
+        LogUtil.info("START [getUnitedAccuDetail] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/getUnitedAccuDetail"+ " body>>"+stdCcrUserResourceQueryDetail.toString()+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		StdCcaUserResourceQueryDetailResponse info=new StdCcaUserResourceQueryDetailResponse();
 		try {
 		    //系统id
@@ -371,8 +371,8 @@ public class Bon3Controller{
             LogUtil.error("输出参数 getUnitedAccuDetailResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.debug("输出参数 getUnitedAccuDetailResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [getUnitedAccuDetail] SERVICE...", null, this.getClass());
+        LogUtil.info("输出参数 getUnitedAccuDetailResponse=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [getUnitedAccuDetail] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -390,8 +390,8 @@ public class Bon3Controller{
 	public String getCreditInfo(@RequestBody GetCreditInfoReq getCreditInfoReq,
 									  @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [getCreditInfo] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/getCreditInfo"+ " body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [getCreditInfo] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/getCreditInfo"+ " body>>"+JSON.toJSONString(getCreditInfoReq,SerializerFeature.WriteMapNullValue)
 				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		GetCreditInfoRes info=new GetCreditInfoRes();
 		try {
@@ -432,8 +432,8 @@ public class Bon3Controller{
             LogUtil.error("输出参数[getCreditInfoRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-        LogUtil.debug("输出参数[getCreditInfoRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [getCreditInfo] SERVICE...", null, this.getClass());
+        LogUtil.info("输出参数[getCreditInfoRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [getCreditInfo] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -450,8 +450,8 @@ public class Bon3Controller{
 	public String getOweList(@RequestBody GetOweListReq getOweListReq,
 								@RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [getOweList] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/getOweList" + " body>>"+JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [getOweList] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/getOweList" + " body>>"+JSON.toJSONString(getOweListReq,SerializerFeature.WriteMapNullValue)
 				+" header>>"+JSON.toJSONString(headers),null, this.getClass());
 		GetOweListRes info=new GetOweListRes();
 		try {
@@ -496,8 +496,8 @@ public class Bon3Controller{
 			LogUtil.error("输出参数[getOweListRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.debug("输出参数 getOweListReq=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [getOweList] SERVICE...", null, this.getClass());
+		LogUtil.info("输出参数 getOweListReq=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [getOweList] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -515,8 +515,8 @@ public class Bon3Controller{
 	public String getRealTimeBill(@RequestBody GetRealTimeBillReq getRealTimeBillReq,
 							 @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [getRealTimeBill] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/getRealTimeBill" + " body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [getRealTimeBill] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/getRealTimeBill" + " body>>"+JSON.toJSONString(getRealTimeBillReq,SerializerFeature.WriteMapNullValue)
 				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		GetRealTimeBillRes info=new GetRealTimeBillRes();
 		try {
@@ -559,8 +559,8 @@ public class Bon3Controller{
             LogUtil.error("输出参数[GetRealTimeBillRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
 			return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
 		}
-		LogUtil.debug("输出参数 getRealTimeBill=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [getRealTimeBill] SERVICE...", null, this.getClass());
+		LogUtil.info("输出参数 getRealTimeBill=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [getRealTimeBill] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 
@@ -578,8 +578,8 @@ public class Bon3Controller{
 	public String searchAcctInfo(@RequestBody SearchAcctInfoReq searchAcctInfoReq,
 								  @RequestHeader Map<String,String> headers,HttpServletResponse response){
 		//记录业务日志
-        LogUtil.debug("START [searchAcctInfo] SERVICE...", null, this.getClass());
-		LogUtil.debug("/bon3/searchAcctInfo" + " body>>"+JSON.toJSONString(searchAcctInfoReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [searchAcctInfo] SERVICE...", null, this.getClass());
+		LogUtil.info("/bon3/searchAcctInfo" + " body>>"+JSON.toJSONString(searchAcctInfoReq,SerializerFeature.WriteMapNullValue)
 				+" header>>"+JSON.toJSONString(headers), null,this.getClass());
 		SearchAcctInfoRes info=new SearchAcctInfoRes();
 		try {
@@ -589,7 +589,7 @@ public class Bon3Controller{
 			LogUtil.error("/bon3/searchAcctInfo服务调用失败", e, this.getClass());
 			info.setErrorCode(Constant.ResultCode.ERROR);
 		}
-        LogUtil.debug("END [searchAcctInfo] SERVICE...", null, this.getClass());
+        LogUtil.info("END [searchAcctInfo] SERVICE...", null, this.getClass());
 		return JSON.toJSONString(info,SerializerFeature.WriteMapNullValue);
 	}
 

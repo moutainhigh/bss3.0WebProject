@@ -1085,7 +1085,7 @@ public class OpenApiConroller{
     public String[] isOperAttrStruct(OperAttrStruct operAttrStruct){
         String[] result=new String[2];
         if(operAttrStruct==null){
-            result[0]="";
+            result[0]="4103";
             result[1]="操作人属性[operAttrStruct]不能为空，请重新输入";
             return result;
         }
@@ -1093,7 +1093,7 @@ public class OpenApiConroller{
         //操作工号标识
         String staffId =operAttrStruct.getStaffId();
         if(staffId==null&&StringUtil.isEmpty(staffId)){
-            result[0]="1002";
+            result[0]="4103";
             result[1]="操作工号标识[staffId]字段不能为空，请重新输入";
             return result;
         }
@@ -1119,7 +1119,7 @@ public class OpenApiConroller{
         String[] result=new String[2];
 
         if(svcObjectStruct==null){
-            result[0]="";
+            result[0]="4103";
             result[1]="服务条件对象[svcObjectStruct]不能为空，请重新输入";
             return result;
         }
@@ -1127,11 +1127,11 @@ public class OpenApiConroller{
         //对象类型 1-帐户标识 2-用户标识 3-用户号码 4-客户标识 5-销售品实例
         String objType=svcObjectStruct.getObjType();
         if(objType==null||"".equals(objType)){
-            result[0]="1002";
+            result[0]="4103";
             result[1]="对象类型[objType]字段不能为空，请重新输入";
             return result;
         }else if(!("1".equals(objType)||"2".equals(objType)||"3".equals(objType)||"4".equals(objType)||"5".equals(objType))){
-            result[0]="1000";
+            result[0]="4103";
             result[1]="对象类型[objType]输入有误，请重新输入";
             return result;
         }
@@ -1139,7 +1139,7 @@ public class OpenApiConroller{
         //对象值 如果是用户号码且用户号码属性为固话、宽带时，此值要求带区号，含0
         String objValue=svcObjectStruct.getObjValue();
         if(objValue==null||"".equals(objValue)){
-            result[0]="1002";
+            result[0]="4103";
             result[1]="对象值[objValue]字段不能为空，请重新输入";
             return result;
         }
@@ -1148,12 +1148,12 @@ public class OpenApiConroller{
         String objAttr=svcObjectStruct.getObjAttr();
         if("3".equals(objType)){
             if(objAttr==null||"".equals(objAttr)){
-                result[0]="1002";
+                result[0]="4103";
                 result[1]="用户号码属性[objAttr]字段不能为空，请重新输入";
                 return result;
             }else if(!("0".equals(objType)||"1".equals(objType)||"2".equals(objType)||"3".equals(objType)||"4".equals(objType)
                     ||"5".equals(objType)||"6".equals(objType)||"99".equals(objType))){
-                result[0]="1000";
+                result[0]="4103";
                 result[1]="用户号码属性[objAttr]输入有误，请重新输入";
                 return result;
             }
@@ -1167,7 +1167,7 @@ public class OpenApiConroller{
         String dataArea=svcObjectStruct.getDataArea();
         if(!(dataArea==null||"".equals(dataArea))){
             if(!("1".equals(dataArea)||"2".equals(dataArea)||"3".equals(dataArea)||"4".equals(dataArea))){
-                result[0]="1000";
+                result[0]="4103";
                 result[1]="数据范围[dataArea]输入有误，请重新输入";
                 return result;
             }

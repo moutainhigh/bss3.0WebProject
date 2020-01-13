@@ -437,7 +437,7 @@ public class OrclCommonDao {
             cnt = bussihallChargeRecordMapperDao.updateBussihallChargeRecord(bussihallChargeRecord);
         }*/
         if (cnt < 0) {
-            resultInfo.setResultInfo(ErrorCodePublicEnum.DB_INSERT_ERROR);
+            resultInfo.setResultInfo(ErrorCodePublicEnum.DB_UPDATE_ERROR);
             return resultInfo;
         }
         LogUtil.info("[修改冲正流水记录结束]----------------",null, this.getClass());
@@ -467,4 +467,12 @@ public class OrclCommonDao {
         return mobileNumberQueryRes;
 
     }
-}
+    public int  insertItemChargeOrder(Map map){
+
+        return ymChargeRecordMapperDao.insertItemChargeOrder(map);
+    }
+
+    public List<Map<String,Object>> getAcctIdFromAcctCd (String acctCd){
+        return ymChargeRecordMapperDao.getAcctIdFromAcctCd(acctCd);
+    }
+ }

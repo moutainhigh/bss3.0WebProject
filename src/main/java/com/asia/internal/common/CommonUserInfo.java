@@ -69,8 +69,10 @@ public class CommonUserInfo {
                     stdCcaQueryServListBean = stdCcaQueryServList.get(0);
                 }
             }
-        } else {
+        } else if (stdCcaQueryServList.size() == 1) {
             stdCcaQueryServListBean = stdCcaQueryServList.get(0);
+        } else {
+            throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
         }
 
         return stdCcaQueryServListBean;

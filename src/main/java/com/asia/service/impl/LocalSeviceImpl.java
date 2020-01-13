@@ -7,6 +7,7 @@ import com.asia.common.AcctApiUrl;
 import com.asia.common.utils.HttpUtil;
 import com.asia.common.utils.HttpUtil.HttpResult;
 import com.asia.common.utils.LogUtil;
+import com.asia.common.utils.StringUtil;
 import com.asia.dao.OrclCommonDao;
 import com.asia.domain.bon3.SearchAcctInfoReq;
 import com.asia.domain.bon3.SearchAcctInfoReq.StdCcrQueryAcct;
@@ -709,21 +710,17 @@ public class LocalSeviceImpl implements IlocalService {
         String accNum = body.getAccNum();
         Map map = new HashMap();
         map.put("accNbr", accNum);
-        //先屏蔽掉携号转网
-       /*
+        //携号转网判断
        Map npMap = new HashMap();
         Map netWorkMap = new HashMap();
        List<Map<String,Object>> npList =  billInstMappperDao.selectNpAccNbr(map);
-        List<Map<String, Object>> netWorkList = new ArrayList<>();
        if(npList.size() > 0){
            npMap = npList.get(0);
-           netWorkList = billInstMappperDao.selectNewWorkPartner(npMap);
-           netWorkMap = netWorkList.get(0);
-           if ("00104310".equals(netWorkMap.get("networkId"))) {
+           String outNetwork = String.valueOf(npMap.get("outNetwork"));
+           if ("001".equals(outNetwork.substring(0,2))) {
                userInfoListBean.setNetType("0");
            }
-
-       }*/
+       }
         LogUtil.debug("[开始查询数据库，查询用户归属信息]-----------------",null, this.getClass());
         List<Map<String,Object>> regionList = headRegionMapperDao.selectHeadRegion(map);
         LogUtil.debug("[数据库返回结果]" + regionList.toString(),null, this.getClass());
@@ -732,7 +729,9 @@ public class LocalSeviceImpl implements IlocalService {
             userInfoListBean.setAreaCode(String.valueOf(map.get("orgAreaCode")));
             userInfoListBean.setPhoneId(body.getAccNum());
             userInfoListBean.setUserType(body.getAccNumType());
-            userInfoListBean.setNetType(String.valueOf(map.get("nettype")));
+            if (npList.size() ==0) {
+                userInfoListBean.setNetType(String.valueOf(map.get("nettype")));
+            }
             userByPhoneQueryServiceResBean.setUserInfoList(userInfoListBean);
         }else {
             throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
@@ -804,8 +803,8 @@ public class LocalSeviceImpl implements IlocalService {
         object.put("appID", "1111111");
 
         HttpResult balanceResult = null;
-        LogUtil.debug("[开始调用远程服务 余额查询]"+ acctApiUrl.getQueryBalance(),null, this.getClass());
-        LogUtil.debug("输入参数[balanceQuery]="+balanceQuery.toString(),null, this.getClass());
+        LogUtil.info("[开始调用远程服务 余额查询]"+ acctApiUrl.getQueryBalance(),null, this.getClass());
+        LogUtil.info("输入参数[balanceQuery]="+balanceQuery.toString(),null, this.getClass());
         try {
             balanceResult = HttpUtil.doPostJson(acctApiUrl.getQueryBalance(), balanceQuery, object);
         } catch (ClientProtocolException e) {
@@ -823,7 +822,7 @@ public class LocalSeviceImpl implements IlocalService {
             LogUtil.error(errorMsg,null,this.getClass());
             throw new BillException(ErrorCodeCompEnum.RREMOTE_ACCESS_FAILE_EXCEPTION);
         }
-        LogUtil.debug("[调用远程服务 余额查询]"+acctApiUrl.getQueryBalance()+"输出结果[result]="
+        LogUtil.info("[调用远程服务 余额查询]"+acctApiUrl.getQueryBalance()+"输出结果[result]="
                 +balanceResult.toString(),null,this.getClass());
 
         JSONObject json = JSON.parseObject(balanceResult.getData());
@@ -910,8 +909,8 @@ public class LocalSeviceImpl implements IlocalService {
             Map<String, String> object2 = new HashMap<String, String>();
             object2.put("appID", "1111111");
 
-            LogUtil.debug("[开始调用远程服务 欠费查询]"+ acctApiUrl.getQryBill(),null, this.getClass());
-            LogUtil.debug("输入参数[oweQry]="+oweQry.toString(),null, this.getClass());
+            LogUtil.info("[开始调用远程服务 欠费查询]"+ acctApiUrl.getQryBill(),null, this.getClass());
+            LogUtil.info("输入参数[oweQry]="+oweQry.toString(),null, this.getClass());
             HttpResult oweResult = null;
             try {
                 oweResult = HttpUtil.doPostJson(acctApiUrl.getQryBill(), oweQry, object2);
@@ -930,7 +929,7 @@ public class LocalSeviceImpl implements IlocalService {
             if (oweResult.getData() == null) {
                 throw new BillException(ErrorCodeCompEnum.QUERY_BILL_Err);
             }
-            LogUtil.debug("[调用远程服务 欠费查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
+            LogUtil.info("[调用远程服务 欠费查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
                     +oweResult.toString(),null,this.getClass());
 
             JSONObject oweJson = JSON.parseObject(oweResult.getData());
@@ -966,8 +965,8 @@ public class LocalSeviceImpl implements IlocalService {
         Map<String, String> object = new HashMap<String, String>();
         object.put("appID", "1111111");
 
-        LogUtil.debug("[开始调用远程服务 账单查询]"+ acctApiUrl.getGetOweList(),null, this.getClass());
-        LogUtil.debug("输入参数[queryAddValueFeeReq]="+queryAddValueFeeReq.toString(),null, this.getClass());
+        LogUtil.info("[开始调用远程服务 账单查询]"+ acctApiUrl.getGetOweList(),null, this.getClass());
+        LogUtil.info("输入参数[queryAddValueFeeReq]="+queryAddValueFeeReq.toString(),null, this.getClass());
         HttpResult resultOweList = null;
         try {
             resultOweList = HttpUtil.doPostJson(acctApiUrl.getGetOweList(), query, object);
@@ -987,7 +986,7 @@ public class LocalSeviceImpl implements IlocalService {
         if (resultOweList.getData() == null) {
             throw new BillException(ErrorCodeCompEnum.QUERY_NO_DATA);
         }
-        LogUtil.debug("[调用远程服务 账单查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
+        LogUtil.info("[调用远程服务 账单查询]"+acctApiUrl.getGetOweList()+"输出结果[result]="
                 +resultOweList.toString(),null,this.getClass());
         JSONObject json = JSON.parseObject(resultOweList.getData());
         Map<String, Object> map = (Map) json.get("stdCcaCustomizeBillQueryBill");
@@ -1084,7 +1083,7 @@ public class LocalSeviceImpl implements IlocalService {
     private void checkServExist(StdCcaQueryServListBean stdCcaQueryServ) throws BillException {
         if (stdCcaQueryServ != null) {
             String state = stdCcaQueryServ.getServState();
-            if ("2HN".equals(state) || "2HX".equals(state) || "2HF".equals(state)) {
+            if ("3".equals(state)) {
                 String errorMsg = "找不到用户或帐户档案";
                 LogUtil.error(errorMsg,null,this.getClass());
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);
@@ -1131,26 +1130,51 @@ public class LocalSeviceImpl implements IlocalService {
             String realPerformMonth="";
             String subsidiesAvg="";
             String oneTimeSubsidies="";
-            SearchAcctInfoRes searchAcctInfoRes=JSON.parseObject(result.getData(), SearchAcctInfoRes.class);
-            String acct_id=searchAcctInfoRes.getStdCcaQueryAcct().getQueryAcctInfo().get(0).getAcctId();
+            String lastReturnFee = "";
+            SearchAcctInfoRes searchAcctInfoRes= null;
+            String acct_id = "";
+            try {
+                searchAcctInfoRes = JSON.parseObject(result.getData(), SearchAcctInfoRes.class);
+                acct_id=searchAcctInfoRes.getStdCcaQueryAcct().getQueryAcctInfo().get(0).getAcctId();
+            }
+            catch (Exception e) {
+                LogUtil.error("产品实例不存在",null,this.getClass());
+               /* throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);*/
+            }
             List<Map<String,Object>> list=pOfferPayPlanInfoDao.queryPOfferPayPlanInfo(returnRoleId);
             if(list.size()==0){
                 returnResult.setResultCode("0");
                 returnResult.setResultMsg("");
                 StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                 //调账务服务查询用户信息
-                stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
+                try {
+                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
                         "1","1", headers);
                 //查询用户是否存在
-                try {
+
                     checkServExist(stdCcaQueryServ);
                 }catch (BillException b){
-                    throw new BillException(b);
+                    LogUtil.error("产品实例不存在",null,this.getClass());
+                    /*throw new BillException(b);*/
                 }
-                String servId = stdCcaQueryServ.getServId();
-                String totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
+                String totalConsumed = "";
+
+                    String servId = stdCcaQueryServ.getServId();
+                    if (!StringUtil.isEmpty(servId)) {
+                     totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
                 if(totalConsumed==null||totalConsumed.equals("")){
                     totalConsumed="";
+                }
+                }
+                list = pOfferPayPlanInfoDao.selectPOfferPayPlanInfoLh(returnRoleId);
+                if (list.size() > 0) {
+                    Map<String,Object> pOfferPayPlanInfo=list.get(0);
+                    String returnRuleId = String.valueOf(pOfferPayPlanInfo.get("returnRuleId"));
+                    List<Map<String, Object>> aReturnRuleList = aReturnRuleInstanceDao.queryLastAReturnRuleStep(returnRuleId);
+                    if (aReturnRuleList.size() > 0) {
+                        Map lastReturnFeeMap = aReturnRuleList.get(0);
+                        lastReturnFee = String.valueOf(lastReturnFeeMap.get("defReturnValue"));
+                    }
                 }
                 SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
                 subsidiesInfo.setOneTimeSubsidies(oneTimeSubsidies);
@@ -1158,13 +1182,16 @@ public class LocalSeviceImpl implements IlocalService {
                 subsidiesInfo.setSubsidiesAvg(String.valueOf(subsidiesAvg));
                 subsidiesInfo.setTotalConsumed(totalConsumed);
                 subsidiesInfo.setTotalSubsidies(totalSubsidies);
+                subsidiesInfo.setLastReturnFee(lastReturnFee);
                 returnResult.setSubsidiesInfo(subsidiesInfo);
                 return  returnResult;
             }else{
                 Map<String,Object> pOfferPayPlanInfo=list.get(0);
                 String conferflag=pOfferPayPlanInfo.get("CONFER_FLAG").toString();
+                String returnRuleId = String.valueOf(pOfferPayPlanInfo.get("returnRuleId"));
                 oneTimeSubsidies=pOfferPayPlanInfo.get("TOTAL_MONEY").toString();//一次性补贴
-
+                returnRoleId = returnRuleId;
+                lastReturnFee = "";
                 if(conferflag.equals("1")){//普通返还
                     String instance_id=aReturnRuleInstanceDao.queryAReturnRuleInstance(acct_id,returnRoleId);
                     if(instance_id==null||instance_id.equals("")){
@@ -1185,23 +1212,33 @@ public class LocalSeviceImpl implements IlocalService {
                             int avg = Integer.parseInt(totalSubsidies) / Integer.parseInt(realPerformMonth);//用户每月享受补贴平均值
                             subsidiesAvg=String.valueOf(avg);
                         }
+                        List<Map<String, Object>> aReturnRuleList = aReturnRuleInstanceDao.queryLastAReturnRuleStep(returnRoleId);
+                        if (aReturnRuleList.size() > 0) {
+                            Map lastReturnFeeMap = aReturnRuleList.get(0);
+                            lastReturnFee = String.valueOf(lastReturnFeeMap.get("defReturnValue"));
+                        }
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("SUCCESS");
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
-                    //调账务服务查询用户信息
+                    try {
+                        //调账务服务查询用户信息
                     stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
                             "1","1", headers);
                     //查询用户是否存在
-                    try {
+
                         checkServExist(stdCcaQueryServ);
                     }catch (BillException b){
-                        throw new BillException(b);
+                        LogUtil.error("产品实例不存在",null,this.getClass());
                     }
-                    String servId = stdCcaQueryServ.getServId();
-                    String totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
-                    if(totalConsumed==null||totalConsumed.equals("")){
-                        totalConsumed="";
+                    String totalConsumed = "";
+
+                        String servId = stdCcaQueryServ.getServId();
+                    if (!StringUtil.isEmpty(servId)) {
+                        totalConsumed = nfoHDUserFeeDao.queryTotalConsumed(servId);
+                        if (totalConsumed == null || totalConsumed.equals("")) {
+                            totalConsumed = "";
+                        }
                     }
                     SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
                     subsidiesInfo.setOneTimeSubsidies(oneTimeSubsidies);
@@ -1209,6 +1246,7 @@ public class LocalSeviceImpl implements IlocalService {
                     subsidiesInfo.setSubsidiesAvg(String.valueOf(subsidiesAvg));
                     subsidiesInfo.setTotalConsumed(totalConsumed);
                     subsidiesInfo.setTotalSubsidies(totalSubsidies);
+                    subsidiesInfo.setLastReturnFee(lastReturnFee);
                     returnResult.setSubsidiesInfo(subsidiesInfo);
 
                 }else if(conferflag.equals("2")){//翼支付反还
@@ -1230,23 +1268,33 @@ public class LocalSeviceImpl implements IlocalService {
                             int avg = Integer.parseInt(totalSubsidies) / Integer.parseInt(realPerformMonth);//用户每月享受补贴平均值
                             subsidiesAvg=String.valueOf(avg);
                         }
+                        List<Map<String, Object>> aReturnRuleList = aReturnRuleInstanceDao.queryLastAReturnRuleStep(returnRoleId);
+                        if (aReturnRuleList.size() > 0) {
+                            Map lastReturnFeeMap = aReturnRuleList.get(0);
+                            lastReturnFee = String.valueOf(lastReturnFeeMap.get("defReturnValue"));
+                        }
                         returnResult.setResultCode("0");
                         returnResult.setResultMsg("SUCCESS");
                     }
                     StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
                     //调账务服务查询用户信息
-                    stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
+                    try {
+                        stdCcaQueryServ = commonUserInfo.getUserInfo(accNbr, "0431", "1",
                             "1","1", headers);
                     //查询用户是否存在
-                    try {
+
                         checkServExist(stdCcaQueryServ);
                     }catch (BillException b){
-                        throw new BillException(b);
+                        LogUtil.error("产品实例不存在",null,this.getClass());
                     }
-                    String servId = stdCcaQueryServ.getServId();
-                    String totalConsumed=nfoHDUserFeeDao.queryTotalConsumed(servId);
-                    if(totalConsumed==null||totalConsumed.equals("")){
-                        totalConsumed="";
+                    String totalConsumed = "";
+
+                        String servId = stdCcaQueryServ.getServId();
+                        if (!StringUtil.isEmpty(servId)) {
+                        totalConsumed = nfoHDUserFeeDao.queryTotalConsumed(servId);
+                        if (totalConsumed == null || totalConsumed.equals("")) {
+                            totalConsumed = "";
+                        }
                     }
                     SubsidiesInfo subsidiesInfo=new SubsidiesInfo();
                     subsidiesInfo.setOneTimeSubsidies(oneTimeSubsidies);
@@ -1254,6 +1302,7 @@ public class LocalSeviceImpl implements IlocalService {
                     subsidiesInfo.setSubsidiesAvg(String.valueOf(subsidiesAvg));
                     subsidiesInfo.setTotalConsumed(totalConsumed);
                     subsidiesInfo.setTotalSubsidies(totalSubsidies);
+                    subsidiesInfo.setLastReturnFee(lastReturnFee);
                     returnResult.setSubsidiesInfo(subsidiesInfo);
 
                 }else{

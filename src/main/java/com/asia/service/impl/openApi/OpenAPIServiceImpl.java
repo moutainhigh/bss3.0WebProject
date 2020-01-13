@@ -27,6 +27,7 @@ import com.asia.domain.openApi.QryJTBillInfoRes.DataBean.ArrearsBean;
 import com.asia.domain.openApi.RtBillItemRes.DataBillItem;
 import com.asia.domain.openApi.RtBillItemRes.VoiceBillItem;
 import com.asia.domain.openApi.child.BillingCycle;
+import com.asia.domain.openApi.child.OperAttrStruct;
 import com.asia.domain.openApi.child.SvcObjectStruct;
 import com.asia.domain.plcaApi.OtherRemindReq;
 import com.asia.domain.plcaApi.OtherRemindReq.MsgInfoBean;
@@ -155,6 +156,9 @@ public class OpenAPIServiceImpl {
             headers.putAll(result.getHeaders());
             QryPaymentRes qryPaymentRes=JSON.parseObject(result.getData(), QryPaymentRes.class);
             List<QryPaymentRes.PaymentInfo> paymentInfoList= qryPaymentRes.getPaymentInfoList();
+            if (StringUtil.isEmpty(paymentInfoList)) {
+                return qryPaymentRes;
+            }
             List<QryPaymentRes.PaymentInfo> list=new ArrayList<>();
             for(int i=0;i<paymentInfoList.size();i++){
                 QryPaymentRes.PaymentInfo paymentInfo=paymentInfoList.get(i);
@@ -388,13 +392,28 @@ public class OpenAPIServiceImpl {
 
         StdCcaQueryServListBean stdCcaQueryServ = new StdCcaQueryServListBean();
         SvcObjectStruct svcObjectStruct = body.getSvcObjectStruct();
+        OperAttrStruct operAttrStruct = body.getOperAttrStruct();
+        String systemId = body.getSystemId();
+        String otherPaymentId = body.getFlowId();
         accNum = svcObjectStruct.getObjValue();
         objAttr = svcObjectStruct.getObjAttr();
-        objType = svcObjectStruct.getObjType();
         if ("3".equals(svcObjectStruct.getObjAttr())) {
             String iptvNum = svcObjectStruct.getObjValue();
-            accNum = iptvNum.substring(4);
+            //vc合同号充值，号码属性也传的3，在这里特殊处理一下
+            if (!"0".equals(iptvNum.substring(0, 1))) {
+                svcObjectStruct.setObjType("1");
+              List<Map<String,Object>> acctIdList =   orclCommonDao.getAcctIdFromAcctCd(iptvNum);
+                if (acctIdList.size() > 0) {
+                    Map acctMap = acctIdList.get(0);
+                    svcObjectStruct.setObjValue(String.valueOf(acctMap.get("acctId")));
+                }
+
+            } else {
+                accNum = iptvNum.substring(4);
+            }
+
         }
+        objType = svcObjectStruct.getObjType();
         if ("3".equals(objType)) {
         //调账务服务查询用户信息
         stdCcaQueryServ = commonUserInfo.getUserInfo(accNum, "0431", "2",
@@ -439,8 +458,33 @@ public class OpenAPIServiceImpl {
                 if (!"0".equals(resultInfo.getCode())) {
                     throw new BillException(ErrorCodeCompEnum.INSERT_CHARGE_BALANCE_ERR);
                 }
+                //充值要入itms表
+                if ("4102".equals(systemId)
+                        ||"1004".equals(systemId)
+                        ||"1003".equals(systemId)
+                        ||"1005".equals(systemId)) {
+                    Map map = new HashMap();
+                    map.put("otherPaymentId", otherPaymentId);
+                    map.put("busiCode", systemId);
+                    if (orclCommonDao.insertItemChargeOrder(map) < 1) {
+                        throw new BillException(ErrorCodeCompEnum.INSERT_CHARGE_BALANCE_ERR);
+                    }
+                    LogUtil.info("端到端数据入表成功【otherPaymentId】：" + otherPaymentId
+                            + "【accNbr】：" + accNum,null,this.getClass());
+                }
             }
             return JSON.parseObject(result.getData(), RechargeBalanceRes.class);
+        }else if (result.getCode() == HttpStatus.SC_BAD_REQUEST){
+            String errorMsg = getHttpErrorInfo(acctApiUrl.getRechargeBalance(), result);
+            LogUtil.error(errorMsg, null, this.getClass());
+            rechargeBalanceRes = JSON.parseObject(result.getData(), RechargeBalanceRes.class);
+            if ("11000003".equals(rechargeBalanceRes.getResultCode())
+                    || "22000001".equals(rechargeBalanceRes.getResultCode())) {
+                rechargeBalanceRes.setResultCode("1200");
+            } else {
+                rechargeBalanceRes.setResultCode("4103");
+            }
+            return rechargeBalanceRes;
         } else {
             String errorMsg = getHttpErrorInfo(acctApiUrl.getRechargeBalance(), result);
             LogUtil.error(errorMsg, null, this.getClass());
@@ -489,7 +533,9 @@ public class OpenAPIServiceImpl {
         if (owenCustList.size() > 0) {
             Map owenCustMap = owenCustList.get(0);
             Integer effDate = Integer.parseInt(owenCustMap.get("changeDate").toString());
-            body.setStartDate(effDate);
+            if (body.getStartDate() < effDate) {
+                body.setStartDate(effDate);
+            }
         }
         LogUtil.info("[用户的过户信息]" + owenCustList.toString(), null, this.getClass());
         LogUtil.info("[开始调用远程服务 详单信息查询]" + acctApiUrl.getRtBillItem(), null, this.getClass());
@@ -1155,7 +1201,7 @@ public class OpenAPIServiceImpl {
     private void checkServExist(StdCcaQueryServListBean stdCcaQueryServ) throws BillException {
         if (stdCcaQueryServ != null) {
             String state = stdCcaQueryServ.getServState();
-            if ("2HN".equals(state) || "2HX".equals(state) || "2HF".equals(state)) {
+            if ("3".equals(state)) {
                 String errorMsg = "找不到用户或帐户档案";
                 LogUtil.error(errorMsg, null, this.getClass());
                 throw new BillException(ErrorCodeCompEnum.HSS_SEARCH_SERV_INFO_NOT_EXIST);

@@ -13,4 +13,10 @@
     from a_return_rule_step a
     where a.return_rule_id=#{return_rule_id}
   </select>
+  <select id="queryLastAReturnRuleStep"  resultType="java.util.HashMap">
+    select DEF_RETURN_VALUE defReturnValue
+    from a_return_rule_step a
+    where a.return_rule_id=#{return_rule_id}
+    order by step desc
+  </select>
 </mapper>

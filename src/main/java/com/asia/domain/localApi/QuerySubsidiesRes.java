@@ -1,8 +1,5 @@
 package com.asia.domain.localApi;
 
-import com.asia.common.baseObj.BaseBonResDomain;
-import com.asia.domain.localApi.child.QueryAddValueFeeResBean;
-
 /**
  * @author WangBaoQiang
  * @ClassName: QueryAddValueFeeRes
@@ -29,7 +26,7 @@ public class QuerySubsidiesRes {
         private String totalSubsidies;
         private String oneTimeSubsidies;
         private String totalConsumed;
-
+        private String lastReturnFee;
         public String getRealPerformMonth() {
             return realPerformMonth;
         }
@@ -68,6 +65,14 @@ public class QuerySubsidiesRes {
 
         public void setTotalConsumed(String totalConsumed) {
             this.totalConsumed = totalConsumed;
+        }
+
+        public String getLastReturnFee() {
+            return lastReturnFee;
+        }
+
+        public void setLastReturnFee(String lastReturnFee) {
+            this.lastReturnFee = lastReturnFee;
         }
     }
 

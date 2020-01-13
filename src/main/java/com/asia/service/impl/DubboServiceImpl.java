@@ -90,10 +90,10 @@ public class DubboServiceImpl {
 		routeRuleInfo.setRouteValue(acctId);
 		exactlyRtQry.setRouteRuleInfo(routeRuleInfo);
 		exactlyRtQryRequest.setExactlyRtQry(exactlyRtQry);
-        LogUtil.debug("[开始调用dubbo【exactlyRtQuery】远程服务 实时账单查询]" + "\n" ,null, this.getClass());
-        LogUtil.debug("输入参数[exactlyRtQryRequest]="+JSON.toJSONString(exactlyRtQryRequest),null, this.getClass());
+        LogUtil.info("[开始调用dubbo【exactlyRtQuery】远程服务 实时账单查询]" + "\n" ,null, this.getClass());
+        LogUtil.info("输入参数[exactlyRtQryRequest]="+JSON.toJSONString(exactlyRtQryRequest),null, this.getClass());
 		exactlyRtQryResponse = rtQueryService.exactlyRtQuery(exactlyRtQryRequest);
-        LogUtil.debug("[调用dubbo【exactlyRtQuery】远程服务 实时账单查询]"+"\n输出结果[result]="
+        LogUtil.info("[调用dubbo【exactlyRtQuery】远程服务 实时账单查询]"+"\n输出结果[result]="
                 + JSON.toJSONString(exactlyRtQryResponse),null,this.getClass());
 		if("0".equals(exactlyRtQryResponse.getErrorCode())){
             List<FeeBill> realFeeBill = new ArrayList<>();

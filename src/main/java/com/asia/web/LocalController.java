@@ -570,8 +570,8 @@ public class LocalController {
     public String accountBalanceCpcpQuery(@RequestBody AccountBalanceCpcpQueryReq accountBalanceCpcpQueryReq,
                                            @RequestHeader Map<String,String> headers, HttpServletResponse response){
         //记录业务日志
-        LogUtil.debug("START [accountBalanceCpcpQuery] SERVICE...", null, this.getClass());
-        LogUtil.debug("/local/accountBalanceCpcpQuery" +" body>>"+JSON.toJSONString(accountBalanceCpcpQueryReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [accountBalanceCpcpQuery] SERVICE...", null, this.getClass());
+        LogUtil.info("/local/accountBalanceCpcpQuery" +" body>>"+JSON.toJSONString(accountBalanceCpcpQueryReq,SerializerFeature.WriteMapNullValue)
                 +" header>>"+JSON.toJSONString(headers),null, this.getClass());
         AccountBalanceCpcpQueryRes info=new AccountBalanceCpcpQueryRes();
         try {
@@ -600,8 +600,8 @@ public class LocalController {
             LogUtil.error("输出参数[accountBalanceCpcpQueryRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 accountBalanceCpcpQueryRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [accountBalanceCpcpQuery] SERVICE...", null, this.getClass());
+        LogUtil.info("输出参数 accountBalanceCpcpQueryRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [accountBalanceCpcpQuery] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
 
@@ -611,8 +611,8 @@ public class LocalController {
     public String queryAddValueFee(@RequestBody QueryAddValueFeeReq queryAddValueFeeReq,
                                           @RequestHeader Map<String,String> headers, HttpServletResponse response){
         //记录业务日志
-        LogUtil.debug("START [queryAddValueFee] SERVICE...", null, this.getClass());
-        LogUtil.debug("/local/queryAddValueFee" +" body>>"+JSON.toJSONString(queryAddValueFeeReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [queryAddValueFee] SERVICE...", null, this.getClass());
+        LogUtil.info("/local/queryAddValueFee" +" body>>"+JSON.toJSONString(queryAddValueFeeReq,SerializerFeature.WriteMapNullValue)
                 +" header>>"+JSON.toJSONString(headers),null, this.getClass());
         QueryAddValueFeeRes info=new QueryAddValueFeeRes();
         try {
@@ -650,8 +650,8 @@ public class LocalController {
             LogUtil.error("输出参数[queryAddValueFeeRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 queryAddValueFeeRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [queryAddValueFee] SERVICE...", null, this.getClass());
+        LogUtil.info("输出参数 queryAddValueFeeRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [queryAddValueFee] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
     /**
@@ -714,8 +714,8 @@ public class LocalController {
     public String acountRealFeeDetailService(@RequestBody AcountRealFeeDetailServiceReq acountRealFeeDetailServiceReq,
                                  @RequestHeader Map<String,String> headers,HttpServletResponse response){
         //记录业务日志
-        LogUtil.debug("START [acountRealFeeDetailService] SERVICE...", null, this.getClass());
-        LogUtil.debug("/local/acountRealFeeDetailService" +" body>>"+JSON.toJSONString(acountRealFeeDetailServiceReq,SerializerFeature.WriteMapNullValue)
+        LogUtil.info("START [acountRealFeeDetailService] SERVICE...", null, this.getClass());
+        LogUtil.info("/local/acountRealFeeDetailService" +" body>>"+JSON.toJSONString(acountRealFeeDetailServiceReq,SerializerFeature.WriteMapNullValue)
                 +" header>>"+JSON.toJSONString(headers),null, this.getClass());
         AcountRealFeeDetailServiceRes info=new AcountRealFeeDetailServiceRes();
         try {
@@ -762,8 +762,8 @@ public class LocalController {
             LogUtil.error("输出参数[acountRealFeeDetailServiceRes]=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
             return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
         }
-        LogUtil.debug("输出参数 acountRealFeeDetailServiceRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
-        LogUtil.debug("END [acountRealFeeDetailService] SERVICE...", null, this.getClass());
+        LogUtil.info("输出参数 acountRealFeeDetailServiceRes=" + JSON.toJSONString(info,SerializerFeature.WriteMapNullValue), null, this.getClass());
+        LogUtil.info("END [acountRealFeeDetailService] SERVICE...", null, this.getClass());
         return JSON.toJSONString(info, SerializerFeature.WriteMapNullValue);
     }
     /**
